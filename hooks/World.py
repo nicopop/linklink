@@ -1,4 +1,5 @@
 # Object classes from AP core, to represent an entire MultiWorld and this individual World that's part of it
+import logging
 from worlds.AutoWorld import World
 from BaseClasses import MultiWorld, CollectionState
 
@@ -87,11 +88,17 @@ def after_create_items(item_pool: list[ManualItem], world: World, multiworld: Mu
             queue = iter(v for v in victims if v != player)
             other_player = next(queue)
 
-        filler = world.multiworld.worlds[other_player].create_filler()
-        if filter is None:
-            raise Exception(f"Unable to create filler for {multiworld.player_name[other_player]}")
-        item_pool.append(filler)
-        item_pool.remove(item)
+        try:
+            filler = world.multiworld.worlds[other_player].create_filler()
+            if filter is None:
+                raise Exception(f"Unable to create filler for {multiworld.player_name[other_player]}")
+            item_pool.append(filler)
+            item_pool.remove(item)
+        except Exception as e:
+            logging.error(f"Error creating filler for {multiworld.player_name[other_player]}: {e}")
+            victims.remove(other_player)
+            if not victims:
+                break
         other_player = next(queue, None)
 
     return item_pool
