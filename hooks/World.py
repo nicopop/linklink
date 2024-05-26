@@ -82,6 +82,8 @@ def before_create_items_filler(item_pool: list, world: World, multiworld: MultiW
 def after_create_items(item_pool: list[ManualItem], world: World, multiworld: MultiWorld, player: int) -> list:
     # Remove "Nothing" items and replace them with filler items from other players
     victims = get_victims(multiworld, player)
+    victims = [v for v in victims if world.multiworld.worlds[v].get_filler_item_name()]  # Only include players with filler items
+
     other_player = None
     for item in [i for i in item_pool.copy() if i.name == "Nothing"]:
         if other_player is None:
@@ -97,6 +99,7 @@ def after_create_items(item_pool: list[ManualItem], world: World, multiworld: Mu
         except Exception as e:
             logging.error(f"Error creating filler for {multiworld.player_name[other_player]}: {e}")
             victims.remove(other_player)
+            queue = iter(v for v in victims if v != player)
             if not victims:
                 break
         other_player = next(queue, None)
@@ -148,7 +151,8 @@ def after_generate_basic(world: World, multiworld: MultiWorld, player: int):
         if 'linklink' in item_data:
             print(repr(item_data))
             linklink: dict[str, list[str]] = item_data['linklink']
-            for i in range(1, item_data['count'] + 1):
+            item_count = item_data['count']
+            for i in range(1, item_count + 1):
                 any_placed = False
                 n = 1
                 for j in range(1, multiworld.players + 1):

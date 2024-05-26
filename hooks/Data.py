@@ -1,5 +1,5 @@
 ITEM_TABLE = []
-MAX_PLAYERS = 10
+MAX_PLAYERS = 20
 FREE_ITEMS = 0
 
 # called after the items.json file has been loaded, before any item loading or processing has occurred
