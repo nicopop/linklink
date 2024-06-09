@@ -81,8 +81,9 @@ def before_create_items_filler(item_pool: list, world: World, multiworld: MultiW
 # The complete item pool prior to being set for generation is provided here, in case you want to make changes to it
 def after_create_items(item_pool: list[ManualItem], world: World, multiworld: MultiWorld, player: int) -> list:
     # Remove "Nothing" items and replace them with filler items from other players
+    filler_blacklist = ["SMZ3", "Links Awakening DX", "Manual_LinkLink_Silasary"]  # These games don't have filler items or don't implement them correctly
     victims = get_victims(multiworld, player)
-    victims = [v for v in victims if world.multiworld.worlds[v].get_filler_item_name()]  # Only include players with filler items
+    victims = [v for v in victims if v != player and multiworld.worlds[v].game not in filler_blacklist]  # Only include players with filler items
 
     other_player = None
     for item in [i for i in item_pool.copy() if i.name == "Nothing"]:
