@@ -5,13 +5,13 @@
 		"category": [],
 		"progression": true,
 		"linklink": {
-            "The Legend of Zelda": ["Sword, White Sword, Magical Sword"],
+            "The Legend of Zelda": ["Sword", "White Sword", "Magical Sword"],
             "A Link to the Past": ["Progressive Sword"],
             "SMZ3": ["ProgressiveSword"],
 			"Links Awakening DX": ["Progressive Sword"],
 			"Ocarina of Time": ["Kokiri Sword", "Giants Knife", "Biggoron Sword"],
 			"The Legend of Zelda - Oracle of Seasons": ["Progressive Sword", "Biggoron's Sword"],
-			"Wind Waker": ["Progressive Sword"],
+			"The Wind Waker": ["Progressive Sword"],
 			"TUNIC": ["Sword Upgrade"]
         }
 	},
@@ -22,12 +22,12 @@
 		"progression": true,
 		"linklink": {
             "The Legend of Zelda": ["Magical Shield"],
-            "A Link to the Past": ["Blue Shield", "Red Shield", "Mirror Shield"],
+            "A Link to the Past": ["Progressive Shield", "Blue Shield", "Red Shield", "Mirror Shield"],
             "SMZ3": ["ProgressiveShield"],
 			"Links Awakening DX": ["Progressive Shield"],
-			"Ocarina of Time": ["Deku Shield", "Hylian Shield", "Mirror Shield"],
+			"Ocarina of Time": ["Mirror Shield", "Hylian Shield", "Deku Shield"],
 			"The Legend of Zelda - Oracle of Seasons": ["Progressive Shield"],
-			"Wind Waker": ["Progressive Shield"],
+			"The Wind Waker": ["Progressive Shield"],
 			"TUNIC": ["Shield"]
 		}
 	},
@@ -40,7 +40,7 @@
             "A Link to the Past": ["Fire Rod"],
             "SMZ3": ["Firerod"],
 			"Ocarina of Time": ["Fire Arrows"],
-			"Wind Waker": ["Progressive Bow"],
+			"The Wind Waker": ["Progressive Bow"],
 			"TUNIC": ["Glass Cannon"]
         }
 	},
@@ -66,7 +66,7 @@
             "A Link to the Past": ["Silver Bow", "Progressive Bow (Alt)"],
             "SMZ3": ["SilverArrows"],
 			"Ocarina of Time": ["Light Arrows"],
-			"Wind Waker": ["Progressive Bow"]
+			"The Wind Waker": ["Progressive Bow"]
 		}
 	},
 	{
@@ -79,8 +79,8 @@
             "A Link to the Past": ["Progressive Bow", "Bow", "Arrow Upgrade (70)", "Arrow Upgrade (+10)", "Arrow Upgrade (+5)", "Arrows (10)"],
             "SMZ3": ["Bow", "ArrowUpgrade10", "ArrowUpgrade5"],
 			"Links Awakening DX": ["Bow", "Max Arrows Upgrade", "10 Arrows"],
-			"Ocarina of Time": ["Progressive Bow"],
-			"Wind Waker": ["Progressive Bow", "Progressive Quiver"]
+			"Ocarina of Time": ["Bow"],
+			"The Wind Waker": ["Progressive Bow", "Progressive Quiver"]
 		}
 	},
 	{
@@ -95,7 +95,7 @@
 			"Links Awakening DX": ["Boomerang"],
 			"Ocarina of Time": ["Boomerang"],
 			"The Legend of Zelda - Oracle of Seasons": ["Progressive Boomerang"],
-			"Wind Waker": ["Boomerang"]
+			"The Wind Waker": ["Boomerang"]
 		}
 	},
 	{
@@ -110,7 +110,7 @@
 			"Links Awakening DX": ["Max Bombs Upgrade", "Bombs"],
 			"Ocarina of Time": ["Bomb Bag"],
 			"The Legend of Zelda - Oracle of Seasons": ["Bombs (10)"],
-			"Wind Waker": ["Bombs", "Progressive Bomb Bag"],
+			"The Wind Waker": ["Bombs", "Progressive Bomb Bag"],
 			"TUNIC": ["Firecracker x6", "Firecracker x5", "Firecracker x4", "Firecracker x3"]
 		}
 	},
@@ -126,7 +126,7 @@
 			"Links Awakening DX": ["Ocarina"],
 			"Ocarina of Time": ["Ocarina"],
 			"The Legend of Zelda - Oracle of Seasons": ["Moosh's Flute", "Ricky's Flute", "Dimitri's Flute"],
-			"Wind Waker": ["Wind Waker"]
+			"The Wind Waker": ["Wind Waker"]
 		}
 	},
 	{
@@ -136,11 +136,11 @@
 		"progression": true,
 		"linklink": {
             "The Legend of Zelda": ["Blue Ring", "Red Ring"],
-            "A Link to the Past": ["Blue Mail", "Red Mail"],
+            "A Link to the Past": ["Progressive Mail", "Blue Mail", "Red Mail"],
             "SMZ3": ["ProgressiveTunic"],
 			"Links Awakening DX": ["Blue Tunic"],
 			"Ocarina of Time": ["Double Defense"],
-			"Wind Waker": ["Magic Armor"],
+			"The Wind Waker": ["Magic Armor"],
 			"TUNIC": ["DEF Offering"]
 		}
 	},
@@ -154,9 +154,9 @@
             "A Link to the Past": ["Progressive Glove"],
             "SMZ3": ["ProgressiveGlove"],
 			"Links Awakening DX": ["Progressive Power Bracelet"],
-			"Ocarina of Time": ["Progressive Strength"],
+			"Ocarina of Time": ["Progressive Strength Upgrade"],
 			"The Legend of Zelda - Oracle of Seasons": ["Power Bracelet"],
-			"Wind Waker": ["Power Bracelet"],
+			"The Wind Waker": ["Power Bracelets"],
 			"TUNIC": ["ATT Offering"]
         }
 	},
@@ -172,7 +172,7 @@
 			"Links Awakening DX": ["Hookshot"],
 			"Ocarina of Time": ["Progressive Hookshot"],
 			"The Legend of Zelda - Oracle of Seasons": ["Magnetic Gloves"],
-			"Wind Waker": ["Grappling Hook, Hookshot"],
+			"The Wind Waker": ["Grappling Hook", "Hookshot"],
 			"TUNIC": ["Magic Orb"]
         }
 	},
@@ -187,7 +187,7 @@
             "SMZ3": ["Flippers"],
 			"Links Awakening DX": ["Flippers"],
 			"Ocarina of Time": ["Progressive Scale"],
-			"The Legend of Zelda - Oracle of Seasons": ["Flippers", "Zora Ring"]
+			"The Legend of Zelda - Oracle of Seasons": ["Flippers", "Swimmer's Ring", "Zora Ring"]
         }
 	},
     {
@@ -199,7 +199,7 @@
             "A Link to the Past": ["Hammer"],
             "SMZ3": ["Hammer"],
 			"Ocarina of Time": ["Megaton Hammer"],
-			"Wind Waker": ["Skull Hammer"]
+			"The Wind Waker": ["Skull Hammer"]
         }
 	},
     {
@@ -208,10 +208,10 @@
 		"category": [],
 		"progression": true,
 		"linklink": {
-            "A Link to the Past": ["Bottles"],
+            "A Link to the Past": ["Bottle","Bottle (Bee)","Bottle (Blue Potion)","Bottle (Fairy)","Bottle (Good Bee)","Bottle (Green Potion)","Bottle (Red Potion)"],
             "SMZ3": ["Bottle","BottleWithBee","BottleWithBluePotion","BottleWithFairy","BottleWithGoldBee","BottleWithGreenPotion","BottleWithRedPotion"],
 			"Ocarina of Time": ["Bottle","Bottle with Big Poe","Bottle with Blue Fire","Bottle with Blue Potion","Bottle with Bugs","Bottle with Fairy","Bottle with Fish","Bottle with Green Potion","Bottle with Milk","Bottle with Poe","Bottle with Red Potion"],
-			"Wind Waker": ["Empty Bottle"],
+			"The Wind Waker": ["Empty Bottle"],
 			"TUNIC": ["Potion Flask"]
         }
 	},
@@ -251,6 +251,19 @@
 			"Links Awakening DX": ["Pegasus Boots"],
 			"Ocarina of Time": ["Hover Boots"],
 			"TUNIC": ["Anklet"]
+        }
+	},
+	{
+		"count": 2,
+		"name": "Magic Meter",
+		"category": [],
+		"progression": true,
+		"linklink": {
+            "A Link to the Past": ["Magic Upgrade (1/2)", "Magic Upgrade (1/4)"],
+			"Ocarina of Time": ["Magic Meter"],
+			"The Wind Waker": ["Progressive Magic Meter"],
+            "SMZ3": ["HalfMagic"],
+			"TUNIC": ["MP Offering"]
         }
 	},
     {
@@ -322,7 +335,7 @@
 		"progression": true,
 		"linklink": {
 			"Ocarina of Time": ["Iron Boots"],
-			"Wind Waker": ["Iron Boots"]
+			"The Wind Waker": ["Iron Boots"]
 		}
 	},
 	{
@@ -333,7 +346,7 @@
 		"linklink": {
 			"Links Awakening DX": ["Feather"],
 			"The Legend of Zelda - Oracle of Seasons": ["Progressive Feather"],
-			"Wind Waker": ["Golden Feather"]
+			"The Wind Waker": ["Golden Feather"]
 		}
 	},
 	{
@@ -367,19 +380,18 @@
 		"linklink": {
 			"Ocarina of Time": ["Gerudo Membership Card"],
 			"The Legend of Zelda - Oracle of Seasons": ["Member's Card"],
-			"Wind Waker": ["Fill-Up Coupon"]
+			"The Wind Waker": ["Fill-Up Coupon"]
 		}
 	},
 	{
-		"count": 2,
+		"count": 3,
 		"name": "Seed Bag",
 		"category": [],
 		"progression": true,
 		"linklink": {
-
 			"Ocarina of Time": ["Deku Nut Capacity"],
 			"The Legend of Zelda - Oracle of Seasons": ["Seed Satchel"],
-			"Wind Waker": ["Bait Bag"]
+			"The Wind Waker": ["Bait Bag"]
 		}
 	},
 	{
@@ -392,7 +404,7 @@
             "SMZ3": ["Mirror"],
 			"Links Awakening DX": ["Magnifying Glass"],
 			"Ocarina of Time": ["Lens of Truth"],
-			"Wind Waker": ["Spyglass"]
+			"The Wind Waker": ["Spyglass"]
 		}
 	},
 	{
@@ -403,7 +415,7 @@
 		"linklink": {
             "The Legend of Zelda": ["Letter"],
 			"Ocarina of Time": ["Rutos Letter"],
-			"Wind Waker": ["Delivery Bag"],
+			"The Wind Waker": ["Delivery Bag"],
 			"TUNIC": ["Pages 0-1"]
 		}
 	},
@@ -416,7 +428,7 @@
             "A Link to the Past": ["Moon Pearl"],
             "SMZ3": ["MoonPearl"],
 			"The Legend of Zelda - Oracle of Seasons": ["Round Jewel", "Pyramid Jewel", "X-Shaped Jewel", "Square Jewel"],
-			"Wind Waker": ["Din's Pearl", "Farore's Pearl", "Nayru's Pearl"],
+			"The Wind Waker": ["Din's Pearl", "Farore's Pearl", "Nayru's Pearl"],
 			"TUNIC": ["Red Questagon", "Green Questagon", "Blue Questagon"]
 		}
 	},
@@ -427,7 +439,7 @@
 		"progression": true,
 		"linklink": {
 			"Ocarina of Time": ["Progressive Wallet"],
-			"Wind Waker": ["Progressive Wallet"],
+			"The Wind Waker": ["Progressive Wallet"],
 			"TUNIC": ["Effigy"]
 		}
 	},
@@ -443,7 +455,7 @@
 			"Links Awakening DX": ["Heart Container"],
 			"Ocarina of Time": ["Heart Container"],
 			"The Legend of Zelda - Oracle of Seasons": ["Heart Container"],
-			"Wind Waker": ["Heart Container", "Piece of Heart"],
+			"The Wind Waker": ["Heart Container", "Piece of Heart"],
 			"TUNIC": ["HP Offering", "Potion Flask", "Flask Shard"]
 		}
 	}
