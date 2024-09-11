@@ -93,7 +93,7 @@ def after_create_items(item_pool: list[ManualItem], world: World, multiworld: Mu
 
         try:
             filler = world.multiworld.worlds[other_player].create_filler()
-            if filter is None:
+            if filler is None:
                 raise Exception(f"Unable to create filler for {multiworld.player_name[other_player]}")
             item_pool.append(filler)
             item_pool.remove(item)
@@ -190,6 +190,8 @@ def after_generate_basic(world: World, multiworld: MultiWorld, player: int):
             for location in multiworld.get_unfilled_locations(player):
                 if location.name.startswith(f"{item_data['name']} "):
                     location.parent_region.locations.remove(location)
+        
+        
 
 def get_victims(multiworld: MultiWorld, player: int) -> set[int]:
     victims: set = get_option_value(multiworld, player, "victims")
