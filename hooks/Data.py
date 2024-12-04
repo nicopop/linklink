@@ -1,11 +1,20 @@
 ITEM_TABLE = []
 MAX_PLAYERS = 40
 FREE_ITEMS = 0
+PKMN = True
+
+# called after the game.json file has been loaded
+def after_load_game_file(game_table: dict) -> dict:
+    return game_table
 
 # called after the items.json file has been loaded, before any item loading or processing has occurred
 # if you need access to the items after processing to add ids, etc., you should use the hooks in World.py
 def after_load_item_file(item_table: list) -> list:
     # Store a reference to this
+    if PKMN:
+        from ..Data import load_data_file
+        item_table.extend(load_data_file('items_pkmn.json'))
+
     for item in item_table:
         if 'count' not in item:
             item['count'] = 1
@@ -58,6 +67,12 @@ def after_load_region_file(region_table: dict) -> dict:
 # called after the categories.json file has been loaded
 def after_load_category_file(category_table: dict) -> dict:
     return category_table
+
+# called after the meta.json file has been loaded and just before the properties of the apworld are defined. You can use this hook to change what is displayed on the webhost
+# for more info check https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/world%20api.md#webworld-class
+def after_load_meta_file(meta_table: dict) -> dict:
+    return meta_table
+
 
 # called when an external tool (eg Univeral Tracker) ask for slot data to be read
 # use this if you want to restore more data
