@@ -575,7 +575,7 @@
 		"linklink": {
             "The Legend of Zelda": ["Heart Container"],
             "A Link to the Past": ["Boss Heart Container", "Piece of Heart"],
-            "SMZ3": ["HeartContainer"],
+            "SMZ3": ["HeartContainer", "HeartPiece"],
 			"Links Awakening DX": ["Heart Container", "Heart Piece"],
 			"Ocarina of Time": ["Heart Container", "Piece of Heart"],
 			"The Legend of Zelda - Oracle of Seasons": ["Heart Container", "Piece of Heart", "Heart Piece"],
