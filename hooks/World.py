@@ -2,6 +2,7 @@
 import logging
 from worlds.AutoWorld import World
 from BaseClasses import MultiWorld, CollectionState
+from typing import TYPE_CHECKING
 
 # Object classes from Manual -- extending AP core -- representing items and locations that are used in generation
 from ..Items import ManualItem
@@ -17,6 +18,9 @@ from ..Helpers import is_option_enabled, get_option_value
 
 # calling logging.info("message") anywhere below in this file will output the message to both console and log file
 import logging
+
+if TYPE_CHECKING:
+    from .. import ManualWorld
 
 ########################################################################################
 ## Order of method calls when the world generates:
@@ -86,32 +90,35 @@ def before_create_items_filler(item_pool: list, world: World, multiworld: MultiW
 
 # The complete item pool prior to being set for generation is provided here, in case you want to make changes to it
 def after_create_items(item_pool: list[ManualItem], world: World, multiworld: MultiWorld, player: int) -> list:
-    # # Remove "Nothing" items and replace them with filler items from other players
-    # filler_blacklist = ["SMZ3", "Links Awakening DX", "Manual_LinkLink_Silasary"]  # These games don't have filler items or don't implement them correctly
-    # victims = get_victims(multiworld, player)
-    # victims = [v for v in victims if v != player and multiworld.worlds[v].game not in filler_blacklist]  # Only include players with filler items
-
-    # other_player = None
-    # for item in [i for i in item_pool.copy() if i.name == "Nothing"]:
-    #     if other_player is None:
-    #         queue = iter(v for v in victims if v != player)
-    #         other_player = next(queue)
-
-    #     try:
-    #         filler = world.multiworld.worlds[other_player].create_filler()
-    #         if filler is None:
-    #             raise Exception(f"Unable to create filler for {multiworld.player_name[other_player]}")
-    #         item_pool.append(filler)
-    #         item_pool.remove(item)
-    #     except Exception as e:
-    #         logging.error(f"Error creating filler for {multiworld.player_name[other_player]}: {e}")
-    #         victims.remove(other_player)
-    #         queue = iter(v for v in victims if v != player)
-    #         if not victims:
-    #             break
-    #     other_player = next(queue, None)
-
     return item_pool
+
+def replace_nothings(world: World, multiworld: MultiWorld, player: int):
+    # Remove "Nothing" items and replace them with filler items from other players
+    item_pool = [i for i in multiworld.itempool if i.player == player and i.location is None]
+
+    filler_blacklist = ["SMZ3", "Links Awakening DX", "Manual_LinkLink_Silasary"]  # These games don't have filler items or don't implement them correctly
+    victims = get_victims(multiworld, player)
+    victims = [v for v in victims if v != player and multiworld.worlds[v].game not in filler_blacklist]  # Only include players with filler items
+
+    other_player = None
+    for item in [i for i in item_pool.copy() if i.name == "Nothing"]:
+        if other_player is None:
+            queue = iter(v for v in victims if v != player)
+            other_player = next(queue)
+
+        try:
+            filler = world.multiworld.worlds[other_player].create_filler()
+            if filler is None:
+                raise Exception(f"Unable to create filler for {multiworld.player_name[other_player]}")
+            item_pool.append(filler)
+            item_pool.remove(item)
+        except Exception as e:
+            logging.error(f"Error creating filler for {multiworld.player_name[other_player]}: {e}")
+            victims.remove(other_player)
+            queue = iter(v for v in victims if v != player)
+            if not victims:
+                break
+        other_player = next(queue, None)
 
 # Called before rules for accessing regions and locations are created. Not clear why you'd want this, but it's here.
 def before_set_rules(world: World, multiworld: MultiWorld, player: int):
@@ -150,8 +157,16 @@ def before_generate_basic(world: World, multiworld: MultiWorld, player: int) -> 
     pass
 
 # This method is run at the very end of pre-generation, once the place_item options have been handled and before AP generation occurs
-def after_generate_basic(world: World, multiworld: MultiWorld, player: int):
-    victims = get_victims(multiworld, player)
+def after_generate_basic(world: "ManualWorld", multiworld: MultiWorld, player: int):
+    victims = get_victims(multiworld, player)                
+
+    def remove_nothing():
+        for i in multiworld.itempool.copy():
+            if i.name == "Nothing" and i.player == player:
+                multiworld.itempool.remove(i)
+                return
+        logging.error("Could not find Nothing to remove")
+        return None
 
     unplaced_items = [i for i in multiworld.itempool if i.location is None]
     for item_data in item_table:
@@ -170,7 +185,7 @@ def after_generate_basic(world: World, multiworld: MultiWorld, player: int):
                     if location is None:
                         continue
                     if multiworld.worlds[j].game not in linklink:
-                        logging.warning(f"Game {multiworld.worlds[j].game} not in linklink for {item_data['name']}")
+                        logging.debug(f"Game {multiworld.worlds[j].game} not in linklink for {item_data['name']}")
                         continue
                     options = [item for item in unplaced_items if item.name in linklink[multiworld.worlds[j].game] and item.player == j]
                     options.sort(key=lambda x: linklink[multiworld.worlds[j].game].index(x.name))
@@ -196,6 +211,9 @@ def after_generate_basic(world: World, multiworld: MultiWorld, player: int):
             for location in multiworld.get_unfilled_locations(player):
                 if location.name.startswith(f"{item_data['name']} "):
                     location.parent_region.locations.remove(location)
+                    remove_nothing()
+    
+    replace_nothings(world, multiworld, player)
         
         
 

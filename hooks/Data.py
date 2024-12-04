@@ -34,7 +34,6 @@ def after_load_location_file(location_table: list) -> list:
             for i in range(1, item['count'] + 1):
                 for j in range(1, MAX_PLAYERS + 1):
                     location_table.append({
-                        "id": i * 1000 + j,
                         "name": f"{item['name']} {i} Player {j}",
                         "region": f"{item['name']} {i}",
                         "category": [item['name']],
