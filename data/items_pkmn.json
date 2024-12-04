@@ -1,0 +1,144 @@
+[
+    {
+		"count": 1,
+		"name": "HM01 Cut",
+		"category": [],
+		"progression": true,
+		"linklink": {
+            "Pokemon Crystal": ["HM01 Cut"],
+            "Pokemon Emerald": ["HM01 Cut"],
+            "Pokemon Red and Blue": ["HM01 Cut"]
+        }
+	},
+	{
+		"count": 1,
+		"name": "HM02 Fly",
+		"category": [],
+		"progression": true,
+		"linklink": {
+			"Pokemon Crystal": ["HM02 Fly"],
+			"Pokemon Emerald": ["HM02 Fly"],
+			"Pokemon Red and Blue": ["HM02 Fly"]
+		}
+	},
+	{
+		"count": 1,
+		"name": "HM03 Surf",
+		"category": [],
+		"progression": true,
+		"linklink": {
+			"Pokemon Crystal": ["HM03 Surf"],
+			"Pokemon Emerald": ["HM03 Surf"],
+			"Pokemon Red and Blue": ["HM03 Surf"]
+		}
+	},
+	{
+		"count": 1,
+		"name": "HM04 Strength",
+		"category": [],
+		"progression": true,
+		"linklink": {
+			"Pokemon Crystal": ["HM04 Strength"],
+			"Pokemon Emerald": ["HM04 Strength"],
+			"Pokemon Red and Blue": ["HM04 Strength"]
+		}
+	},
+	{
+		"count": 1,
+		"name": "HM05 Flash",
+		"category": [],
+		"progression": true,
+		"linklink": {
+			"Pokemon Crystal": ["HM05 Flash"],
+			"Pokemon Emerald": ["HM05 Flash"],
+			"Pokemon Red and Blue": ["HM05 Flash"]
+		}
+	},
+	{
+		"count": 1,
+		"name": "HM06 Rock Smash",
+		"category": [],
+		"progression": true,
+		"linklink": {
+			"Pokemon Crystal": ["TM08 Rock Smash"],
+			"Pokemon Emerald": ["HM06 Rock Smash"]
+		}
+	},
+	{
+		"count": 1,
+		"name": "HM07 Waterfall",
+		"category": [],
+		"progression": true,
+		"linklink": {
+			"Pokemon Crystal": ["HM07 Waterfall"],
+			"Pokemon Emerald": ["HM07 Waterfall"]
+		}
+	},
+	{
+		"count": 0,
+		"name": "HM Whirlpool/ Dive",
+		"category": [],
+		"progression": true,
+		"linklink": {
+			"Pokemon Crystal": ["HM_WHIRLPOOL"],
+			"Pokemon Emerald": ["HM08 Dive"]
+		}
+	},
+	{
+		"name": "Poke Flute",
+		"category": [],
+		"progression": true,
+		"linklink": {
+			"Pokemon Crystal": ["Poke Flute"],
+			"Pokemon Red and Blue": ["Poke Flute"]
+		}
+	},
+	{
+		"name": "Bicycle",
+		"category": [],
+		"progression": true,
+		"linklink": {
+			"Pokemon Crystal": ["Bicycle"],
+			"Pokemon Red and Blue": ["Bicycle"],
+			"Pokemon Emerald": ["Mach Bike"]
+		}
+	},
+	{
+		"name": "S.S. Ticket",
+		"category": [],
+		"progression": true,
+		"linklink": {
+			"Pokemon Crystal": ["S.S. Ticket"],
+			"Pokemon Red and Blue": ["S.S. Ticket"],
+			"Pokemon Emerald": ["S.S. Ticket"]
+		}
+	},
+	{
+		"name": "Card Key",
+		"category": [],
+		"progression": true,
+		"linklink": {
+			"Pokemon Crystal": ["Card Key"],
+			"Pokemon Red and Blue": ["Card Key"]
+		}
+	},
+	{
+		"name": "Scope",
+		"category": [],
+		"progression": true,
+		"linklink": {
+			"Pokemon Emerald": ["Devon Scope"],
+			"Pokemon Red and Blue": ["Silph Scope"]
+		}
+	},
+	{
+		"name": "Coin Case",
+		"category": [],
+		"progression": true,
+		"linklink": {
+			"Pokemon Crystal": ["Coin Case"],
+			"Pokemon Red and Blue": ["Coin Case"],
+			"Pokemon Emerald": ["Coin Case"]
+		}
+	}
+]
