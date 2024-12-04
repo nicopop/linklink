@@ -1,7 +1,7 @@
 ITEM_TABLE = []
 MAX_PLAYERS = 40
 FREE_ITEMS = 0
-PKMN = True
+PKMN = False
 
 # called after the game.json file has been loaded
 def after_load_game_file(game_table: dict) -> dict:
@@ -34,6 +34,7 @@ def after_load_location_file(location_table: list) -> list:
             for i in range(1, item['count'] + 1):
                 for j in range(1, MAX_PLAYERS + 1):
                     location_table.append({
+                        "id": i * 1000 + j,
                         "name": f"{item['name']} {i} Player {j}",
                         "region": f"{item['name']} {i}",
                         "category": [item['name']],
@@ -73,8 +74,8 @@ def after_load_category_file(category_table: dict) -> dict:
 def after_load_meta_file(meta_table: dict) -> dict:
     return meta_table
 
-
 # called when an external tool (eg Univeral Tracker) ask for slot data to be read
 # use this if you want to restore more data
-def hook_interpret_slot_data(world, player: int, slot_data: dict[str, any]):
-    pass
+# return True if you want to trigger a regeneration if you changed anything
+def hook_interpret_slot_data(world, player: int, slot_data: dict[str, any]) -> bool:
+    return False

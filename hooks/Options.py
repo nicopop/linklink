@@ -7,7 +7,7 @@ from ..Helpers import is_option_enabled, get_option_value
 
 
 ####################################################################
-# NOTE: At the time that options are created, Manual has no concept of the multiworld or its own world. 
+# NOTE: At the time that options are created, Manual has no concept of the multiworld or its own world.
 #       Options are defined before the world is even created.
 #
 # Example of creating your own option:

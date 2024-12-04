@@ -15,7 +15,8 @@ from ..Data import game_table, item_table, location_table, region_table
 # These helper methods allow you to determine if an option has been set, or what its value is, for any player in the multiworld
 from ..Helpers import is_option_enabled, get_option_value
 
-
+# calling logging.info("message") anywhere below in this file will output the message to both console and log file
+import logging
 
 ########################################################################################
 ## Order of method calls when the world generates:
@@ -30,6 +31,11 @@ from ..Helpers import is_option_enabled, get_option_value
 ########################################################################################
 
 
+
+# Use this function to change the valid filler items to be created to replace item links or starting items.
+# Default value is the `filler_item_name` from game.json
+def hook_get_filler_item_name(world: World, multiworld: MultiWorld, player: int) -> str | bool:
+    return False
 
 # Called before regions and locations are created. Not clear why you'd want this, but it's here. Victory location is included, but Victory event is not placed yet.
 def before_create_regions(world: World, multiworld: MultiWorld, player: int):
@@ -80,30 +86,30 @@ def before_create_items_filler(item_pool: list, world: World, multiworld: MultiW
 
 # The complete item pool prior to being set for generation is provided here, in case you want to make changes to it
 def after_create_items(item_pool: list[ManualItem], world: World, multiworld: MultiWorld, player: int) -> list:
-    # Remove "Nothing" items and replace them with filler items from other players
-    filler_blacklist = ["SMZ3", "Links Awakening DX", "Manual_LinkLink_Silasary"]  # These games don't have filler items or don't implement them correctly
-    victims = get_victims(multiworld, player)
-    victims = [v for v in victims if v != player and multiworld.worlds[v].game not in filler_blacklist]  # Only include players with filler items
+    # # Remove "Nothing" items and replace them with filler items from other players
+    # filler_blacklist = ["SMZ3", "Links Awakening DX", "Manual_LinkLink_Silasary"]  # These games don't have filler items or don't implement them correctly
+    # victims = get_victims(multiworld, player)
+    # victims = [v for v in victims if v != player and multiworld.worlds[v].game not in filler_blacklist]  # Only include players with filler items
 
-    other_player = None
-    for item in [i for i in item_pool.copy() if i.name == "Nothing"]:
-        if other_player is None:
-            queue = iter(v for v in victims if v != player)
-            other_player = next(queue)
+    # other_player = None
+    # for item in [i for i in item_pool.copy() if i.name == "Nothing"]:
+    #     if other_player is None:
+    #         queue = iter(v for v in victims if v != player)
+    #         other_player = next(queue)
 
-        try:
-            filler = world.multiworld.worlds[other_player].create_filler()
-            if filler is None:
-                raise Exception(f"Unable to create filler for {multiworld.player_name[other_player]}")
-            item_pool.append(filler)
-            item_pool.remove(item)
-        except Exception as e:
-            logging.error(f"Error creating filler for {multiworld.player_name[other_player]}: {e}")
-            victims.remove(other_player)
-            queue = iter(v for v in victims if v != player)
-            if not victims:
-                break
-        other_player = next(queue, None)
+    #     try:
+    #         filler = world.multiworld.worlds[other_player].create_filler()
+    #         if filler is None:
+    #             raise Exception(f"Unable to create filler for {multiworld.player_name[other_player]}")
+    #         item_pool.append(filler)
+    #         item_pool.remove(item)
+    #     except Exception as e:
+    #         logging.error(f"Error creating filler for {multiworld.player_name[other_player]}: {e}")
+    #         victims.remove(other_player)
+    #         queue = iter(v for v in victims if v != player)
+    #         if not victims:
+    #             break
+    #     other_player = next(queue, None)
 
     return item_pool
 
@@ -150,7 +156,7 @@ def after_generate_basic(world: World, multiworld: MultiWorld, player: int):
     unplaced_items = [i for i in multiworld.itempool if i.location is None]
     for item_data in item_table:
         if 'linklink' in item_data:
-            print(repr(item_data))
+            logging.debug(repr(item_data))
             linklink: dict[str, list[str]] = item_data['linklink']
             item_count = item_data['count']
             for i in range(1, item_count + 1):
@@ -164,12 +170,12 @@ def after_generate_basic(world: World, multiworld: MultiWorld, player: int):
                     if location is None:
                         continue
                     if multiworld.worlds[j].game not in linklink:
-                        print(f"Game {multiworld.worlds[j].game} not in linklink for {item_data['name']}")
+                        logging.warning(f"Game {multiworld.worlds[j].game} not in linklink for {item_data['name']}")
                         continue
                     options = [item for item in unplaced_items if item.name in linklink[multiworld.worlds[j].game] and item.player == j]
                     options.sort(key=lambda x: linklink[multiworld.worlds[j].game].index(x.name))
                     if i == 1 and len(options) == 0:
-                        print(f"No options for {item_data['name']} {i} for {multiworld.player_name[j]} ({multiworld.worlds[j].game})")
+                        logging.warning(f"No options for {item_data['name']} {i} for {multiworld.player_name[j]} ({multiworld.worlds[j].game})")
 
                     for item in options:
                         if placed:
@@ -184,7 +190,7 @@ def after_generate_basic(world: World, multiworld: MultiWorld, player: int):
                         break
                 if not any_placed:
                     item = next(item for item in unplaced_items if item.name == item_data['name'] and item.player == player)
-                    print(f'Removing surplus {item.name}')
+                    logging.info(f'Removing surplus {item.name}')
                     multiworld.itempool.remove(item)
                     unplaced_items.remove(item)
             for location in multiworld.get_unfilled_locations(player):
@@ -217,5 +223,21 @@ def after_fill_slot_data(slot_data: dict, world: World, multiworld: MultiWorld, 
 def before_write_spoiler(world: World, multiworld: MultiWorld, spoiler_handle) -> None:
     pass
 
-def hook_get_filler_item_name():
+# This is called when you want to add information to the hint text
+def before_extend_hint_information(hint_data: dict[int, dict[int, str]], world: World, multiworld: MultiWorld, player: int) -> None:
+    
+    ### Example way to use this hook: 
+    # if player not in hint_data:
+    #     hint_data.update({player: {}})
+    # for location in multiworld.get_locations(player):
+    #     if not location.address:
+    #         continue
+    #
+    #     use this section to calculate the hint string
+    #
+    #     hint_data[player][location.address] = hint_string
+    
+    pass
+
+def after_extend_hint_information(hint_data: dict[int, dict[int, str]], world: World, multiworld: MultiWorld, player: int) -> None:
     pass
