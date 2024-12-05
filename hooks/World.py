@@ -94,7 +94,9 @@ def after_create_items(item_pool: list[ManualItem], world: World, multiworld: Mu
 
 def replace_nothings(world: World, multiworld: MultiWorld, player: int):
     # Remove "Nothing" items and replace them with filler items from other players
-    item_pool = [i for i in multiworld.itempool if i.player == player and i.location is None]
+    item_pool = [i for i in multiworld.itempool if i.player == player]
+    item_count = len(item_pool)
+    location_count = len(multiworld.get_locations(player))
 
     filler_blacklist = ["SMZ3", "Links Awakening DX", "Manual_LinkLink_Silasary"]  # These games don't have filler items or don't implement them correctly
     victims = get_victims(multiworld, player)
@@ -110,8 +112,8 @@ def replace_nothings(world: World, multiworld: MultiWorld, player: int):
             filler = world.multiworld.worlds[other_player].create_filler()
             if filler is None:
                 raise Exception(f"Unable to create filler for {multiworld.player_name[other_player]}")
-            item_pool.append(filler)
-            item_pool.remove(item)
+            multiworld.itempool.append(filler)
+            multiworld.itempool.remove(item)
         except Exception as e:
             logging.error(f"Error creating filler for {multiworld.player_name[other_player]}: {e}")
             victims.remove(other_player)
@@ -158,7 +160,7 @@ def before_generate_basic(world: World, multiworld: MultiWorld, player: int) -> 
 
 # This method is run at the very end of pre-generation, once the place_item options have been handled and before AP generation occurs
 def after_generate_basic(world: "ManualWorld", multiworld: MultiWorld, player: int):
-    victims = get_victims(multiworld, player)                
+    victims = get_victims(multiworld, player)
 
     def remove_nothing():
         for i in multiworld.itempool.copy():
@@ -212,10 +214,10 @@ def after_generate_basic(world: "ManualWorld", multiworld: MultiWorld, player: i
                 if location.name.startswith(f"{item_data['name']} "):
                     location.parent_region.locations.remove(location)
                     remove_nothing()
-    
+
     replace_nothings(world, multiworld, player)
-        
-        
+
+
 
 def get_victims(multiworld: MultiWorld, player: int) -> set[int]:
     victims: set = get_option_value(multiworld, player, "victims")
@@ -243,8 +245,8 @@ def before_write_spoiler(world: World, multiworld: MultiWorld, spoiler_handle) -
 
 # This is called when you want to add information to the hint text
 def before_extend_hint_information(hint_data: dict[int, dict[int, str]], world: World, multiworld: MultiWorld, player: int) -> None:
-    
-    ### Example way to use this hook: 
+
+    ### Example way to use this hook:
     # if player not in hint_data:
     #     hint_data.update({player: {}})
     # for location in multiworld.get_locations(player):
@@ -254,7 +256,7 @@ def before_extend_hint_information(hint_data: dict[int, dict[int, str]], world: 
     #     use this section to calculate the hint string
     #
     #     hint_data[player][location.address] = hint_string
-    
+
     pass
 
 def after_extend_hint_information(hint_data: dict[int, dict[int, str]], world: World, multiworld: MultiWorld, player: int) -> None:
