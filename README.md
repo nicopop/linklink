@@ -41,4 +41,6 @@ This is an extension of the standard Manual item definition.
 
 ## How does this work?
 
-Locations are automatically created by [after_load_location_file](hooks/Data.py), and item placement and culling is done in [after_generate_basic](hooks/World.py).  Distribution can done by hand using the Manual Client, but it is recommended that you use the [Slow Release Client](https://github.com/gjgfuj/AP-SlowRelease/releases) to automatically send items out as they come into Logic.
+Locations are automatically created by [after_load_location_file](hooks/Data.py), and item placement and culling is done in [after_generate_basic](hooks/World.py).  
+
+Distribution can done by hand using the Manual Client, but it is recommended that you use the [Slow Release Client](https://github.com/gjgfuj/AP-SlowRelease/releases) to automatically send items out as they come into Logic.
