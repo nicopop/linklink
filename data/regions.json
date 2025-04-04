@@ -1,6 +1,7 @@
 {
-	"Free Items":
-	{
-		"connects_to": []
-	}
+    "$schema": "https://github.com/ManualForArchipelago/Manual/raw/main/schemas/Manual.regions.schema.json",
+    "Free Items":
+    {
+        "connects_to": []
+    }
 }

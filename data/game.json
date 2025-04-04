@@ -1,5 +1,9 @@
 {
-	"game": "LinkLink",
-	"player": "Silasary",
-	"filler_item_name": "Nothing"
+    "$schema": "https://github.com/ManualForArchipelago/Manual/raw/main/schemas/Manual.game.schema.json",
+    "game": "LinkLink",
+    "creator": "Nicopopxd",
+
+    "filler_item_name": "Nothing",
+
+    "_comment": ["original creator: Silasary"]
 }

@@ -1,9 +1,11 @@
-[
-	{
-		"name":"Victory Road",
-		"region": "Free Items",
-		"victory": true,
-		"category": [],
-		"requires": []
-	}
-]
+{
+    "$schema": "https://github.com/ManualForArchipelago/Manual/raw/main/schemas/Manual.locations.schema.json",
+    "data": [
+        {
+            "name":"Victory Road",
+            "region": "Free Items",
+            "victory": true,
+            "category": [],
+            "requires": []
+        }
+]}

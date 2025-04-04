@@ -1,10 +1,13 @@
 from typing import TYPE_CHECKING, Optional
-from worlds.generic.Rules import set_rule, add_rule
+from enum import IntEnum
+
 from .Regions import regionMap
 from .hooks import Rules
+from .Helpers import clamp, is_item_enabled, get_items_with_value, is_option_enabled, get_option_value, convert_string_to_type, format_to_valid_identifier
+
 from BaseClasses import MultiWorld, CollectionState
-from .Helpers import clamp, is_item_enabled, get_items_with_value, is_option_enabled
 from worlds.AutoWorld import World
+from worlds.generic.Rules import set_rule, add_rule
 
 import re
 import math
@@ -14,9 +17,33 @@ import logging
 if TYPE_CHECKING:
     from . import ManualWorld
 
+class LogicErrorSource(IntEnum):
+    INFIX_TO_POSTFIX = 1 # includes more closing parentheses than opening (but not the opposite)
+    EVALUATE_POSTFIX = 2 # includes missing pipes and missing value on either side of AND/OR
+    EVALUATE_STACK_SIZE = 3 # includes missing curly brackets
+
+def construct_logic_error(location_or_region: dict, source: LogicErrorSource) -> KeyError:
+    object_type = "location/region"
+    object_name = location_or_region.get("name", "Unknown")
+
+    if location_or_region.get("is_region", False) or "starting" in location_or_region or "connects_to" in location_or_region:
+        object_type = "region"
+    elif "region" in location_or_region or "category" in location_or_region:
+        object_type = "location"
+
+    if source == LogicErrorSource.INFIX_TO_POSTFIX:
+        source_text = "There may be mismatched parentheses, or other invalid syntax for the requires."
+    elif source == LogicErrorSource.EVALUATE_POSTFIX:
+        source_text = "There may be missing || around item names, or an AND/OR that is missing a value on one side, or other invalid syntax for the requires."
+    elif source == LogicErrorSource.EVALUATE_STACK_SIZE:
+        source_text = "There may be missing {} around requirement functions like YamlEnabled() / YamlDisabled(), or other invalid syntax for the requires."
+    else:
+        source_text = "This requires includes invalid syntax."
+
+    return KeyError(f"Invalid 'requires' for {object_type} '{object_name}': {source_text} (ERROR {source})")
+
 def infix_to_postfix(expr, location):
     prec = {"&": 2, "|": 2, "!": 3}
-
     stack = []
     postfix = ""
 
@@ -34,15 +61,18 @@ def infix_to_postfix(expr, location):
                 while stack and stack[-1] != "(":
                     postfix += stack.pop()
                 stack.pop()
+
         while stack:
             postfix += stack.pop()
     except Exception:
-        raise KeyError("Invalid logic format for location/region {}.".format(location))
+        raise construct_logic_error(location, LogicErrorSource.INFIX_TO_POSTFIX)
+
     return postfix
 
 
 def evaluate_postfix(expr: str, location: str) -> bool:
     stack = []
+
     try:
         for c in expr:
             if c == "0":
@@ -61,10 +91,11 @@ def evaluate_postfix(expr: str, location: str) -> bool:
                 op = stack.pop()
                 stack.append(not op)
     except Exception:
-        raise KeyError("Invalid logic format for location/region {}.".format(location))
+        raise construct_logic_error(location, LogicErrorSource.EVALUATE_POSTFIX)
 
     if len(stack) != 1:
-        raise KeyError("Invalid logic format for location/region {}.".format(location))
+        raise construct_logic_error(location, LogicErrorSource.EVALUATE_STACK_SIZE)
+
     return stack.pop()
 
 def set_rules(world: "ManualWorld", multiworld: MultiWorld, player: int):
@@ -75,14 +106,18 @@ def set_rules(world: "ManualWorld", multiworld: MultiWorld, player: int):
         # Get the "real" item counts of item in the pool/placed/starting_items
         items_counts = world.get_item_counts(player)
 
+        # Preparing some variables for exception messages
+        area_type = "region" if area.get("is_region",False) else "location"
+        area_name = area.get("name", f"unknown with these parameters: {area}")
+
         if requires_list == "":
             return True
 
         def findAndRecursivelyExecuteFunctions(requires_list: str, recursionDepth: int = 0) -> str:
             found_functions = re.findall(r'\{(\w+)\((.*?)\)\}', requires_list)
             if found_functions:
-                if recursionDepth >= world.rules_functions_maximum_recursion:
-                    raise RecursionError(f'One or more functions in "{area.get("name", f"An area with these parameters: {area}")}"\'s requires looped too many time (maximum recursion is {world.rules_functions_maximum_recursion}) \
+                if recursionDepth > world.rules_functions_maximum_recursion:
+                    raise RecursionError(f'One or more functions in {area_type} "{area_name}"\'s requires looped too many time (maximum recursion is {world.rules_functions_maximum_recursion}) \
                                          \n    As of this Exception the following function(s) are waiting to run: {[f[0] for f in found_functions]} \
                                          \n    And the currently processed requires look like this: "{requires_list}"')
                 else:
@@ -98,10 +133,16 @@ def set_rules(world: "ManualWorld", multiworld: MultiWorld, player: int):
                             func = getattr(Rules, func_name, None)
 
                         if not callable(func):
-                            raise ValueError(f"Invalid function `{func_name}` in {area}.")
+                            raise ValueError(f'Invalid function "{func_name}" in {area_type} "{area_name}".')
 
-                        convert_req_function_args(func, func_args, area.get("name", f"An area with these parameters: {area}"))
-                        result = func(world, multiworld, state, player, *func_args)
+                        convert_req_function_args(func, func_args, area_name)
+                        try:
+                            result = func(world, multiworld, state, player, *func_args)
+                        except Exception as ex:
+                            raise RuntimeError(f'A call to the function "{func_name}" in {area_type} "{area_name}"\'s requires raised an Exception. \
+                                                \nUnless it was called by another function, it should look something like "{{{func_name}({item[1]})}}" in {area_type}s.json. \
+                                                \nFull error message: \
+                                                \n\n{type(ex).__name__}: {ex}')
                         if isinstance(result, bool):
                             requires_list = requires_list.replace("{" + func_name + "(" + item[1] + ")}", "1" if result else "0")
                         else:
@@ -242,7 +283,7 @@ def set_rules(world: "ManualWorld", multiworld: MultiWorld, player: int):
     for region in regionMap.keys():
         used_location_names.extend([l.name for l in multiworld.get_region(region, player).locations])
         if region != "Menu":
-            for exitRegion in multiworld.get_region(region, player).exits:
+            for exitRegion in multiworld.get_region(region, player).entrances:
                 def fullRegionCheck(state: CollectionState, region=regionMap[region]):
                     return fullLocationOrRegionCheck(state, region)
 
@@ -264,6 +305,10 @@ def set_rules(world: "ManualWorld", multiworld: MultiWorld, player: int):
         locFromWorld = multiworld.get_location(location["name"], player)
 
         locationRegion = regionMap[location["region"]] if "region" in location else None
+
+        if locationRegion:
+            locationRegion['name'] = location['region']
+            locationRegion['is_region'] = True
 
         if "requires" in location: # Location has requires, check them alongside the region requires
             def checkBothLocationAndRegion(state: CollectionState, location=location, region=locationRegion):
@@ -290,76 +335,41 @@ def set_rules(world: "ManualWorld", multiworld: MultiWorld, player: int):
     # Victory requirement
     multiworld.completion_condition[player] = lambda state: state.has("__Victory__", player)
 
-    def convert_req_function_args(func, args: list[str], areaName: str, warn: bool = False):
+    def convert_req_function_args(func, args: list[str], areaName: str):
         parameters = inspect.signature(func).parameters
-        knownArguments = ["world", "multiworld", "state", "player"]
-        index = 0
-        for parameter, info in parameters.items():
-            if parameter in knownArguments:
+        knownParameters = ["world", "multiworld", "state", "player"]
+        index = -1
+        for parameter in parameters.values():
+            if parameter.name in knownParameters:
+                continue
+            index += 1
+            target_type = parameter.annotation
+
+            if index < len(args) and args[index] != "":
+                value = args[index].strip()
+            else:
+                if parameter.default is not inspect.Parameter.empty:
+                    if index < len(args):
+                        args[index] = parameter.default
+                    continue
+                else:
+                    if parameter.annotation is inspect.Parameter.empty:
+                        raise Exception(f"A call of the \"{func.__name__}\" function in \"{areaName}\"'s requirement, asks for a value for its argument \"{parameter.name}\" but it's missing.")
+                    else:
+                        raise Exception(f"A call of the \"{func.__name__}\" function in \"{areaName}\"'s requirement, asks for a value of type {target_type} for its argument \"{parameter.name}\" but it's missing.")
+
+            if target_type == str or parameter.annotation is inspect.Parameter.empty: #Don't convert since its already a string or if we don't know the type to convert to
+                args[index] = value
                 continue
 
-            argType = info.annotation
-            optional = False
             try:
-                if issubclass(argType, inspect._empty): #if not set then it wont get converted but still be checked for valid data at index
-                    argType = str
+                value = convert_string_to_type(value, target_type)
 
-            except TypeError: # Optional
-                if argType.__module__ == 'typing' and argType._name == 'Optional':
-                    optional = True
-                    argType = argType.__args__[0]
-                else:
-                    #Implementing complex typing is not simple so ill skip it for now
-                    index += 1
-                    continue
+            except Exception as e:
+                raise Exception(f"A call of the \"{func.__name__}\" function in \"{areaName}\"'s requirement, asks for a value of type {target_type}\nfor its argument \"{parameter.name}\" but its value \"{value}\" cannot be converted to {target_type} \nOriginal Error:'{e}'")
 
-            try:
-                value = args[index].strip()
+            args[index] = value
 
-            except IndexError:
-                if info is not inspect.Parameter.empty:
-                    value = info.default
-
-                else:
-                    raise Exception(f"A call of the {func.__name__} function in '{areaName}'s requirement, asks for a value of type {argType}\nfor its argument '{info.name}' but its missing")
-
-            if optional:
-                if isinstance(value, type(None)):
-                    index += 1
-                    continue
-                elif isinstance(value, str):
-                    if value.lower() == 'none':
-                        value = None
-                        args[index] = value
-                        index += 1
-                        continue
-
-
-            if not isinstance(value, argType):
-                if issubclass(argType, bool):
-                    #Special conversion to bool
-                    if value.lower() in ['true', '1']:
-                        value = True
-
-                    elif value.lower() in ['false', '0']:
-                        value = False
-
-                    else:
-                        value = bool(value)
-                        if warn:
-                        # warning here spam the console if called from rules.py, might be worth to make it a data validation instead
-                            logging.warning(f"A call of the {func.__name__} function in '{areaName}'s requirement, asks for a value of type {argType}\nfor its argument '{info.name}' but an unknown string was passed and thus converted to {value}")
-
-                else:
-                    try:
-                        value = argType(value)
-
-                    except ValueError:
-                        raise Exception(f"A call of the {func.__name__} function in '{areaName}'s requirement, asks for a value of type {argType}\nfor its argument '{info.name}' but its value '{value}' cannot be converted to {argType}")
-
-                args[index] = value
-
-            index += 1
 
 def ItemValue(world: World, multiworld: MultiWorld, state: CollectionState, player: int, valueCount: str, skipCache: bool = False):
     """When passed a string with this format: 'valueName:int',
@@ -375,21 +385,21 @@ def ItemValue(world: World, multiworld: MultiWorld, state: CollectionState, play
     value_name = valueCount[0].lower().strip()
     requested_count = int(valueCount[1].strip())
 
-    if not hasattr(world, 'item_values_cache'): #Cache made for optimization purposes
-        world.item_values_cache = {}
+    if not hasattr(world, 'itemvalue_rule_cache'): #Cache made for optimization purposes
+        world.itemvalue_rule_cache = {}
 
-    if not world.item_values_cache.get(player, {}):
-        world.item_values_cache[player] = {}
+    if not world.itemvalue_rule_cache.get(player, {}):
+        world.itemvalue_rule_cache[player] = {}
 
     if not skipCache:
-        if not world.item_values_cache[player].get(value_name, {}):
-            world.item_values_cache[player][value_name] = {
+        if not world.itemvalue_rule_cache[player].get(value_name, {}):
+            world.itemvalue_rule_cache[player][value_name] = {
                 'state': {},
                 'count': -1,
                 }
 
-    if (skipCache or world.item_values_cache[player][value_name].get('count', -1) == -1
-            or world.item_values_cache[player][value_name].get('state') != dict(state.prog_items[player])):
+    if (skipCache or world.itemvalue_rule_cache[player][value_name].get('count', -1) == -1
+            or world.itemvalue_rule_cache[player][value_name].get('state') != dict(state.prog_items[player])):
         # Run First Time, if state changed since last check or if skipCache has a value
         existing_item_values = get_items_with_value(world, multiworld, value_name)
         total_Count = 0
@@ -399,9 +409,9 @@ def ItemValue(world: World, multiworld: MultiWorld, state: CollectionState, play
                 total_Count += count * value
         if skipCache:
             return total_Count >= requested_count
-        world.item_values_cache[player][value_name]['count'] = total_Count
-        world.item_values_cache[player][value_name]['state'] = dict(state.prog_items[player])
-    return world.item_values_cache[player][value_name]['count'] >= requested_count
+        world.itemvalue_rule_cache[player][value_name]['count'] = total_Count
+        world.itemvalue_rule_cache[player][value_name]['state'] = dict(state.prog_items[player])
+    return world.itemvalue_rule_cache[player][value_name]['count'] >= requested_count
 
 # Two useful functions to make require work if an item is disabled instead of making it inaccessible
 def OptOne(world: World, multiworld: MultiWorld, state: CollectionState, player: int, item: str, items_counts: Optional[dict] = None):
