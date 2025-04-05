@@ -60,13 +60,6 @@ def before_create_items_filler(item_pool: list, world: World, multiworld: MultiW
     world.linklink_keys = len(item_pool)
     return item_pool
 
-    # Some other useful hook options:
-
-    ## Place an item at a specific location
-    # location = next(l for l in multiworld.get_unfilled_locations(player=player) if l.name == "Location Name")
-    # item_to_place = next(i for i in item_pool if i.name == "Item Name")
-    # location.place_locked_item(item_to_place)
-    # item_pool.remove(item_to_place)
 
 # The complete item pool prior to being set for generation is provided here, in case you want to make changes to it
 def after_create_items(item_pool: list[Item], world: World, multiworld: MultiWorld, player: int) -> list:
@@ -153,150 +146,157 @@ def before_generate_basic(world: World, multiworld: MultiWorld, player: int):
 
 # This method is run at the very end of pre-generation, once the place_item options have been handled and before AP generation occurs
 def after_generate_basic(world: World, multiworld: MultiWorld, player: int):
-    start_time = time.time()
-    victims = get_victims(world)
+    def linklink_magic(count_precollected_items = True):
+        start_time = time.time()
+        victims = get_victims(world)
 
-    unplaced_items = [i for i in multiworld.itempool if i.location is None]
-    unplaced_nothing = [i for i in unplaced_items if i.name == world.filler_item_name and i.player == player]
+        unplaced_items = [i for i in multiworld.itempool if i.location is None]
+        unplaced_nothing = [i for i in unplaced_items if i.name == world.filler_item_name and i.player == player]
 
-    filler_to_make: int = 0
+        filler_to_make: int = 0
 
-    players_digits = len(str(MAX_PLAYERS))
-    def place_locked_item(location: Location, item: Item):
-        if location.item:
-            old_item = location.item
-            old_item.location = None
-            multiworld.itempool.append(old_item)
-            unplaced_items.append(old_item)
-            unplaced_nothing.append(old_item)
-        location.item = item
-        item.location = location
-        location.locked = True
+        players_digits = len(str(MAX_PLAYERS))
+        def place_locked_item(location: Location, item: Item):
+            if location.item:
+                old_item = location.item
+                old_item.location = None
+                multiworld.itempool.append(old_item)
+                unplaced_items.append(old_item)
+                unplaced_nothing.append(old_item)
+            location.item = item
+            item.location = location
+            location.locked = True
 
-    logging.info(f"{multiworld.player_name[player]} is casting some linklink black magic with {', '.join([multiworld.player_name[p] for p in victims]) if len(world.options.victims.value) > 0 else 'everyone'}") # type: ignore
-    for item_data in item_table:
-        if 'linklink' in item_data:
-            # logging.debug(repr(linklink))
-            linklink: dict[str, list[str]] = item_data['linklink']
-            item_count: int = item_data['count']
-            item_name: str = item_data['name']
-            filler_to_make_for_player: dict[int, int] = {}
-            item_cache: dict[int, list[Item]] = {}
-            digit = len(str(item_count + 1))
-            for i in range(1, item_count + 1):
-                any_placed = False
-                n = 1
-                for j in range(1, multiworld.players + 1):
-                    if j == player or j not in victims:
-                        continue
-                    jworld: World = multiworld.worlds[j]
-                    game = jworld.game
-                    if game not in linklink:
-                        logging.debug(f"Game {game} not in linklink for {item_name}")
-                        continue
-
-                    if filler_to_make_for_player.get(j, None) is None:
-                        filler_to_make_for_player[j] = 0
-
-                    location = multiworld.get_location(f"{item_name} {str(i).zfill(digit)} Player {str(n).zfill(players_digits)}", player)
-                    if location is None:
-                        continue
-
-                    if hasattr(jworld, "item_name_groups") and "$item_name_groups" not in linklink[game]:
-                        for name in list(linklink[game]):
-                            if name in jworld.item_name_groups.keys():
-                                linklink[game].remove(name)
-                                linklink[game].extend([i for i in jworld.item_name_groups[name]])
-                        linklink[game].append("$item_name_groups")
-
-                    if item_cache.get(j, None) is None:
-                        shuffle = "$Shuffle" in linklink[game]
-                        options = [item for item in unplaced_items if item.name in linklink[game] and item.player == j]
-                        options.sort(key=lambda x: linklink[game].index(x.name))
-                        if shuffle and len(options) > 1: jworld.random.shuffle(options)
-                        item_cache[j] = options
-                        if i == 1 and len(options) == 0:
-                            logging.debug(f"linklink: No options for {item_name} {str(i).zfill(digit)} for {multiworld.player_name[j]} ({game})")
+        logging.info(f"{multiworld.player_name[player]} is casting some linklink{' black' if count_precollected_items else ''} magic with {', '.join([multiworld.player_name[p] for p in victims]) if len(world.options.victims.value) > 0 else 'everyone'}") # type: ignore
+        for item_data in item_table:
+            if 'linklink' in item_data:
+                # logging.debug(repr(linklink))
+                linklink: dict[str, list[str]] = item_data['linklink']
+                item_count: int = item_data['count']
+                item_name: str = item_data['name']
+                filler_to_make_for_player: dict[int, int] = {}
+                item_cache: dict[int, list[Item]] = {}
+                digit = len(str(item_count + 1))
+                for i in range(1, item_count + 1):
+                    any_placed = False
+                    n = 1
+                    for j in range(1, multiworld.players + 1):
+                        if j == player or j not in victims:
+                            continue
+                        jworld: World = multiworld.worlds[j]
+                        game = jworld.game
+                        if game not in linklink:
+                            logging.debug(f"Game {game} not in linklink for {item_name}")
                             continue
 
-                    item: Item|None = next(iter(item_cache[j]), None)
-                    if item is not None:
-                        item_cache[j].remove(item)
-                        place_locked_item(location, item)
-                        unplaced_items.remove(item)
+                        if filler_to_make_for_player.get(j, None) is None:
+                            filler_to_make_for_player[j] = 0
+
+                        location = multiworld.get_location(f"{item_name} {str(i).zfill(digit)} Player {str(n).zfill(players_digits)}", player)
+                        if location is None:
+                            continue
+
+                        if hasattr(jworld, "item_name_groups") and "$item_name_groups" not in linklink[game]:
+                            for name in list(linklink[game]):
+                                if name in jworld.item_name_groups.keys():
+                                    linklink[game].remove(name)
+                                    linklink[game].extend([i for i in jworld.item_name_groups[name]])
+                            linklink[game].append("$item_name_groups")
+
+                        if item_cache.get(j, None) is None:
+                            shuffle = "$Shuffle" in linklink[game]
+                            options = [item for item in unplaced_items if item.name in linklink[game] and item.player == j]
+                            options.sort(key=lambda x: linklink[game].index(x.name))
+                            if shuffle and len(options) > 1: jworld.random.shuffle(options)
+                            item_cache[j] = options
+                            if i == 1 and len(options) == 0:
+                                logging.debug(f"linklink: No options for {item_name} {str(i).zfill(digit)} for {multiworld.player_name[j]} ({game})")
+                                continue
+
+                        item: Item|None = next(iter(item_cache[j]), None)
+                        if item is not None:
+                            item_cache[j].remove(item)
+                            place_locked_item(location, item)
+                            unplaced_items.remove(item)
+                            multiworld.itempool.remove(item)
+                            filler_to_make_for_player[j] += 1
+                            n += 1
+                            any_placed = True
+
+                    if not any_placed:
+                        item = next(item for item in unplaced_items if item.name == item_name and item.player == player)
+                        logging.debug(f'Removing surplus {item.name}')
                         multiworld.itempool.remove(item)
-                        filler_to_make_for_player[j] += 1
-                        n += 1
-                        any_placed = True
+                        unplaced_items.remove(item)
 
-                if not any_placed:
-                    item = next(item for item in unplaced_items if item.name == item_name and item.player == player)
-                    logging.debug(f'Removing surplus {item.name}')
-                    multiworld.itempool.remove(item)
-                    unplaced_items.remove(item)
+                if filler_to_make_for_player.values():
+                    item_count = max(filler_to_make_for_player.values())
 
-            if filler_to_make_for_player.values():
-                item_count = max(filler_to_make_for_player.values())
+                    for p, c in dict(filler_to_make_for_player).items():
+                        if c == 0:
+                            filler_to_make_for_player.pop(p)
 
-                for p, c in dict(filler_to_make_for_player).items():
-                    if c == 0:
-                        filler_to_make_for_player.pop(p)
+                    queue: Iterator = iter([]) # for type checking reason
+                    player_id = None
+                    for _ in range(item_count):
+                        if player_id is None:
+                            queue = iter([player_id for player_id in filler_to_make_for_player.keys()])
+                            player_id = next(queue)
 
-                queue: Iterator = iter([]) # for type checking reason
-                player_id = None
-                for _ in range(item_count):
-                    if player_id is None:
-                        queue = iter([player_id for player_id in filler_to_make_for_player.keys()])
-                        player_id = next(queue)
+                        filler_to_make_for_player[player_id] -= 1
+                        if filler_to_make_for_player[player_id] == 0:
+                            filler_to_make_for_player.pop(player_id)
+                        player_id = next(queue, None)
 
-                    filler_to_make_for_player[player_id] -= 1
-                    if filler_to_make_for_player[player_id] == 0:
-                        filler_to_make_for_player.pop(player_id)
-                    player_id = next(queue, None)
+                    for player_id, count in {p: c for p, c in filler_to_make_for_player.items() if c > 0}.items():
+                        skip = False
+                        for _ in range(count):
+                            if skip:
+                                continue
+                            jworld = multiworld.worlds[player_id]
+                            filler = try_create_filter(jworld)
+                            if filler is not None:
+                                multiworld.itempool.append(filler)
+                                if unplaced_nothing is not None and len(unplaced_nothing) > 0:
+                                    multiworld.itempool.remove(unplaced_nothing.pop())
+                                filler_to_make_for_player[player_id] -= 1
+                                if filler_to_make_for_player[player_id] == 0:
+                                    filler_to_make_for_player.pop(player_id)
+                            else:
+                                # if creating filler fail skip the rest of this players attempt
+                                skip = True
+                    filler_to_make += sum(filler_to_make_for_player.values())
 
-                for player_id, count in {p: c for p, c in filler_to_make_for_player.items() if c > 0}.items():
-                    skip = False
-                    for _ in range(count):
-                        if skip:
-                            continue
-                        jworld = multiworld.worlds[player_id]
-                        filler = try_create_filter(jworld)
-                        if filler is not None:
-                            multiworld.itempool.append(filler)
-                            if unplaced_nothing is not None and len(unplaced_nothing) > 0:
-                                multiworld.itempool.remove(unplaced_nothing.pop())
-                            filler_to_make_for_player[player_id] -= 1
-                            if filler_to_make_for_player[player_id] == 0:
-                                filler_to_make_for_player.pop(player_id)
-                        else:
-                            # if creating filler fail skip the rest of this players attempt
-                            skip = True
-                filler_to_make += sum(filler_to_make_for_player.values())
+                for location in [l for l in multiworld.get_filled_locations(player) if l.name.startswith(f"{item_name} ")]:
+                    if location.item is not None and location.item.name == world.filler_item_name:
+                        if location.parent_region is not None:
+                            location.parent_region.locations.remove(location)
 
-            for location in [l for l in multiworld.get_filled_locations(player) if l.name.startswith(f"{item_name} ")]:
-                if location.item is not None and location.item.name == world.filler_item_name:
-                    if location.parent_region is not None:
-                        location.parent_region.locations.remove(location)
+        personal_precol: list[Item] = [i for i in multiworld.precollected_items.get(player, []) if i.name != world.filler_item_name] \
+                                    if count_precollected_items else []
 
-    # personal_precol = [i for i in multiworld.precollected_items.get(player, []) if i.name != world.filler_item_name]
+        nothing_total = filler_to_make + len(multiworld.get_unfilled_locations(player))
+        nothing_to_make = nothing_total - len(unplaced_nothing) + len(personal_precol)
 
-    nothing_total = filler_to_make + len(multiworld.get_unfilled_locations(player))
-    nothing_to_make = nothing_total - len(unplaced_nothing) # + len(personal_precol)
+        if nothing_to_make < 0:
+            for _ in range(abs(nothing_to_make)):
+                if len(unplaced_nothing) > 0:
+                    multiworld.itempool.remove(unplaced_nothing.pop())
+        elif nothing_to_make > 0:
+            for _ in range(nothing_to_make):
+                filler = world.create_filler()
+                unplaced_nothing.append(filler)
+                multiworld.itempool.append(filler)
 
-    if nothing_to_make < 0:
-        for _ in range(abs(nothing_to_make)):
-            if len(unplaced_nothing) > 0:
-                multiworld.itempool.remove(unplaced_nothing.pop())
-    elif nothing_to_make > 0:
-        for _ in range(nothing_to_make):
-            filler = world.create_filler()
-            unplaced_nothing.append(filler)
-            multiworld.itempool.append(filler)
+        if unplaced_nothing:
+            replace_nothings(world, multiworld, player, unplaced_nothing)
+        elapsed_time = time.time() - start_time
+        logging.info(f"{multiworld.player_name[player]} took {elapsed_time:.4f} seconds to do the linklink magic")
 
-    if unplaced_nothing:
-        replace_nothings(world, multiworld, player, unplaced_nothing)
-    elapsed_time = time.time() - start_time
-    logging.info(f"{multiworld.player_name[player]} took {elapsed_time:.4f} seconds to do the linklink magic")
+    if world.options.magic_in_pre_fill.value:
+        setattr(world, "pre_fill", linklink_magic)
+    else:
+        linklink_magic(False)
 
 def get_filler_item_name(self: World) -> str:
         multiworld = self.multiworld

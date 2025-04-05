@@ -35,9 +35,16 @@ class Victims(OptionSet):
             return "Everybody"
         return ", ".join(sorted(value))
 
+class MagicInPreFill(DefaultOnToggle):
+    """Should the Execution of the linklink logic/magic be in the prefill stage instead of after_generate_basic
+    It might make generation less likely to gen BUT in pre_fill linklink will respect/support start_inventory_from_pool and plando
+    """
+    display_name = "Magic done in pre_fill"
+
 
 # This is called before any manual options are defined, in case you want to define your own with a clean slate or let Manual define over them
 def before_options_defined(options: dict) -> dict:
+    options["magic_in_pre_fill"] = MagicInPreFill
     options["victims"] = Victims
     return options
 
