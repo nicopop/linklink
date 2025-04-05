@@ -1,10 +1,13 @@
 ITEM_TABLE = []
-MAX_PLAYERS = 40
-FREE_ITEMS = 0
+MAX_PLAYERS = 6
+FREE_ITEMS = 16
 PKMN = False
+FILLER_NAME = ""
 
 # called after the game.json file has been loaded
 def after_load_game_file(game_table: dict) -> dict:
+    global FILLER_NAME
+    FILLER_NAME = game_table.get("filler_item_name", "Nothing")
     return game_table
 
 # called after the items.json file has been loaded, before any item loading or processing has occurred
@@ -31,18 +34,23 @@ def after_load_progressive_item_file(progressive_item_table: list) -> list:
 def after_load_location_file(location_table: list) -> list:
     for item in ITEM_TABLE:
         if 'linklink' in item:
+            digit = len(str(item['count'] + 1))
+            players_digits = len(str(MAX_PLAYERS))
+
             for i in range(1, item['count'] + 1):
                 for j in range(1, MAX_PLAYERS + 1):
                     location_table.append({
-                        "name": f"{item['name']} {i} Player {j}",
-                        "region": f"{item['name']} {i}",
+                        "name": f"{item['name']} {str(i).zfill(digit)} Player {str(j).zfill(players_digits)}",
+                        "region": f"{item['name']} {str(i).zfill(digit)}",
                         "category": [item['name']],
                         "requires": "",
+		                "place_item": [FILLER_NAME],
                         "linklink": item['linklink'],
                     })
+    digit = len(str(FREE_ITEMS + 1))
     for i in range(1, FREE_ITEMS + 1):
         location_table.append({
-            "name": f"Free Item {i}",
+            "name": f"Free Item {str(i).zfill(digit)}",
             "region": "Free Items",
             "category": ["Free Items"],
             "requires": "",
@@ -55,8 +63,9 @@ def after_load_location_file(location_table: list) -> list:
 def after_load_region_file(region_table: dict) -> dict:
     for item in ITEM_TABLE:
         if 'linklink' in item:
+            digit = len(str(item['count'] + 1))
             for i in range(1, item['count'] + 1):
-                name = f"{item['name']} {i}"
+                name = f"{item['name']} {str(i).zfill(digit)}"
                 if name not in region_table:
                     region_table[name] = {
                         "name": name,
