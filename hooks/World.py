@@ -375,18 +375,46 @@ def before_write_spoiler(world: World, multiworld: MultiWorld, spoiler_handle) -
 
 # This is called when you want to add information to the hint text
 def before_extend_hint_information(hint_data: dict[int, dict[int, str]], world: World, multiworld: MultiWorld, player: int) -> None:
+    import re
+    from itertools import groupby
+    items = [loc.item for loc in multiworld.get_filled_locations() if loc.item is not None and loc.item.player == player]
+    items.extend(multiworld.precollected_items.get(player, []))
 
-    ### Example way to use this hook:
-    # if player not in hint_data:
-    #     hint_data.update({player: {}})
-    # for location in multiworld.get_locations(player):
-    #     if not location.address:
-    #         continue
-    #
-    #     use this section to calculate the hint string
-    #
-    #     hint_data[player][location.address] = hint_string
+    groups: dict[str,list] = {}
+    keyfunc = lambda i: i.name
+    data = sorted(items, key=keyfunc)
+    for k, g in groupby(data, keyfunc):
+        if k not in groups.keys():
+            groups[k] = list(g)      # Store group iterator as a list
 
+    if player not in hint_data:
+        hint_data.update({player: {}})
+
+    queues: dict[str,Iterator] = {}
+    victims: dict[str,list[Item]] = {}
+    next_item: dict[str,Item|None] = {}
+    for location in multiworld.get_locations(player):
+        if not location.address:
+            continue
+        elif location.parent_region is not None and location.parent_region.name == 'Free Items':
+            continue
+
+        item_name = re.split(r'\d+', location.name)[0].strip()
+
+        if next_item.get(item_name, None) is None or item_name not in queues.keys():
+            victims[item_name] = groups.get(item_name, [])
+            world.random.shuffle(victims[item_name])
+            queues[item_name] = iter(v for v in victims[item_name])
+            next_item[item_name] = next(queues[item_name], None)
+
+        current_item = next_item[item_name]
+        if current_item is not None:
+            if current_item.location is not None:
+                hint_data[player][location.address] = f"{str(current_item.location)}"
+            else:
+                hint_data[player][location.address] = f"You already should have this item"
+            pass
+        next_item[item_name] = next(queues[item_name], None)
     pass
 
 def after_extend_hint_information(hint_data: dict[int, dict[int, str]], world: World, multiworld: MultiWorld, player: int) -> None:
