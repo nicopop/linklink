@@ -224,7 +224,10 @@ def after_generate_basic(world: World, multiworld: MultiWorld, player: int):
                             any_placed = True
 
                     if not any_placed:
-                        item = next(item for item in unplaced_items if item.name == item_name and item.player == player)
+                        item = next((item for item in unplaced_items if item.name == item_name and item.player == player), None)
+                        if item is None:
+                            break
+                            # We are out of items to remove anyway
                         logging.debug(f'Removing surplus {item.name}')
                         multiworld.itempool.remove(item)
                         unplaced_items.remove(item)
