@@ -154,6 +154,7 @@ def after_generate_basic(world: World, multiworld: MultiWorld, player: int):
         unplaced_nothing = [i for i in unplaced_items if i.name == world.filler_item_name and i.player == player]
 
         filler_to_make: int = 0
+        extras: int = sum([i['extra'] for i in item_table if 'linklink' in i] + [0])
 
         players_digits = len(str(MAX_PLAYERS))
         def place_locked_item(location: Location, item: Item):
@@ -172,11 +173,12 @@ def after_generate_basic(world: World, multiworld: MultiWorld, player: int):
             if 'linklink' in item_data:
                 # logging.debug(repr(linklink))
                 linklink: dict[str, list[str]] = item_data['linklink']
-                item_count: int = item_data['count']
+                item_count: int = item_data['count'] - item_data['extra']
                 item_name: str = item_data['name']
                 filler_to_make_for_player: dict[int, int] = {}
                 item_cache: dict[int, list[Item]] = {}
                 digit = len(str(item_count + 1))
+                any_victim = False
                 for i in range(1, item_count + 1):
                     any_placed = False
                     n = 1
@@ -222,6 +224,7 @@ def after_generate_basic(world: World, multiworld: MultiWorld, player: int):
                             filler_to_make_for_player[j] += 1
                             n += 1
                             any_placed = True
+                            any_victim = True
 
                     if not any_placed:
                         item = next((item for item in unplaced_items if item.name == item_name and item.player == player), None)
@@ -231,13 +234,29 @@ def after_generate_basic(world: World, multiworld: MultiWorld, player: int):
                         logging.debug(f'Removing surplus {item.name}')
                         multiworld.itempool.remove(item)
                         unplaced_items.remove(item)
+                if not any_victim:
+                    if item_data.get('extra'):
+                        for _ in range(item_data['extra']):
+                            item = next((item for item in unplaced_items if item.name == item_name and item.player == player), None)
+                            if item is None:
+                                break
+                                # We are out of items to remove anyway
+                            extras -= 1
+                            logging.debug(f'Removing surplus {item.name}')
+                            multiworld.itempool.remove(item)
+                            unplaced_items.remove(item)
 
                 if filler_to_make_for_player.values():
-                    item_count = max(filler_to_make_for_player.values())
-
+                    max_filler = max(filler_to_make_for_player.values())
+                    spots = 0
                     for p, c in dict(filler_to_make_for_player).items():
                         if c == 0:
                             filler_to_make_for_player.pop(p)
+                        else:
+                            spots += c
+                    extra_to_remove = min(extras, spots - max_filler)
+                    item_count = min(max_filler + extra_to_remove, spots)
+                    extras -= extra_to_remove
 
                     queue: Iterator = iter([]) # for type checking reason
                     player_id = None
@@ -279,7 +298,7 @@ def after_generate_basic(world: World, multiworld: MultiWorld, player: int):
                                     if count_precollected_items else []
 
         nothing_total = filler_to_make + len(multiworld.get_unfilled_locations(player))
-        nothing_to_make = nothing_total - len(unplaced_nothing) + len(personal_precol)
+        nothing_to_make = nothing_total - len(unplaced_nothing) + len(personal_precol) - extras
 
         if nothing_to_make < 0:
             for _ in range(abs(nothing_to_make)):
@@ -412,7 +431,7 @@ def before_extend_hint_information(hint_data: dict[int, dict[int, str]], world: 
             if current_item.location is not None:
                 hint_data[player][location.address] = f"{str(current_item.location)}"
             else:
-                hint_data[player][location.address] = f"You already should have this item"
+                hint_data[player][location.address] = f"In {multiworld.player_name[player]}'s start inventory"
             pass
         next_item[item_name] = next(queues[item_name], None)
     pass

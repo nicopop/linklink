@@ -83,6 +83,12 @@
                     "pattern": "^[0-9]+$",
                     "default": 1
                 },
+                "extra": {
+                    "description": "(Optional) Additional copies of the item that will not generate linklink locations.",
+                    "type": ["string", "integer"],
+                    "pattern": "^[0-9]+$",
+                    "default": 0
+                },
                 "value": {
                     "description": "(Optional) A dictionary of values this item has in the format {\"name\": int,\"otherName\": int} \nUsed with the {ItemValue(Name: int)} in location requires \neg. \"value\": {\"coins\":10} mean this item is worth 10 coins",
                     "type": "object",

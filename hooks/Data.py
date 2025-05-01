@@ -21,6 +21,10 @@ def after_load_item_file(item_table: list) -> list:
     for item in item_table:
         if 'count' not in item:
             item['count'] = 1
+        if 'extra' not in item:
+            item['extra'] = 0
+        else:
+            item['count'] += item['extra']
     ITEM_TABLE.extend(item_table)
     return item_table
 
@@ -34,10 +38,11 @@ def after_load_progressive_item_file(progressive_item_table: list) -> list:
 def after_load_location_file(location_table: list) -> list:
     for item in ITEM_TABLE:
         if 'linklink' in item:
-            digit = len(str(item['count'] + 1))
+            count = item['count'] - item['extra']
+            digit = len(str(count + 1))
             players_digits = len(str(MAX_PLAYERS))
 
-            for i in range(1, item['count'] + 1):
+            for i in range(1, count + 1):
                 for j in range(1, MAX_PLAYERS + 1):
                     location_table.append({
                         "name": f"{item['name']} {str(i).zfill(digit)} Player {str(j).zfill(players_digits)}",
