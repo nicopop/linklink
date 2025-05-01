@@ -6,6 +6,6 @@
             "region": "Free Items",
             "victory": true,
             "category": [],
-            "requires": []
+            "requires": "|@linklink:25%|"
         }
 ]}
