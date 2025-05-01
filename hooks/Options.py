@@ -2,7 +2,7 @@
 from Options import Option, OptionSet, FreeText, NumericOption, Toggle, DefaultOnToggle, Choice, TextChoice, Range, NamedRange, OptionGroup, PerGameCommonOptions
 # These helper methods allow you to determine if an option has been set, or what its value is, for any player in the multiworld
 from ..Helpers import is_option_enabled, get_option_value
-from typing import Type
+from typing import Type, Any
 
 
 ####################################################################
@@ -43,7 +43,7 @@ class MagicInPreFill(DefaultOnToggle):
 
 
 # This is called before any manual options are defined, in case you want to define your own with a clean slate or let Manual define over them
-def before_options_defined(options: dict) -> dict:
+def before_options_defined(options: dict[str, Type[Option[Any]]]) -> dict[str, Type[Option[Any]]]:
     options["magic_in_pre_fill"] = MagicInPreFill
     options["victims"] = Victims
     return options
@@ -61,7 +61,7 @@ def after_options_defined(options: Type[PerGameCommonOptions]):
     pass
 
 # Use this Hook if you want to add your Option to an Option group (existing or not)
-def before_option_groups_created(groups: dict[str, list[Option]]) -> dict[str, list[Option]]:
+def before_option_groups_created(groups: dict[str, list[Type[Option[Any]]]]) -> dict[str, list[Type[Option[Any]]]]:
     # Uses the format groups['GroupName'] = [TotalCharactersToWinWith]
     return groups
 
