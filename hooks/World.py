@@ -59,6 +59,25 @@ def after_create_regions(world: World, multiworld: MultiWorld, player: int):
 #       will create 5 items that are the "useful trap" class
 # {"Item Name": {ItemClassification.useful: 5}} <- You can also use the classification directly
 def before_create_items_all(item_config: dict[str, int|dict], world: World, multiworld: MultiWorld, player: int) -> dict[str, int|dict]:
+    for item_data in item_table:
+        item_data = cast(dict[str, Any], item_data)
+        if item_config.get(item_data['name']) and 'linklink' in item_data:
+            classification = ItemClassification.filler
+
+            if item_data.get("trap"):
+                classification |= ItemClassification.trap
+
+            if item_data.get("useful"):
+                classification |= ItemClassification.useful
+
+            if item_data.get("progression_skip_balancing"):
+                classification |= ItemClassification.progression_skip_balancing
+            elif item_data.get("progression"):
+                classification |= ItemClassification.progression
+
+            if item_data['extra']:
+                item_config[item_data['name']] = {classification: item_data['count'] - item_data['extra'], ItemClassification.useful: item_data['extra']}
+
     return item_config
 
 # The item pool before starting items are processed, in case you want to see the raw item pool at that stage
@@ -238,7 +257,7 @@ def after_generate_basic(world: World, multiworld: MultiWorld, player: int):
                             any_victim = True
 
                     if not any_placed:
-                        item = next((item for item in unplaced_items if item.name == item_name and item.player == player), None)
+                        item = next((item for item in unplaced_items if item.name == item_name and item.player == player and ItemClassification.progression in item.classification), None)
                         if item is None:
                             break
                             # We are out of items to remove anyway
