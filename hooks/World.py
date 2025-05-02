@@ -224,7 +224,7 @@ def after_generate_basic(world: World, multiworld: MultiWorld, player: int):
                         if filler_to_make_for_player.get(j, None) is None:
                             filler_to_make_for_player[j] = 0
 
-                        location = multiworld.get_location(f"{item_name} {str(i).zfill(digit)} Player {str(n).zfill(players_digits)}", player)
+                        location = multiworld.get_location(f"{item_name} l$l {str(i).zfill(digit)} Player {str(n).zfill(players_digits)}", player)
                         if location is None:
                             continue
 
@@ -346,7 +346,9 @@ def after_generate_basic(world: World, multiworld: MultiWorld, player: int):
         logging.info(f"{multiworld.player_name[player]} took {elapsed_time:.4f} seconds to do the linklink magic")
 
     if world.options.magic_in_pre_fill.value:
-        setattr(world, "pre_fill", linklink_magic)
+        def pre_fill():
+            linklink_magic()
+        setattr(world, "pre_fill", pre_fill)
     else:
         linklink_magic(False)
 
@@ -463,7 +465,7 @@ def before_extend_hint_information(hint_data: dict[int, dict[int, str]], world: 
         elif location.parent_region is not None and location.parent_region.name == 'Free Items':
             continue
 
-        item_name = re.split(r'\d+', location.name)[0].strip()
+        item_name = location.name.split("l$l")[0].strip() # re.split(r'\d+', location.name)[0].strip()
 
         if next_item.get(item_name, None) is None or item_name not in queues.keys():
             victims[item_name] = groups.get(item_name, [])
