@@ -1,6 +1,7 @@
+from typing import Any
 ITEM_TABLE = []
 MAX_PLAYERS = 6
-FREE_ITEMS = 16
+FREE_ITEMS = 12
 PKMN = False
 FILLER_NAME = ""
 
@@ -96,5 +97,5 @@ def after_load_meta_file(meta_table: dict) -> dict:
 # called when an external tool (eg Universal Tracker) ask for slot data to be read
 # use this if you want to restore more data
 # return True if you want to trigger a regeneration if you changed anything
-def hook_interpret_slot_data(world, player: int, slot_data: dict[str, any]) -> dict | bool:
+def hook_interpret_slot_data(world, player: int, slot_data: dict[str, Any]) -> dict | bool:
     return False

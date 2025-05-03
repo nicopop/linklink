@@ -103,19 +103,19 @@ def after_create_items(item_pool: list[Item], world: World, multiworld: MultiWor
 
 
 
-def replace_nothings(world: World, multiworld: MultiWorld, player: int, unplaced_nothing: list[Item]| None = None):
+def replace_nothings(world: World, multiworld: MultiWorld, player: int, unplaced_nothing: int | None = None):
     # Remove "Nothing" items and replace them with filler items from other players
     if unplaced_nothing is not None:
-        item_pool = unplaced_nothing
+        item_count = unplaced_nothing
     else:
         item_pool = [i for i in multiworld.itempool if i.player == player and i.name == world.filler_item_name]
-    item_count = len(item_pool)
+        item_count = len(item_pool)
 
     filler_blacklist: list[str] = [] # ["SMZ3", "Links Awakening DX"]  # These games don't have filler items or don't implement them correctly
     victims = list(get_victims(world))
     victims = [v for v in victims if v != player and multiworld.worlds[v].game not in filler_blacklist \
                 and "linklink" not in multiworld.worlds[v].game.lower()]  # Only include players with filler items
-
+    replacements: list[Item] = []
     queue: Iterator = iter([])  # for type checking reason
     other_player = None
     while item_count > 0:
@@ -126,9 +126,7 @@ def replace_nothings(world: World, multiworld: MultiWorld, player: int, unplaced
         jworld = multiworld.worlds[other_player]
         filler = try_create_filter(jworld)
         if filler is not None:
-            multiworld.itempool.append(filler)
-            if unplaced_nothing is not None and len(unplaced_nothing) > 0:
-                multiworld.itempool.remove(unplaced_nothing.pop())
+            replacements.append(filler)
             item_count -= 1
         else:
             victims.remove(other_player)
@@ -137,6 +135,7 @@ def replace_nothings(world: World, multiworld: MultiWorld, player: int, unplaced
             world.random.shuffle(victims)
             queue = iter(v for v in victims)
         other_player = next(queue, None)
+    return replacements
 
 # Called before rules for accessing regions and locations are created. Not clear why you'd want this, but it's here.
 def before_set_rules(world: World, multiworld: MultiWorld, player: int):
@@ -184,7 +183,9 @@ def after_generate_basic(world: World, multiworld: MultiWorld, player: int):
         unplaced_nothing = [i for i in unplaced_items if i.name == world.filler_item_name and i.player == player]
 
         filler_to_make: int = 0
-        extras: int = sum([i['extra'] for i in item_table if 'linklink' in i] + [0])
+        filler_made: int = 0
+        filler_keys: int = 0
+        extras: int = 0
 
         players_digits = len(str(MAX_PLAYERS))
         def place_locked_item(location: Location, item: Item):
@@ -204,11 +205,14 @@ def after_generate_basic(world: World, multiworld: MultiWorld, player: int):
                 # logging.debug(repr(linklink))
                 linklink: dict[str, list[str]] = item_data['linklink']
                 item_count: int = item_data['count'] - item_data['extra']
+                extras += item_data['extra']
                 item_name: str = item_data['name']
                 filler_to_make_for_player: dict[int, int] = {}
                 item_cache: dict[int, list[Item]] = {}
                 digit = len(str(item_count + 1))
                 any_victim = False
+                highest_placed_count = 0
+                spot_filled = 0
                 for i in range(1, item_count + 1):
                     any_placed = False
                     n = 1
@@ -232,13 +236,52 @@ def after_generate_basic(world: World, multiworld: MultiWorld, player: int):
                             for name in list(linklink[game]):
                                 if name in jworld.item_name_groups.keys():
                                     linklink[game].remove(name)
-                                    linklink[game].extend([i for i in jworld.item_name_groups[name]])
+                                    linklink[game].extend([lli for lli in jworld.item_name_groups[name]])
                             linklink[game].append("$item_name_groups")
 
                         if item_cache.get(j, None) is None:
                             shuffle = "$Shuffle" in linklink[game]
                             options = [item for item in unplaced_items if item.name in linklink[game] and item.player == j]
+                            for item in options:
+                                item.LINKLINK_create_filler = True
                             options.sort(key=lambda x: linklink[game].index(x.name))
+                            options_index = 0
+                            last_index = -1
+                            for ll_item in linklink[game]:
+                                if not ll_item.startswith("$"):
+                                    buffer_index = -1
+                                    for buffer_item in options:
+                                        buffer_index += 1
+                                        if buffer_item.name == ll_item:
+                                            options_index = buffer_index
+                                            break
+                                elif ll_item == "$Shuffle":
+                                    if last_index != -1:
+                                        # TODO shuffle everything BEFORE the shuffle instead of just if shuffle is present
+                                        pass
+                                elif ll_item.startswith("$Buffer_"):
+                                    buffer_to_make = min(int(ll_item.removeprefix("$Buffer_")), max(0, item_count - len(options)))
+                                    if try_create_filter(jworld) is not None: # If current jworld can create filler use those
+                                        failed = False
+                                        buffers: list[Item] = []
+                                        buffer_count = buffer_to_make
+                                        while buffer_count > 0 and not failed:
+                                            filler = try_create_filter(jworld)
+                                            if filler is not None:
+                                                buffers.append(filler)
+                                                buffer_count -= 1
+                                            else:
+                                                failed = True
+                                    else: # if not go ahead and use the default any victims randomly picked fillers
+                                        buffers = replace_nothings(world, multiworld, player, buffer_to_make)
+                                    for item in buffers:
+                                        item.LINKLINK_create_filler = False
+                                    multiworld.itempool.extend(buffers)
+                                    unplaced_items.extend(buffers)
+                                    for buffer_item in buffers:
+                                        options.insert(options_index + 1, buffer_item)
+                                last_index += 1
+
                             if shuffle and len(options) > 1: jworld.random.shuffle(options)
                             item_cache[j] = options
                             if i == 1 and len(options) == 0:
@@ -251,10 +294,15 @@ def after_generate_basic(world: World, multiworld: MultiWorld, player: int):
                             place_locked_item(location, item)
                             unplaced_items.remove(item)
                             multiworld.itempool.remove(item)
-                            filler_to_make_for_player[j] += 1
+                            if item.LINKLINK_create_filler:
+                                filler_to_make_for_player[j] += 1
+                            else:
+                                multiworld.itempool.remove(unplaced_nothing.pop())
                             n += 1
+                            spot_filled += 1
                             any_placed = True
                             any_victim = True
+                            highest_placed_count = max(highest_placed_count, i)
 
                     if not any_placed:
                         item = next((item for item in unplaced_items if item.name == item_name and item.player == player and ItemClassification.progression in item.classification), None)
@@ -277,15 +325,10 @@ def after_generate_basic(world: World, multiworld: MultiWorld, player: int):
                             unplaced_items.remove(item)
 
                 if filler_to_make_for_player.values():
-                    max_filler = max(filler_to_make_for_player.values())
-                    spots = 0
-                    for p, c in dict(filler_to_make_for_player).items():
-                        if c == 0:
-                            filler_to_make_for_player.pop(p)
-                        else:
-                            spots += c
-                    extra_to_remove = min(extras, spots - max_filler)
-                    item_count = min(max_filler + extra_to_remove, spots)
+                    filler_keys += highest_placed_count
+                    available_spots = spot_filled - highest_placed_count
+                    extra_to_remove = min(available_spots, extras)
+                    item_count = highest_placed_count + extra_to_remove
                     extras -= extra_to_remove
 
                     queue: Iterator = iter([]) # for type checking reason
@@ -308,6 +351,7 @@ def after_generate_basic(world: World, multiworld: MultiWorld, player: int):
                             jworld = multiworld.worlds[player_id]
                             filler = try_create_filter(jworld)
                             if filler is not None:
+                                filler_made += 1
                                 multiworld.itempool.append(filler)
                                 if unplaced_nothing is not None and len(unplaced_nothing) > 0:
                                     multiworld.itempool.remove(unplaced_nothing.pop())
@@ -330,18 +374,25 @@ def after_generate_basic(world: World, multiworld: MultiWorld, player: int):
         nothing_total = filler_to_make + len(multiworld.get_unfilled_locations(player))
         nothing_to_make = nothing_total - len(unplaced_nothing) + len(personal_precol) - extras
 
+        failed_to_remove = 0
         if nothing_to_make < 0:
             for _ in range(abs(nothing_to_make)):
                 if len(unplaced_nothing) > 0:
                     multiworld.itempool.remove(unplaced_nothing.pop())
+                else:
+                    failed_to_remove += 1
         elif nothing_to_make > 0:
             for _ in range(nothing_to_make):
                 filler = world.create_filler()
                 unplaced_nothing.append(filler)
                 multiworld.itempool.append(filler)
-
+        if failed_to_remove:
+            logging.info(f"{multiworld.player_name[player]} failed to remove {failed_to_remove} items you will see in the logs that there are more items than locations")
         if unplaced_nothing:
-            replace_nothings(world, multiworld, player, unplaced_nothing)
+            replacements = replace_nothings(world, multiworld, player, len(unplaced_nothing))
+            for nothing in unplaced_nothing:
+                multiworld.itempool.remove(nothing)
+            multiworld.itempool.extend(replacements)
         elapsed_time = time.time() - start_time
         logging.info(f"{multiworld.player_name[player]} took {elapsed_time:.4f} seconds to do the linklink magic")
 
