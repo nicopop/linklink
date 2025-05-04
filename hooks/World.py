@@ -76,7 +76,12 @@ def before_create_items_all(item_config: dict[str, int|dict], world: World, mult
                 classification |= ItemClassification.progression
 
             if item_data['extra']:
-                item_config[item_data['name']] = {classification: item_data['count'] - item_data['extra'], ItemClassification.useful: item_data['extra']}
+                extra_classification = ItemClassification(classification)
+                if ItemClassification.progression in classification and ItemClassification.useful not in classification:
+                    extra_classification |= ItemClassification.useful
+                extra_classification &= ~ItemClassification.progression_skip_balancing
+
+                item_config[item_data['name']] = {classification: item_data['count'] - item_data['extra'], extra_classification: item_data['extra']}
 
     return item_config
 
