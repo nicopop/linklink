@@ -328,7 +328,7 @@ def after_generate_basic(world: World, multiworld: MultiWorld, player: int):
                             logging.debug(f'Removing surplus {item.name}')
                             multiworld.itempool.remove(item)
                             unplaced_items.remove(item)
-
+                filler_to_make_for_player = {player_id: count for player_id, count in filler_to_make_for_player.items() if count > 0}
                 if filler_to_make_for_player.values():
                     filler_keys += highest_placed_count
                     available_spots = spot_filled - highest_placed_count
@@ -355,9 +355,11 @@ def after_generate_basic(world: World, multiworld: MultiWorld, player: int):
                                 continue
                             jworld = multiworld.worlds[player_id]
                             filler = try_create_filter(jworld)
+                            filler.LINKLINK_is_filler = True
                             if filler is not None:
                                 filler_made += 1
                                 multiworld.itempool.append(filler)
+                                unplaced_items.append(filler)
                                 if unplaced_nothing is not None and len(unplaced_nothing) > 0:
                                     multiworld.itempool.remove(unplaced_nothing.pop())
                                 filler_to_make_for_player[player_id] -= 1
@@ -372,12 +374,29 @@ def after_generate_basic(world: World, multiworld: MultiWorld, player: int):
                     if location.item is not None and location.item.name == world.filler_item_name:
                         if location.parent_region is not None:
                             location.parent_region.locations.remove(location)
+        if extras > 0:
+            logging.info(f"Failed to fit {extras} extra keys in the item pool, randomly picked items from the generated fillers will be removed to avoid creating too many items")
+            filler_items = [i for i in unplaced_items if hasattr(i, "LINKLINK_is_filler") and i.LINKLINK_is_filler]
+            for _ in range(extras):
+                if filler_to_make > 0:
+                    filler_to_make -= 1
+                    extras -= 1
+                elif filler_items:
+                    sacrifice = world.random.choice(filler_items)
+                    multiworld.itempool.remove(sacrifice)
+                    unplaced_items.remove(sacrifice)
+                    filler_items.remove(sacrifice)
+                    extras -= 1
+                else:
+                    break
+            if extras > 0:
+                logging.warning(f"Failed to remove {extras} extra keys, you might see a message later talking about too many items.")
 
-        personal_precol: list[Item] = [i for i in multiworld.precollected_items.get(player, []) if i.name != world.filler_item_name] \
-                                    if count_precollected_items else []
+        personal_precol: int = len([i for i in multiworld.precollected_items.get(player, []) if i.name != world.filler_item_name]) \
+                                    if count_precollected_items else 0
 
         nothing_total = filler_to_make + len(multiworld.get_unfilled_locations(player))
-        nothing_to_make = nothing_total - len(unplaced_nothing) + len(personal_precol) - extras
+        nothing_to_make = nothing_total - len(unplaced_nothing) + personal_precol - extras
 
         failed_to_remove = 0
         if nothing_to_make < 0:
@@ -392,7 +411,7 @@ def after_generate_basic(world: World, multiworld: MultiWorld, player: int):
                 unplaced_nothing.append(filler)
                 multiworld.itempool.append(filler)
         if failed_to_remove:
-            logging.info(f"{multiworld.player_name[player]} failed to remove {failed_to_remove} items you will see in the logs that there are more items than locations")
+            logging.warning(f"{multiworld.player_name[player]} failed to remove {failed_to_remove} items you will see in the logs that there are more items than locations")
         if unplaced_nothing:
             replacements = replace_nothings(world, multiworld, player, len(unplaced_nothing))
             for nothing in unplaced_nothing:
