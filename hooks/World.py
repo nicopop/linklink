@@ -182,7 +182,7 @@ def before_generate_basic(world: World, multiworld: MultiWorld, player: int):
 def after_generate_basic(world: World, multiworld: MultiWorld, player: int):
     def linklink_magic(count_precollected_items = True):
         start_time = time.time()
-        victims = get_victims(world)
+        victims = get_victims(world, True)
 
         unplaced_items = [i for i in multiworld.itempool if i.location is None]
         unplaced_nothing = [i for i in unplaced_items if i.name == world.filler_item_name and i.player == player]
@@ -473,8 +473,19 @@ def try_create_filter(world: World) -> Item|None:
 
     return recursion()
 
+def get_linklink_games(world: World) -> set[str]:
+    if hasattr(world, "LINKLINK_games"):
+        return world.LINKLINK_games
+    games = set()
+    for item_data in item_table:
+        if 'linklink' not in item_data:
+            continue
+        for game in item_data['linklink'].keys():
+            games.add(game)
+    world.LINKLINK_games = games
+    return games
 
-def get_victims(world: World) -> set[int]:
+def get_victims(world: World, filter: bool = False) -> set[int]:
     victims: set = world.options.victims.value # type: ignore
     multiworld = world.multiworld
 
@@ -483,6 +494,13 @@ def get_victims(world: World) -> set[int]:
     else:
         id_for_names = {multiworld.player_name[i]: i for i in range(1, multiworld.players + 1)}
         victims = set([id_for_names[v] for v in victims])
+
+    if filter:
+        games = get_linklink_games(world)
+        for victim in set(victims):
+            if multiworld.worlds[victim].game not in games:
+                victims.remove(victim)
+
     return victims
 
 # This method is run every time an item is added to the state, can be used to modify the value of an item.
