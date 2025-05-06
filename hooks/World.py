@@ -35,8 +35,9 @@ if TYPE_CHECKING:
 ## The fill_slot_data method will be used to send data to the Manual client for later use, like deathlink.
 ########################################################################################
 
-
-
+version = 2025_05_05_00 # YYYYMMDD
+def pretty_version() -> str:
+    return str(version)[:4] + '-' +str(version)[4:6] + '-' +str(version)[6:8] + f'({str(version)[8:]})'
 # Use this function to change the valid filler items to be created to replace item links or starting items.
 # Default value is the `filler_item_name` from game.json
 def hook_get_filler_item_name(world: World, multiworld: MultiWorld, player: int) -> str | bool:
@@ -203,7 +204,7 @@ def after_generate_basic(world: World, multiworld: MultiWorld, player: int):
             item.location = location
             location.locked = True
 
-        logging.info(f"{multiworld.player_name[player]} is casting some linklink{' black' if count_precollected_items else ''} magic with {', '.join([multiworld.player_name[p] for p in victims]) if len(world.options.victims.value) > 0 else 'everyone'}") # type: ignore
+        logging.info(f"{multiworld.player_name[player]} is casting some {world.game} version {pretty_version()}{' black' if count_precollected_items else ''} magic with {', '.join([multiworld.player_name[p] for p in victims]) if len(world.options.victims.value) > 0 else 'everyone'}") # type: ignore
         for item_data in item_table:
             if 'linklink' in item_data:
                 # logging.debug(repr(linklink))

@@ -1,0 +1,68 @@
+name: Create Release - GenerateTweaked
+
+on:
+  workflow_dispatch:
+    inputs:
+      versionsuffix:
+        description: 'Optional version suffix. Exactly 2 digit to keep consistant with default 00'
+        required: false
+        type: string
+        default: '00'
+      changelog:
+        description: 'Changelog'
+        required: true
+        type: string
+
+permissions:
+  actions: read
+  contents: write
+
+jobs:
+  create-release:
+    name: Create linklink apworld
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Set current date to env
+        run: |
+          echo "CURRENT_DATE=$(date +'%Y%m%d')" >> "$GITHUB_ENV"
+          echo "CURRENT_DATE_VERSION=$(date +'%Y%m%d')${{ github.event.inputs.versionsuffix }}" >> "$GITHUB_ENV"
+      - name: Set expected file basename to env
+        run: echo "BASENAME=generate_tweaked" >> "$GITHUB_ENV"
+      - name: Format changelog input as multiline string and put into env
+        run: |
+          echo 'CHANGELOG<<EOF' >> "$GITHUB_ENV"
+          echo "This release contains the following changes:\n\n" >> "$GITHUB_ENV"
+          echo "${{ github.event.inputs.changelog }}" >> "$GITHUB_ENV"
+          echo "\n\nAs always, report any bugs in our Discord!"
+          echo 'EOF' >> "$GITHUB_ENV"
+      - name: Checkout repo
+        uses: actions/checkout@v3
+      - name: Change Generate_Tweaked.py's version to today's date
+        # version = 2025_03_24_00 # YYYYMMDD
+        run: |
+          tmp=$(mktemp)
+          sed -r 's/version = .*/version = ${{ env.CURRENT_DATE_VERSION }}/' hooks/World.py > "$tmp"
+          mv "$tmp" hooks/World.py
+      - name: Create apworld file
+        # rename src folder, zip it, change extension
+        run: |
+          mv . ${{ env.BASENAME }}
+          zip -r ${{ env.BASENAME }}.zip ${{ env.BASENAME }}/*
+          mv ${{ env.BASENAME }}.zip ${{ env.BASENAME }}.apworld
+      - name: Upload apworld as an artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.BASENAME }}.apworld
+          path: ${{ env.BASENAME }}.apworld
+          if-no-files-found: error
+      - name: Add Changelog text to a file for release body, to preserve newlines
+        run: echo -en "${{ env.CHANGELOG }}" > bodyFile.txt
+      - name: Create an GenerateTweaked release
+        uses: ncipollo/release-action@v1
+        with:
+          name: "GenerateTweaked - ${{ env.CURRENT_DATE_VERSION }}"
+          bodyFile: bodyFile.txt
+          tag: "${{ env.CURRENT_DATE_VERSION }}"
+          commit: ${{ env.GITHUB_REF }}
+          artifacts: "${{ env.BASENAME }}.apworld"
