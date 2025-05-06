@@ -61,7 +61,7 @@ def after_create_regions(world: World, multiworld: MultiWorld, player: int):
 def before_create_items_all(item_config: dict[str, int|dict], world: World, multiworld: MultiWorld, player: int) -> dict[str, int|dict]:
     for item_data in item_table:
         item_data = cast(dict[str, Any], item_data)
-        if item_config.get(item_data['name']) and 'linklink' in item_data:
+        if item_config.get(item_data['name']) and item_data.get("extra"): # 'linklink' in item_data:
             classification = ItemClassification.filler
 
             if item_data.get("trap"):
@@ -75,13 +75,12 @@ def before_create_items_all(item_config: dict[str, int|dict], world: World, mult
             elif item_data.get("progression"):
                 classification |= ItemClassification.progression
 
-            if item_data['extra']:
-                extra_classification = ItemClassification(classification)
-                if ItemClassification.progression in classification and ItemClassification.useful not in classification:
-                    extra_classification |= ItemClassification.useful
-                extra_classification &= ~ItemClassification.progression_skip_balancing
+            extra_classification = ItemClassification(classification)
+            if ItemClassification.useful not in classification:
+                extra_classification |= ItemClassification.useful
+            extra_classification &= ~ItemClassification.progression_skip_balancing
 
-                item_config[item_data['name']] = {classification: item_data['count'] - item_data['extra'], extra_classification: item_data['extra']}
+            item_config[item_data['name']] = {classification: item_data['count'] - item_data['extra'], extra_classification: item_data['extra']}
 
     return item_config
 
@@ -266,25 +265,26 @@ def after_generate_basic(world: World, multiworld: MultiWorld, player: int):
                                         pass
                                 elif ll_item.startswith("$Buffer_"):
                                     buffer_to_make = min(int(ll_item.removeprefix("$Buffer_")), max(0, item_count - len(options)))
-                                    if try_create_filter(jworld) is not None: # If current jworld can create filler use those
-                                        failed = False
-                                        buffers: list[Item] = []
-                                        buffer_count = buffer_to_make
-                                        while buffer_count > 0 and not failed:
-                                            filler = try_create_filter(jworld)
-                                            if filler is not None:
-                                                buffers.append(filler)
-                                                buffer_count -= 1
-                                            else:
-                                                failed = True
-                                    else: # if not go ahead and use the default any victims randomly picked fillers
-                                        buffers = replace_nothings(world, multiworld, player, buffer_to_make)
-                                    for item in buffers:
-                                        item.LINKLINK_create_filler = False
-                                    multiworld.itempool.extend(buffers)
-                                    unplaced_items.extend(buffers)
-                                    for buffer_item in buffers:
-                                        options.insert(options_index + 1, buffer_item)
+                                    if buffer_to_make:
+                                        if try_create_filter(jworld) is not None: # If current jworld can create filler use those
+                                            failed = False
+                                            buffers: list[Item] = []
+                                            buffer_count = buffer_to_make
+                                            while buffer_count > 0 and not failed:
+                                                filler = try_create_filter(jworld)
+                                                if filler is not None:
+                                                    buffers.append(filler)
+                                                    buffer_count -= 1
+                                                else:
+                                                    failed = True
+                                        else: # if not go ahead and use the default any victims randomly picked fillers
+                                            buffers = replace_nothings(world, multiworld, player, buffer_to_make)
+                                        for item in buffers:
+                                            item.LINKLINK_create_filler = False
+                                        multiworld.itempool.extend(buffers)
+                                        unplaced_items.extend(buffers)
+                                        for buffer_item in buffers:
+                                            options.insert(options_index + 1, buffer_item)
                                 last_index += 1
 
                             if shuffle and len(options) > 1: jworld.random.shuffle(options)
@@ -310,7 +310,7 @@ def after_generate_basic(world: World, multiworld: MultiWorld, player: int):
                             highest_placed_count = max(highest_placed_count, i)
 
                     if not any_placed:
-                        item = next((item for item in unplaced_items if item.name == item_name and item.player == player and ItemClassification.progression in item.classification), None)
+                        item = next((item for item in unplaced_items if item.name == item_name and item.player == player and item.advancement), None)
                         if item is None:
                             break
                             # We are out of items to remove anyway

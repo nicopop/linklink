@@ -1,6 +1,6 @@
 from typing import Any
 ITEM_TABLE = []
-MAX_PLAYERS = 6
+MAX_PLAYERS = 40
 FREE_ITEMS = 12
 PKMN = False
 FILLER_NAME = ""
