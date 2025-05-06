@@ -35,6 +35,7 @@ jobs:
           echo "This release contains the following changes:\n\n" >> "$GITHUB_ENV"
           echo "${{ github.event.inputs.changelog }}" >> "$GITHUB_ENV"
           echo "\n\nAs always, report any bugs in our Discord!"
+          echo "\nBased on Silasary's [linklink](https://github.com/silasary/linklink)"
           echo 'EOF' >> "$GITHUB_ENV"
       - name: Checkout repo
         uses: actions/checkout@v3
@@ -58,10 +59,10 @@ jobs:
           if-no-files-found: error
       - name: Add Changelog text to a file for release body, to preserve newlines
         run: echo -en "${{ env.CHANGELOG }}" > bodyFile.txt
-      - name: Create an GenerateTweaked release
+      - name: Create a LinkLink release
         uses: ncipollo/release-action@v1
         with:
-          name: "GenerateTweaked - ${{ env.CURRENT_DATE_VERSION }}"
+          name: "Manual LinkLink Nicopopxd - ${{ env.CURRENT_DATE_VERSION }}"
           bodyFile: bodyFile.txt
           tag: "${{ env.CURRENT_DATE_VERSION }}"
           commit: ${{ env.GITHUB_REF }}
