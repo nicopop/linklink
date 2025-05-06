@@ -28,7 +28,7 @@ jobs:
           echo "CURRENT_DATE=$(date +'%Y%m%d')" >> "$GITHUB_ENV"
           echo "CURRENT_DATE_VERSION=$(date +'%Y%m%d')${{ github.event.inputs.versionsuffix }}" >> "$GITHUB_ENV"
       - name: Set expected file basename to env
-        run: echo "BASENAME=linklink" >> "$GITHUB_ENV"
+        run: echo "BASENAME=manual_linklink_nicopopxd" >> "$GITHUB_ENV"
       - name: Format changelog input as multiline string and put into env
         run: |
           echo 'CHANGELOG<<EOF' >> "$GITHUB_ENV"
