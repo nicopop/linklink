@@ -47,7 +47,7 @@ jobs:
       - name: Create apworld file
         # rename src folder, zip it, change extension
         run: |
-          cp . ${{ env.BASENAME }}
+          rsync -Rr . ${{ env.BASENAME }}
           zip -r ${{ env.BASENAME }}.zip ${{ env.BASENAME }}/*
           mv ${{ env.BASENAME }}.zip ${{ env.BASENAME }}.apworld
       - name: Upload apworld as an artifact
