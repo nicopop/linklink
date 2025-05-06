@@ -1,4 +1,4 @@
-name: Create Release - GenerateTweaked
+name: Create Release - linklink
 
 on:
   workflow_dispatch:
@@ -28,7 +28,7 @@ jobs:
           echo "CURRENT_DATE=$(date +'%Y%m%d')" >> "$GITHUB_ENV"
           echo "CURRENT_DATE_VERSION=$(date +'%Y%m%d')${{ github.event.inputs.versionsuffix }}" >> "$GITHUB_ENV"
       - name: Set expected file basename to env
-        run: echo "BASENAME=generate_tweaked" >> "$GITHUB_ENV"
+        run: echo "BASENAME=linklink" >> "$GITHUB_ENV"
       - name: Format changelog input as multiline string and put into env
         run: |
           echo 'CHANGELOG<<EOF' >> "$GITHUB_ENV"
@@ -38,7 +38,7 @@ jobs:
           echo 'EOF' >> "$GITHUB_ENV"
       - name: Checkout repo
         uses: actions/checkout@v3
-      - name: Change Generate_Tweaked.py's version to today's date
+      - name: Change linklink's version to today's date
         # version = 2025_03_24_00 # YYYYMMDD
         run: |
           tmp=$(mktemp)
@@ -47,7 +47,7 @@ jobs:
       - name: Create apworld file
         # rename src folder, zip it, change extension
         run: |
-          mv . ${{ env.BASENAME }}
+          cp . ${{ env.BASENAME }}
           zip -r ${{ env.BASENAME }}.zip ${{ env.BASENAME }}/*
           mv ${{ env.BASENAME }}.zip ${{ env.BASENAME }}.apworld
       - name: Upload apworld as an artifact
