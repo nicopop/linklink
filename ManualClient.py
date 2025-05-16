@@ -19,9 +19,6 @@ ModuleUpdate.update()
 
 import Utils
 
-if __name__ == "__main__":
-    Utils.init_logging("ManualClient", exception_logger="Client")
-
 from NetUtils import ClientStatus
 from CommonClient import gui_enabled, logger, get_base_parser, ClientCommandProcessor, server_loop
 from MultiServer import mark_raw
@@ -200,14 +197,15 @@ class ManualContext(SuperContext):
         if cmd in {"Connected", "DataPackage"}:
             if cmd == "Connected":
                 Utils.persistent_store("client", "last_manual_game", self.game)
-                goal = args["slot_data"].get("goal")
-                if goal and goal < len(self.victory_names):
-                    self.goal_location = self.get_location_by_name(self.victory_names[goal])
-                if args['slot_data'].get('death_link'):
-                    self.ui.enable_death_link()
-                    self.set_deathlink = True
-                    self.last_death_link = 0
-                logger.info(f"Slot data: {args['slot_data']}")
+                if args.get("slot_data"):
+                    goal = args["slot_data"].get("goal")
+                    if goal and goal < len(self.victory_names):
+                        self.goal_location = self.get_location_by_name(self.victory_names[goal])
+                    if args['slot_data'].get('death_link'):
+                        self.ui.enable_death_link()
+                        self.set_deathlink = True
+                        self.last_death_link = 0
+                    logger.info(f"Slot data: {args['slot_data']}")
 
             self.ui.build_tracker_and_locations_table()
             self.ui.request_update_tracker_and_locations_table(update_highlights=True)
@@ -330,10 +328,6 @@ class ManualContext(SuperContext):
             background_color = ColorProperty()
 
         class ManualManager(ui):
-            logging_pairs = [
-                ("Client", "Archipelago"),
-                ("Manual", "Manual"),
-            ]
             base_title = "Archipelago Manual Client"
             listed_items = {"(No Category)": []}
             item_categories = ["(No Category)"]
@@ -366,11 +360,7 @@ class ManualContext(SuperContext):
 
                 self.grid.add_widget(self.manual_game_layout, 3)
 
-                for child in self.tabs.tab_list:
-                    if child.text == "Manual":
-                        panel = child # instead of creating a new TabbedPanelItem, use the one we use above to make the tabs show
-
-                panel.content = ManualTabLayout(orientation="vertical")
+                panel = self.add_client_tab("Manual", ManualTabLayout(orientation="vertical"))
 
                 self.controls_panel = ManualControlsLayout(orientation="horizontal", size_hint_y=None, height=dp(40))
                 self.tracker_and_locations_panel = TrackerAndLocationsLayout(cols = 2)

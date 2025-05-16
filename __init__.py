@@ -39,7 +39,7 @@ from .hooks.Data import hook_interpret_slot_data
 
 class ManualWorld(World):
     __doc__ = world_description
-    game = game_name
+    game: str = game_name
     web = world_webworld
 
     options_dataclass = manual_options_data
@@ -75,6 +75,8 @@ class ManualWorld(World):
 
     def interpret_slot_data(self, slot_data: dict[str, Any]):
         #this is called by tools like UT
+        if not slot_data:
+            return False
 
         regen = False
         for key, value in slot_data.items():
@@ -145,7 +147,9 @@ class ManualWorld(World):
                         true_class = cat
                     else:
                         try:
-                            if cat.startswith('0b'):
+                            if isinstance(cat, int):
+                                true_class = ItemClassification(cat)
+                            elif cat.startswith('0b'):
                                 true_class = ItemClassification(int(cat, base=0))
                             else:
                                 true_class = ItemClassification[cat]
@@ -476,7 +480,7 @@ class ManualWorld(World):
         if not self.item_counts.get(player, {}) or reset:
             real_pool = get_items_for_player(self.multiworld, player, True)
             self.item_counts[player] = {i.name: real_pool.count(i) for i in real_pool}
-        return self.item_counts[player]
+        return self.item_counts.get(player)
 
     def client_data(self):
         return {
