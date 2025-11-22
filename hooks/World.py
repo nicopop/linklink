@@ -37,7 +37,10 @@ if TYPE_CHECKING:
 
 version = 2025_11_21_00 # YYYYMMDD
 def pretty_version() -> str:
-    return str(version)[:4] + '-' +str(version)[4:6] + '-' +str(version)[6:8] + f'({str(version)[8:]})'
+    if isinstance(version, int):
+        return str(version)[:4] + '-' +str(version)[4:6] + '-' +str(version)[6:8] + f'({str(version)[8:]})'
+    else:
+        return version
 # Use this function to change the valid filler items to be created to replace item links or starting items.
 # Default value is the `filler_item_name` from game.json
 def hook_get_filler_item_name(world: World, multiworld: MultiWorld, player: int) -> str | bool:

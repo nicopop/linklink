@@ -3,15 +3,25 @@ name: Create Release - linklink
 on:
   workflow_dispatch:
     inputs:
-      versionsuffix:
-        description: 'Optional version suffix. Exactly 2 digit to keep consistant with default 00'
+      version_string:
+        description: 'Version string, if left empty is set to date'
         required: false
         type: string
-        default: '00'
+        default: '0.0.0'
       changelog:
         description: 'Changelog'
         required: true
         type: string
+
+# Stealing a lot of this from FuzzyGamesOn/RE2R_AP_World's release apworld code
+env:
+  AP_WORLD_NAME: Manual_LinkLink_Nicopopxd
+  AP_WORLD_DIR: ""
+  CHANGELOG: ""
+  VERSION_NUM: "0.0.0"
+  VERSION_NUM_TEXT: 0.0.0
+  AP_WORLD_PATH: ""
+  AP_WORLD_YAML_PATH: ""
 
 permissions:
   actions: read
@@ -23,12 +33,35 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Set current date to env
+      - name: Checkout AP
+        uses: actions/checkout@v4
+        with:
+          repository: ArchipelagoMW/Archipelago
+          path: .
+      - name: Checkout this Repo
+        uses: actions/checkout@v4
+        with:
+          path: temp/
+      - name: Set version number env from apworld init
         run: |
-          echo "CURRENT_DATE=$(date +'%Y%m%d')" >> "$GITHUB_ENV"
-          echo "CURRENT_DATE_VERSION=$(date +'%Y%m%d')${{ github.event.inputs.versionsuffix }}" >> "$GITHUB_ENV"
-      - name: Set expected file basename to env
-        run: echo "BASENAME=manual_linklink_nicopopxd" >> "$GITHUB_ENV"
+          AP_WORLD_DIR=${{ env.AP_WORLD_NAME }}" | tr '[:upper:]' '[:lower:]'
+          mkdir -p worlds/${AP_WORLD_DIR}
+          rsync -a temp/* worlds/${AP_WORLD_DIR} --exclude='.[!.]*'
+          V_NUM=${{ github.event.inputs.version_string }}
+          V_NUM_TEXT=$(echo $V_NUM | sed 's/"//g')
+          echo "VERSION_NUM=$V_NUM" >> $GITHUB_ENV
+          echo "VERSION_NUM_TEXT=$V_NUM_TEXT" >> $GITHUB_ENV
+          echo "echo "AP_WORLD_DIR=$AP_WORLD_DIR" >> $GITHUB_ENV
+
+      - name: Install python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '~3.12.7'
+          check-latest: true
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python ModuleUpdate.py --yes --force
       - name: Format changelog input as multiline string and put into env
         run: |
           echo 'CHANGELOG<<EOF' >> "$GITHUB_ENV"
@@ -37,33 +70,37 @@ jobs:
           echo "\n\nAs always, report any bugs in our Discord!"
           echo "\nBased on Silasary's [linklink](https://github.com/silasary/linklink)"
           echo 'EOF' >> "$GITHUB_ENV"
-      - name: Checkout repo
-        uses: actions/checkout@v3
-      - name: Change linklink's version to today's date
+      - name: Change in apworld's version
         # version = 2025_03_24_00 # YYYYMMDD
         run: |
           tmp=$(mktemp)
-          sed -r 's/version = .*/version = ${{ env.CURRENT_DATE_VERSION }}/' hooks/World.py > "$tmp"
-          mv "$tmp" hooks/World.py
-      - name: Create apworld file
-        # rename src folder, zip it, change extension
+          sed -r 's/version = .*/version = ${{ env.VERSION_NUM }}/' worlds/${{ env.AP_WORLD_DIR }}/hooks/World.py > "$tmp"
+          mv "$tmp" worlds/${{ env.AP_WORLD_DIR }}/hooks/World.py
+      - name: Update World Version in Manifest
+        run:  |
+          cd worlds/${{ env.AP_WORLD_DIR }}
+          echo -e "{\n\t\"game\": \"${{ env.AP_WORLD_NAME }}\"\n}" > archipelago.json
+          json="$(jq '.world_version = ${{ env.VERSION_NUM }}' archipelago.json)"
+          echo $json
+          echo "${json}" > archipelago.json
+      - name: Create AP World Archive
         run: |
-          rsync -Rr . ${{ env.BASENAME }}
-          zip -r ${{ env.BASENAME }}.zip ${{ env.BASENAME }}/*
-          mv ${{ env.BASENAME }}.zip ${{ env.BASENAME }}.apworld
-      - name: Upload apworld as an artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ env.BASENAME }}.apworld
-          path: ${{ env.BASENAME }}.apworld
-          if-no-files-found: error
+          python Launcher.py "Build APWorlds" -- "${{ env.AP_WORLD_NAME }}"
+          echo "AP_WORLD_PATH=build/apworlds/${{ env.AP_WORLD_DIR }}.apworld" >> $GITHUB_ENV
+      - name: Create AP World Template YAML
+        run: |
+          python Launcher.py "Generate Template Options"
+          echo "AP_WORLD_YAML_PATH=Players/Templates/${{ env.AP_WORLD_NAME }}.yaml" >> $GITHUB_ENV
       - name: Add Changelog text to a file for release body, to preserve newlines
-        run: echo -en "${{ env.CHANGELOG }}" > bodyFile.txt
+        run: echo -en "${{ env.CHANGELOG }}" > ${{ github.workspace }}-bodyFile.txt
       - name: Create a LinkLink release
         uses: ncipollo/release-action@v1
         with:
-          name: "Manual LinkLink Nicopopxd - ${{ env.CURRENT_DATE_VERSION }}"
-          bodyFile: bodyFile.txt
-          tag: "${{ env.CURRENT_DATE_VERSION }}"
-          commit: ${{ env.GITHUB_REF }}
-          artifacts: "${{ env.BASENAME }}.apworld"
+          draft: true
+          name: "${{ env.AP_WORLD_NAME }} - ${{ env.VERSION_NUM_TEXT }}"
+          bodyFile: ${{ github.workspace }}-bodyFile.txt
+          tag: "${{ env.VERSION_NUM }}"
+          commit: "main"
+          artifacts: |
+            ${{ env.AP_WORLD_PATH }}
+            ${{ env.AP_WORLD_YAML_PATH }}
