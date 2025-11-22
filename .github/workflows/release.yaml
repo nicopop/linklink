@@ -42,17 +42,18 @@ jobs:
         uses: actions/checkout@v4
         with:
           path: temp/
-      - name: Set version number env from apworld init
+      - name: Setup variables
         run: |
           AP_WORLD_DIR=${{ env.AP_WORLD_NAME }}" | tr '[:upper:]' '[:lower:]'
-          mkdir -p worlds/${AP_WORLD_DIR}
-          rsync -a temp/* worlds/${AP_WORLD_DIR} --exclude='.[!.]*'
           V_NUM=${{ github.event.inputs.version_string }}
           V_NUM_TEXT=$(echo $V_NUM | sed 's/"//g')
           echo "VERSION_NUM=$V_NUM" >> $GITHUB_ENV
           echo "VERSION_NUM_TEXT=$V_NUM_TEXT" >> $GITHUB_ENV
-          echo "echo "AP_WORLD_DIR=$AP_WORLD_DIR" >> $GITHUB_ENV
-
+          echo "AP_WORLD_DIR=$AP_WORLD_DIR" >> $GITHUB_ENV
+      - name: Move this repo to worlds folder
+        run: |
+          mkdir -p worlds/${{ env.AP_WORLD_DIR }}
+          rsync -a temp/* worlds/${{ env.AP_WORLD_DIR }} --exclude='.[!.]*'
       - name: Install python
         uses: actions/setup-python@v5
         with:
