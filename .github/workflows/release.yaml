@@ -44,7 +44,7 @@ jobs:
           path: temp/
       - name: Setup variables
         run: |
-          AP_WORLD_DIR=${{ env.AP_WORLD_NAME }}" | tr '[:upper:]' '[:lower:]'
+          AP_WORLD_DIR="${{ env.AP_WORLD_NAME }}" | tr '[:upper:]' '[:lower:]'
           V_NUM=${{ github.event.inputs.version_string }}
           V_NUM_TEXT=$(echo $V_NUM | sed 's/"//g')
           echo "VERSION_NUM=$V_NUM" >> $GITHUB_ENV
