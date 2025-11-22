@@ -75,13 +75,13 @@ jobs:
         # version = 2025_03_24_00 # YYYYMMDD
         run: |
           tmp=$(mktemp)
-          sed -r 's/version = .*/version = ${{ env.VERSION_NUM }}/' worlds/${{ env.AP_WORLD_DIR }}/hooks/World.py > "$tmp"
+          sed -r 's/version = .*/version = "${{ env.VERSION_NUM }}"/' worlds/${{ env.AP_WORLD_DIR }}/hooks/World.py > "$tmp"
           mv "$tmp" worlds/${{ env.AP_WORLD_DIR }}/hooks/World.py
       - name: Update World Version in Manifest
         run:  |
           cd worlds/${{ env.AP_WORLD_DIR }}
           echo -e "{\n\t\"game\": \"${{ env.AP_WORLD_NAME }}\"\n}" > archipelago.json
-          json="$(jq '.world_version = \"${{ env.VERSION_NUM }}\"' archipelago.json)"
+          json="$(jq --arg version_num ${{ env.VERSION_NUM }} '.world_version = $version_num' archipelago.json)"
           echo $json
           echo "${json}" > archipelago.json
       - name: Create AP World Archive
@@ -93,13 +93,13 @@ jobs:
           python Launcher.py "Generate Template Options"
           echo "AP_WORLD_YAML_PATH=Players/Templates/${{ env.AP_WORLD_NAME }}.yaml" >> $GITHUB_ENV
       - name: Add Changelog text to a file for release body, to preserve newlines
-        run: echo -en "${{ env.CHANGELOG }}" > ${{ github.workspace }}-bodyFile.txt
+        run: echo -en "${{ env.CHANGELOG }}" > bodyFile.txt
       - name: Create a LinkLink release
         uses: ncipollo/release-action@v1
         with:
           draft: true
           name: "${{ env.AP_WORLD_NAME }} - ${{ env.VERSION_NUM_TEXT }}"
-          bodyFile: ${{ github.workspace }}-bodyFile.txt
+          bodyFile: bodyFile.txt
           tag: "${{ env.VERSION_NUM }}"
           commit: "main"
           artifacts: |
