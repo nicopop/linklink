@@ -12,7 +12,7 @@ from ..Helpers import get_items_for_player
 #          data/game.json, data/items.json, data/locations.json, data/regions.json
 #
 from ..Data import game_table, item_table, location_table, region_table
-from .Data import MAX_PLAYERS
+from .Data import MAX_PLAYERS, FILLER_NAME
 
 # These helper methods allow you to determine if an option has been set, or what its value is, for any player in the multiworld
 from ..Helpers import is_option_enabled, get_option_value, format_state_prog_items_key, ProgItemsCat, remove_specific_item
@@ -35,7 +35,7 @@ if TYPE_CHECKING:
 ## The fill_slot_data method will be used to send data to the Manual client for later use, like deathlink.
 ########################################################################################
 
-version = 2025_05_05_00 # YYYYMMDD
+version = 2025_11_21_00 # YYYYMMDD
 def pretty_version() -> str:
     return str(version)[:4] + '-' +str(version)[4:6] + '-' +str(version)[6:8] + f'({str(version)[8:]})'
 # Use this function to change the valid filler items to be created to replace item links or starting items.
@@ -45,10 +45,32 @@ def hook_get_filler_item_name(world: World, multiworld: MultiWorld, player: int)
 
 # Called before regions and locations are created. Not clear why you'd want this, but it's here. Victory location is included, but Victory event is not placed yet.
 def before_create_regions(world: World, multiworld: MultiWorld, player: int):
+    world.is_ut = hasattr(multiworld, "generation_is_fake")
+    world.ut_can_gen_without_yaml = True
+    if world.is_ut and hasattr(multiworld, "re_gen_passthrough"):
+        if world.game in multiworld.re_gen_passthrough:
+            world.is_ut_regen = True
+            slot_data = multiworld.re_gen_passthrough[world.game]["linklink"]
+            world.linklink_locations = slot_data["filtered_locations"]
+            world.linklink_locations_filtered_by_removed = slot_data["filtered_removed"]
+            world.linklink_item_config = slot_data["key_counts"]
+    else:
+        world.is_ut_regen = False
     pass
 
 # Called after regions and locations are created, in case you want to see or modify that information. Victory location is included.
 def after_create_regions(world: World, multiworld: MultiWorld, player: int):
+    if world.is_ut_regen:
+        filter = world.linklink_locations
+        if not world.linklink_locations_filtered_by_removed:
+            # if the filter contains all the existing location
+            locations = [l for l in multiworld.get_locations(player) if l.address is not None and l.address not in filter]
+        else:
+            # if the filter contains all the removed location
+            locations = [l for l in multiworld.get_locations(player) if l.address is not None and l.address in filter]
+        for location in locations:
+            if location.parent_region is not None:
+                location.parent_region.locations.remove(location)
     pass
 
 # This hook allows you to access the item names & counts before the items are created. Use this to increase/decrease the amount of a specific item in the pool
@@ -60,28 +82,36 @@ def after_create_regions(world: World, multiworld: MultiWorld, player: int):
 #       will create 5 items that are the "useful trap" class
 # {"Item Name": {ItemClassification.useful: 5}} <- You can also use the classification directly
 def before_create_items_all(item_config: dict[str, int|dict], world: World, multiworld: MultiWorld, player: int) -> dict[str, int|dict]:
-    for item_data in item_table:
-        item_data = cast(dict[str, Any], item_data)
-        if item_config.get(item_data['name']) and item_data.get("extra"): # 'linklink' in item_data:
-            classification = ItemClassification.filler
+    if not world.is_ut:
+        for item_data in item_table:
+            item_data = cast(dict[str, Any], item_data)
+            if item_config.get(item_data['name']) and item_data.get("extra"): # 'linklink' in item_data:
+                classification = ItemClassification.filler
 
-            if item_data.get("trap"):
-                classification |= ItemClassification.trap
+                if item_data.get("trap"):
+                    classification |= ItemClassification.trap
 
-            if item_data.get("useful"):
-                classification |= ItemClassification.useful
+                if item_data.get("useful"):
+                    classification |= ItemClassification.useful
 
-            if item_data.get("progression_skip_balancing"):
-                classification |= ItemClassification.progression_skip_balancing
-            elif item_data.get("progression"):
-                classification |= ItemClassification.progression
+                if item_data.get("progression_skip_balancing"):
+                    classification |= ItemClassification.progression_skip_balancing
+                elif item_data.get("progression"):
+                    classification |= ItemClassification.progression
 
-            extra_classification = ItemClassification(classification)
-            if ItemClassification.useful not in classification:
-                extra_classification |= ItemClassification.useful
-            extra_classification &= ~ItemClassification.progression_skip_balancing
+                extra_classification = ItemClassification(classification)
+                if ItemClassification.useful not in classification:
+                    extra_classification |= ItemClassification.useful
+                extra_classification &= ~ItemClassification.progression_skip_balancing
 
-            item_config[item_data['name']] = {classification: item_data['count'] - item_data['extra'], extra_classification: item_data['extra']}
+                item_config[item_data['name']] = {classification: item_data['count'] - item_data['extra'], extra_classification: item_data['extra']}
+
+    elif world.is_ut_regen:
+        if hasattr(world, "linklink_item_config"):
+            for item, count in world.linklink_item_config.items():
+                if item in item_config:
+                    item_config[item] = count
+            item_config[FILLER_NAME] = world.linklink_item_config[FILLER_NAME]
 
     return item_config
 
@@ -98,9 +128,14 @@ def before_create_items_filler(item_pool: list, world: World, multiworld: MultiW
 
 # The complete item pool prior to being set for generation is provided here, in case you want to make changes to it
 def after_create_items(item_pool: list[Item], world: World, multiworld: MultiWorld, player: int) -> list:
-    fillers = len(item_pool) - int(world.linklink_keys)
-    locations: dict[str, Location] = {n:l for n, l in world.location_name_to_location.items() if not (l.get('victory') or l.get("linklink", None) is None) }
-    todo = len(locations) - fillers
+    if not world.is_ut_regen:
+        fillers = len(item_pool) - int(world.linklink_keys)
+        locations: dict[str, Location] = {n:l for n, l in world.location_name_to_location.items() if not (l.get('victory') or l.get("linklink", None) is None)}
+        todo = len(locations) - fillers
+    else:
+        #max for datapackage reason
+        todo = max(1, len(world.linklink_locations) - len([i for i in item_pool if i.name == FILLER_NAME]) - 1)
+
     if todo > 0:
         for _ in range(todo):
             item_pool.append(world.create_filler())
@@ -185,7 +220,14 @@ def before_generate_basic(world: World, multiworld: MultiWorld, player: int):
     pass
 
 # This method is run at the very end of pre-generation, once the place_item options have been handled and before AP generation occurs
-def after_generate_basic(world: World, multiworld: MultiWorld, player: int):
+def after_generate_basic(world: "ManualWorld", multiworld: MultiWorld, player: int):
+    world.linklink_removed_location = []
+    def remove_location(location: Location):
+        if location.parent_region is not None:
+            location.parent_region.locations.remove(location)
+            if location.address is not None: #Which it should never unless we have events
+                world.linklink_removed_location.append(location.address)
+
     def linklink_magic(count_precollected_items = True):
         from operator import indexOf
         start_time = time.time()
@@ -388,8 +430,8 @@ def after_generate_basic(world: World, multiworld: MultiWorld, player: int):
 
                 for location in [l for l in multiworld.get_filled_locations(player) if l.name.startswith(f"{item_name} ")]:
                     if location.item is not None and location.item.name == world.filler_item_name:
-                        if location.parent_region is not None:
-                            location.parent_region.locations.remove(location)
+                        remove_location(location)
+
         if extras > 0:
             logging.info(f"Failed to fit {extras} extra keys in the item pool, randomly picked items from the generated fillers will be removed to avoid creating too many items")
             filler_items = [i for i in unplaced_items if id(i) in ll_is_filler]
@@ -434,14 +476,30 @@ def after_generate_basic(world: World, multiworld: MultiWorld, player: int):
                 multiworld.itempool.remove(nothing)
             multiworld.itempool.extend(replacements)
         elapsed_time = time.time() - start_time
+
+        # Update item counts for potential rules usage
+        # Filter Precollected items for those not in logic aka created by start_inventory(_from_pool)
+        precollected_items = list(multiworld.precollected_items[player])
+
+        # UT doesn't precollect the exceptions so this can be skipped
+        precollected_exceptions = world.options.start_inventory.value + world.options.start_inventory_from_pool.value # type: ignore
+        for item, count in precollected_exceptions.items():
+            items_iter = iter([i for i in precollected_items if i.name == item])
+            for _ in range(count):
+                precollected_items.remove(next(items_iter))
+        pool = get_items_for_player(multiworld, player)
+        real_pool = pool + precollected_items
+        world.item_counts[player] = world.get_item_counts(pool=real_pool)
+        world.item_counts_progression[player] = world.get_item_counts(pool=real_pool, only_progression=True)
         logging.info(f"{multiworld.player_name[player]} took {elapsed_time:.4f} seconds to do the linklink magic")
 
-    if world.options.magic_in_pre_fill.value:
-        def pre_fill():
-            linklink_magic()
-        setattr(world, "pre_fill", pre_fill)
-    else:
-        linklink_magic(False)
+    if not world.is_ut:
+        if world.options.magic_in_pre_fill.value:
+            def pre_fill():
+                linklink_magic()
+            setattr(world, "pre_fill", pre_fill)
+        else:
+            linklink_magic(False)
 
 def get_filler_item_name(self: World) -> str:
         multiworld = self.multiworld
@@ -538,7 +596,16 @@ def after_remove_item(world: World, state: CollectionState, Changed: bool, item:
 
 
 # This is called before slot data is set and provides an empty dict ({}), in case you want to modify it before Manual does
-def before_fill_slot_data(slot_data: dict, world: World, multiworld: MultiWorld, player: int) -> dict:
+def before_fill_slot_data(slot_data: dict, world: "ManualWorld", multiworld: MultiWorld, player: int) -> dict:
+    slot_data["linklink"] = {}
+    slot_data["linklink"]["key_counts"] = world.item_counts_progression[player]
+    slot_data["linklink"]["key_counts"][FILLER_NAME] = len([l for l in world.get_locations() if "l$l" in l.name])
+
+    locations_ids = [l.address for l in world.get_locations()]
+    removed_smaller = len(locations_ids) > len(world.linklink_removed_location)
+    # To send as little ids as possible pick the one with less locs in the list
+    slot_data["linklink"]["filtered_removed"] = removed_smaller
+    slot_data["linklink"]["filtered_locations"] = world.linklink_removed_location if removed_smaller else locations_ids
     return slot_data
 
 # This is called after slot data is set and provides the slot data at the time, in case you want to check and modify it after Manual is done with it
