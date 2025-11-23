@@ -13,20 +13,24 @@
             "Links Awakening DX": ["Progressive Sword"],
             "Ocarina of Time": ["Kokiri Sword", "Giants Knife"],
             "The Legend of Zelda - Oracle of Seasons": ["Progressive Sword"],
+            "The Legend of Zelda - Oracle of Ages": ["Progressive Sword"],
             "The Wind Waker": ["Progressive Sword"],
             "TUNIC": ["Sword Upgrade", "Stick", "Sword"],
             "Ori and the Will of the Wisps": ["Sword", "Rapid Sword", "$Buffer_1"],
-            "The Legend of Zelda - Oracle of Ages": ["Progressive Sword"],
             "Majora's Mask Recompiled": ["Progressive Sword"],
             "A Link Between Worlds": ["Progressive Sword"],
             "A Hat in Time": ["Umbrella"],
             "Hollow Knight": ["Pale_Ore"],
             "Outer Wilds": ["Translators", "$Shuffle"],
-            "Minecraft": ["Progressive Weapons"]
+            "Minecraft": ["Progressive Weapons"],
+            "Twilight Princess": ["Progressive Master Sword"],
+            "The Legend of Zelda - Spirit Tracks": ["Sword (Progressive)", "Sword Beam Swordsman's Scroll", "Great Spin Swordsman's Scroll"],
+            "The Legend of Zelda - Phantom Hourglass": ["Swords", "Swordsman's Scroll"],
+            "Skyward Sword": ["Progressive Sword"]
         }
     },
     {
-        "count": 1,
+        "count": 2,
         "name": "Special Weapon or Tool",
         "category": ["linklink"],
         "progression": true,
@@ -35,14 +39,16 @@
             "SMZ3": ["ProgressiveSword"],
             "Ocarina of Time": ["Biggoron Sword"],
             "The Legend of Zelda - Oracle of Seasons": ["Biggoron's Sword"],
+            "The Legend of Zelda - Oracle of Ages": ["Biggoron's Sword"],
             "The Wind Waker": ["Progressive Sword"],
             "TUNIC": ["Sword Upgrade"],
-            "The Legend of Zelda - Oracle of Ages": ["Biggoron's Sword"],
             "Majora's Mask Recompiled": ["Great Fairy Sword"],
             "A Link Between Worlds": ["Progressive Sword"],
             "Ori and the Will of the Wisps": ["Melting Sword"],
             "Outer Wilds": ["Translators", "$Shuffle"],
-            "Minecraft": ["Sharpness III Book"]
+            "Minecraft": ["Sharpness III Book"],
+            "The Legend of Zelda - Phantom Hourglass": ["Phantom Hourglass", "Phantom Blade"],
+            "Skyward Sword": ["Progressive Sword"]
         }
     },
     {
@@ -55,15 +61,19 @@
             "A Link to the Past": ["Progressive Shield", "Blue Shield", "Red Shield", "Mirror Shield", "$Shuffle"],
             "SMZ3": ["ProgressiveShield"],
             "Links Awakening DX": ["Progressive Shield"],
-            "Ocarina of Time": ["Deku Shield", "Hylian Shield", "Mirror Shield", "$Shuffle"],
+            "Ocarina of Time": ["Deku Shield", "Hylian Shield", "Mirror Shield"],
             "The Legend of Zelda - Oracle of Seasons": ["Progressive Shield"],
+            "The Legend of Zelda - Oracle of Ages": ["Progressive Shield"],
             "The Wind Waker": ["Progressive Shield"],
             "TUNIC": ["Shield"],
-            "The Legend of Zelda - Oracle of Ages": ["Progressive Shield"],
             "A Link Between Worlds": ["Hylian Shield"],
             "Hollow Knight": ["Baldur_Shell"],
             "Minecraft": ["Shield"],
-            "Majora's Mask Recompiled": ["Progressive Shield"]
+            "Majora's Mask Recompiled": ["Progressive Shield"],
+            "Twilight Princess": ["Shields"],
+            "The Legend of Zelda - Spirit Tracks": ["Shield"],
+            "The Legend of Zelda - Phantom Hourglass": ["Shield"],
+            "Skyward Sword": ["Wooden Shield", "Hylian Shield"]
         }
     },
     {
@@ -83,7 +93,10 @@
             "Ori and the Will of the Wisps": ["Blaze", "Melting Blaze"],
             "Hollow Knight": ["Fireball"],
             "ANIMAL WELL": ["matchbox", "Match"],
-            "Minecraft": ["Flint and Steel", "Campfire", "$Shuffle"]
+            "Minecraft": ["Flint and Steel", "Campfire", "$Shuffle"],
+            "The Legend of Zelda - Phantom Hourglass": ["Cannon"],
+            "The Legend of Zelda - Spirit Tracks": ["Cannon"],
+            "Skyward Sword": ["Fireshield Earrings"]
         }
     },
     {
@@ -117,7 +130,9 @@
             "Majora's Mask Recompiled": ["Light Arrow"],
             "A Link Between Worlds": ["Bow of Light"],
             "Ori and the Will of the Wisps": ["Melting Bow"],
-            "Minecraft": ["Infinity Book", "32 Arrows", "Single Arrow"]
+            "Minecraft": ["Infinity Book", "32 Arrows", "Single Arrow"],
+            "Twilight Princess": ["Hawkeye"],
+            "The Legend of Zelda - Spirit Tracks": ["Compass of Light"]
         }
     },
     {
@@ -135,7 +150,11 @@
             "Majora's Mask Recompiled": ["Progressive Bow"],
             "A Link Between Worlds": ["Bow"],
             "Ori and the Will of the Wisps": ["Bow", "Bow Efficiency"],
-            "Minecraft": ["Archery"]
+            "Minecraft": ["Archery"],
+            "Twilight Princess": ["Progressive Hero's Bow"],
+            "The Legend of Zelda - Spirit Tracks": ["Bow (Progressive)"],
+            "The Legend of Zelda - Phantom Hourglass": ["Bow (Progressive)"],
+            "Skyward Sword": ["Progressive Bow"]
         }
     },
     {
@@ -150,15 +169,20 @@
             "Links Awakening DX": ["Boomerang"],
             "Ocarina of Time": ["Boomerang"],
             "The Legend of Zelda - Oracle of Seasons": ["Progressive Boomerang"],
-            "The Wind Waker": ["Boomerang"],
             "The Legend of Zelda - Oracle of Ages": ["Boomerang"],
+            "The Wind Waker": ["Boomerang"],
             "A Link Between Worlds": ["Boomerang"],
             "ANIMAL WELL": ["Mock Disc", "Disc"],
-            "Ori and the Will of the Wisps": ["Shuriken", "Shuriken Efficiency"]
+            "Ori and the Will of the Wisps": ["Shuriken", "Shuriken Efficiency"],
+            "Twilight Princess": ["Gale Boomerang"],
+            "The Legend of Zelda - Spirit Tracks": ["Boomerang"],
+            "The Legend of Zelda - Phantom Hourglass": ["Boomerang"],
+            "Skyward Sword": ["Progressive Beetle"]
+
         }
     },
     {
-        "count": 4,
+        "count": 6,
         "name": "Bombs",
         "category": ["linklink"],
         "progression": true,
@@ -168,21 +192,25 @@
             "SMZ3": ["BombUpgrade10", "BombUpgrade5"],
             "Links Awakening DX": ["Max Bombs Upgrade", "Bombs"],
             "Ocarina of Time": ["Bomb Bag"],
-            "The Legend of Zelda - Oracle of Seasons": ["Bombs (10)"],
+            "The Legend of Zelda - Oracle of Seasons": ["Bombs (10)", "Bombs (20)", "Bombchus (10)", "Bombchus (20)", "$Shuffle"],
+            "The Legend of Zelda - Oracle of Ages": ["Bombs (10)", "Bomb Flower", "$Shuffle"],
             "The Wind Waker": ["Bombs", "Progressive Bomb Bag"],
             "TUNIC": ["Bombs", "$Shuffle", "$Buffer_4"],
-            "The Legend of Zelda - Oracle of Ages": ["Bombs (10)"],
             "Majora's Mask Recompiled": ["Progressive Bomb Bag", "Powder Keg", "Blast Mask", "$Shuffle"],
             "A Link Between Worlds": ["Bombs"],
             "A Hat in Time": ["Brewing Hat", "Yarn"],
             "ANIMAL WELL": ["Remote", "F. Pack", "Firecrackers", "Firecracker Refill"],
             "Ori and the Blind Forest": ["Grenade", "Grenade Efficiency"],
             "Ori and the Will of the Wisps": ["Grenade"],
-            "Outer Wilds": ["Eject Button"]
+            "Outer Wilds": ["Eject Button"],
+            "Twilight Princess": ["Bomb Bag", "Giant Bomb Bag"],
+            "The Legend of Zelda - Spirit Tracks": ["Bombs (Progressive)"],
+            "The Legend of Zelda - Phantom Hourglass": ["Bombs (Progressive)", "Bombchus (Progressive)", "$Shuffle"],
+            "Skyward Sword": ["Bomb Bag"]
         }
     },
     {
-        "count": 2,
+        "count": 3,
         "name": "Flute",
         "category": ["linklink"],
         "progression": true,
@@ -193,11 +221,13 @@
             "Links Awakening DX": ["Ocarina"],
             "Ocarina of Time": ["Ocarina"],
             "Majora's Mask Recompiled": ["Ocarina of Time"],
-            "The Legend of Zelda - Oracle of Seasons": ["Moosh's Flute", "Ricky's Flute", "Dimitri's Flute"],
+            "The Legend of Zelda - Oracle of Seasons": ["Moosh's Flute", "Ricky's Flute", "Dimitri's Flute", "$Shuffle"],
+            "The Legend of Zelda - Oracle of Ages": ["Moosh's Flute", "Ricky's Flute", "Dimitri's Flute", "$Shuffle"],
             "The Wind Waker": ["Wind Waker"],
-            "The Legend of Zelda - Oracle of Ages": ["Moosh's Flute", "Ricky's Flute", "Dimitri's Flute"],
             "A Link Between Worlds": ["Bell"],
-            "ANIMAL WELL": ["Animal Flute"]
+            "ANIMAL WELL": ["Animal Flute"],
+            "Twilight Princess": ["Spirit Flute"],
+            "Skyward Sword": ["Goddess's Harp"]
         }
     },
     {
@@ -213,7 +243,8 @@
             "Ori and the Will of the Wisps": ["Bash"],
             "Outer Wilds": ["Autopilot"],
             "Minecraft": ["Progressive Armor"],
-            "Majora's Mask Recompiled": ["Double Defense"]
+            "Majora's Mask Recompiled": ["Double Defense"],
+            "The Legend of Zelda - Phantom Hourglass": ["Hero's New Clothes"]
         }
     },
     {
@@ -231,7 +262,8 @@
             "A Link Between Worlds": ["Progressive Mail"],
             "Ori and the Will of the Wisps": ["Resilience"],
             "Outer Wilds": ["Spacesuit", "Landing Camera"],
-            "Minecraft": ["Progressive Armor"]
+            "Minecraft": ["Progressive Armor"],
+            "The Legend of Zelda - Spirit Tracks": ["Recruit Uniform"]
         }
     },
     {
@@ -248,7 +280,8 @@
             "TUNIC": ["DEF Offering"],
             "A Link Between Worlds": ["Progressive Mail"],
             "Outer Wilds": ["Velocity Matcher"],
-            "Minecraft": ["Progressive Armor"]
+            "Minecraft": ["Progressive Armor"],
+            "The Legend of Zelda - Spirit Tracks": ["Engineer's Clothes"]
         }
     },
     {
@@ -263,15 +296,15 @@
             "Links Awakening DX": ["Progressive Power Bracelet"],
             "Ocarina of Time": ["Progressive Strength Upgrade"],
             "The Legend of Zelda - Oracle of Seasons": ["Power Bracelet"],
+            "The Legend of Zelda - Oracle of Ages": ["Progressive Bracelet"],
             "The Wind Waker": ["Power Bracelets"],
             "TUNIC": ["ATT Offering"],
-            "The Legend of Zelda - Oracle of Ages": ["Progressive Bracelet"],
             "Majora's Mask Recompiled": ["Goron Mask"],
             "A Link Between Worlds": ["Progressive Glove"],
             "Ori and the Will of the Wisps": ["Ancestral Light 1", "Ancestral Light 2"],
             "Outer Wilds": ["Surface Integrity Scanner", "Ghost Matter Wavelength", "$Shuffle"],
             "Hollow Knight": ["Fragile_Strength", "Unbreakable_Strength"],
-            "Minecraft": ["Progressive Tools"]
+            "Minecraft": ["Progressive Resource Crafting"]
         }
     },
     {
@@ -285,15 +318,19 @@
             "SMZ3": ["Hookshot"],
             "Links Awakening DX": ["Hookshot"],
             "Ocarina of Time": ["Progressive Hookshot"],
-            "The Legend of Zelda - Oracle of Seasons": ["Magnetic Gloves"],
+            "The Legend of Zelda - Oracle of Seasons": ["Magnetic Gloves", "Switch Hook", "$Shuffle" ],
+            "The Legend of Zelda - Oracle of Ages": ["Progressive Hook"],
             "The Wind Waker": ["Grappling Hook", "Hookshot"],
             "TUNIC": ["Magic Orb"],
-            "The Legend of Zelda - Oracle of Ages": ["Progressive Hook"],
             "Majora's Mask Recompiled": ["Hookshot"],
             "A Link Between Worlds": ["Hookshot"],
             "Ori and the Will of the Wisps": ["Grapple", "Ultra Grapple"],
             "A Hat in Time": ["Hookshot Badge"],
-            "Minecraft": ["Fishing Rod", "Lead"]
+            "Minecraft": ["Lead"],
+            "Twilight Princess": ["Progressive Clawshot"],
+            "The Legend of Zelda - Spirit Tracks": ["Whip"],
+            "The Legend of Zelda - Phantom Hourglass": ["Grappling Hook", "Salvage Arm"],
+            "Skyward Sword": ["Clawshots", "Whip", "$Shuffle"]
         }
     },
     {
@@ -312,8 +349,11 @@
             "Majora's Mask Recompiled": ["Zora Mask"],
             "A Link Between Worlds": ["Flippers"],
             "Ori and the Blind Forest": ["CleanWater"],
-            "Ori and the Will of the Wisps": ["Clean Water", "Water Breath"],
-            "Hollow Knight": ["Swim", "Isma's_Tear"]
+            "Ori and the Will of the Wisps": ["Clean Water", "Water Dash", "Water Breath"],
+            "Hollow Knight": ["Swim", "Isma's_Tear"],
+            "Twilight Princess": ["Zora Armor"],
+            "The Legend of Zelda - Phantom Hourglass": ["Big Catch Lure", "Swordfish Shadows", "$Shuffle"],
+            "Skyward Sword": ["Water Dragon's Scale"]
         }
     },
     {
@@ -328,7 +368,10 @@
             "The Wind Waker": ["Skull Hammer"],
             "A Link Between Worlds": ["Hammer"],
             "Ori and the Will of the Wisps": ["Hammer", "Melting Hammer"],
-            "ANIMAL WELL": ["Slink"]
+            "ANIMAL WELL": ["Slink"],
+            "Minecraft": ["Progressive Tools"],
+            "Twilight Princess": ["Ball and Chain"],
+            "The Legend of Zelda - Phantom Hourglass": ["Hammer"]
         }
     },
     {
@@ -344,7 +387,13 @@
             "TUNIC": ["Potion Flask"],
             "Majora's Mask Recompiled": ["Bottle of Chateau Romani", "Bottle of Red Potion", "Bottle", "$Shuffle"],
             "A Link Between Worlds": ["Premium Milk", "Bottle"],
-            "Minecraft": ["Bottles", "Bucket", "Brewing", "$Shuffle"]
+            "Minecraft": ["Bottles", "Bucket", "Brewing", "$Shuffle"],
+            "Twilight Princess": ["Bottles", "$Shuffle"],
+            "The Legend of Zelda - Oracle of Seasons": ["Potion"],
+            "The Legend of Zelda - Oracle of Ages": ["Potion", "King Zora's Potion", "$Shuffle"],
+            "The Legend of Zelda - Phantom Hourglass": ["Potion", "Red Potion", "Purple Potion", "Yellow Potion", "$Shuffle"],
+            "The Legend of Zelda - Spirit Tracks": ["Potion", "Red Potion", "Purple Potion", "Yellow Potion", "$Shuffle"],
+            "Skyward Sword": ["Empty Bottle"]
         }
     },
     {
@@ -358,11 +407,15 @@
             "SMZ3": ["Somaria"],
             "Links Awakening DX": ["Magic Rod"],
             "TUNIC": ["Magic Wand"],
+            "The Legend of Zelda - Oracle of Seasons": ["Cane of Somaria"],
             "The Legend of Zelda - Oracle of Ages": ["Cane of Somaria"],
             "A Hat in Time": ["Projectile Badge"],
             "Hollow Knight": ["DreamNails"],
             "Outer Wilds": ["Signalscope"],
-            "ANIMAL WELL": ["B. Wand", "B.B. Wand"]
+            "ANIMAL WELL": ["B. Wand", "B.B. Wand"],
+            "Twilight Princess": ["Progressive Dominion Rod"],
+            "The Legend of Zelda - Spirit Tracks": ["Whirlwind"],
+            "Skyward Sword": ["Gust Bellows", "Progressive Beetle"]
         }
     },
     {
@@ -378,7 +431,11 @@
             "The Legend of Zelda - Oracle of Ages": ["Shovel"],
             "A Link Between Worlds": ["Sand Rod"],
             "ANIMAL WELL": ["Top"],
-            "Minecraft": ["Progressive Resource Crafting"]
+            "Twilight Princess": ["Spinner"],
+            "Minecraft": ["Progressive Tools"],
+            "The Legend of Zelda - Spirit Tracks": ["Sand Wand"],
+            "The Legend of Zelda - Phantom Hourglass": ["Shovel"],
+            "Skyward Sword": ["Progressive Mitts"]
         }
     },
     {
@@ -391,7 +448,7 @@
             "SMZ3": ["Boots"],
             "Links Awakening DX": ["Pegasus Boots"],
             "Ocarina of Time": ["Hover Boots"],
-            "TUNIC": ["Anklet"],
+            "TUNIC": ["Anklet", "Hero's Laurels"],
             "A Link Between Worlds": ["Pegasus Boots"],
             "A Hat in Time": ["Sprint Hat", "No Bonk Badge", "Yarn"],
             "Ori and the Blind Forest": ["Dash"],
@@ -429,8 +486,8 @@
             "A Link Between Worlds": ["Lamp"],
             "Ori and the Will of the Wisps": ["Flash", "Flash Efficiency"],
             "ANIMAL WELL": ["UV Lantern", "Lantern"],
-            "Outer Wilds": ["Scout"],
-            "Hollow Knight": ["Lumafly_Lantern"]
+            "Hollow Knight": ["Lumafly_Lantern"],
+            "Twilight Princess": ["Lantern"]
         }
     },
     {
@@ -470,18 +527,22 @@
             "A Link to the Past": ["Moon Pearl"],
             "SMZ3": ["MoonPearl"],
             "The Legend of Zelda - Oracle of Seasons": ["Round Jewel", "Pyramid Jewel", "X-Shaped Jewel", "Square Jewel", "$Shuffle"],
+            "The Legend of Zelda - Oracle of Ages": ["Slate"],
             "The Wind Waker": ["Din's Pearl", "Farore's Pearl", "Nayru's Pearl", "$Shuffle"],
             "TUNIC": ["Red Questagon", "Green Questagon", "Blue Questagon", "Gold Questagon", "$Shuffle"],
-            "The Legend of Zelda - Oracle of Ages": ["Slate"],
             "Ori and the Blind Forest": ["GinsoKey", "ForlornKey", "HoruKey", "$Shuffle"],
             "Hollow Knight": ["Lurien", "Monomon", "Herrah", "$Shuffle"],
             "Outer Wilds": ["Warp Core Installation Manual", "Coordinates"],
             "Minecraft": ["Dragon Egg Shard", "8 Netherite Scrap", "3 Ender Pearls"],
-            "Majora's Mask Recompiled": ["Odolwa's Remains", "Goht's Remains", "Gyorg's Remains", "Twinmold's Remains", "$Buffer_1", "Fierce Deity's Mask",  "$Buffer_1", "Oath to Order"]
+            "Majora's Mask Recompiled": ["Odolwa's Remains", "Goht's Remains", "Gyorg's Remains", "Twinmold's Remains", "$Buffer_1", "Fierce Deity's Mask",  "$Buffer_1", "Oath to Order"],
+            "Twilight Princess": ["Progressive Fused Shadow", "Progressive Mirror Shard", "$Shuffle"],
+            "The Legend of Zelda - Spirit Tracks": ["Forest Glyph", "Snow Glyph", "Ocean Glyph", "Fire Glyph", "$Shuffle"],
+            "The Legend of Zelda - Phantom Hourglass": ["Shape Crystals", "$Shuffle"],
+            "Skyward Sword": ["Triforce of Courage", "Triforce of Power", "Triforce of Wisdom"]
         }
     },
     {
-        "count": 5,
+        "count": 7,
         "name": "Magic Spell",
         "category": ["linklink"],
         "progression": true,
@@ -497,7 +558,13 @@
             "Outer Wilds": ["Patches", "$Shuffle"],
             "ANIMAL WELL": ["Yoyo", "$Buffer_2", "$Shuffle"],
             "Minecraft": ["Infinity Book", "Silk Touch Book", "Channeling Book", "Piercing IV Book", "Looting III Book", "$Shuffle"],
-            "Majora's Mask Recompiled": ["Elegy of Emptiness", "Song of Storms", "Song of Healing", "Oath to Order", "Sonata of Awakening", "Goron Lullaby", "New Wave Bossa Nova", "$Shuffle"]
+            "Majora's Mask Recompiled": ["Elegy of Emptiness", "Song of Storms", "Song of Healing", "Oath to Order", "Sonata of Awakening", "Goron Lullaby", "New Wave Bossa Nova", "$Shuffle"],
+            "Twilight Princess": ["Shadow Crystal", "Progressive Hidden Skill"],
+            "The Legend of Zelda - Oracle of Seasons": ["Rod of Seasons (Spring)", "Rod of Seasons (Summer)", "Rod of Seasons (Autumn)", "Rod of Seasons (Winter)", "$Shuffle"],
+            "The Legend of Zelda - Spirit Tracks": ["Song of Awakening", "Song of Healing", "Song of Birds", "Song of Light", "Song of Discovery", "$Shuffle"],
+            "The Legend of Zelda - Phantom Hourglass": ["Spirit of Power (Progressive)", "Spirit of Wisdom (Progressive)", "Spirit of Courage (Progressive)", "Spirit of Courage (White)", "$Shuffle"],
+            "Skyward Sword": ["Ballad of the Goddess", "Farore's Courage", "Nayru's Wisdom", "Din's Power", "Faron Song of the Hero Part", "Eldin Song of the Hero Part",
+            "Lanayru Song of the Hero Part", "$Shuffle"]
         }
     },
     {
@@ -508,12 +575,13 @@
         "linklink": {
             "Ocarina of Time": ["Iron Boots"],
             "The Wind Waker": ["Iron Boots"],
-            "Minecraft": ["Progressive Armor"]
+            "Twilight Princess": ["Iron Boots"]
         }
     },
     {
         "count": 1,
         "name": "Feather",
+        "_comment": "A feather",
         "category": ["linklink"],
         "progression": true,
         "linklink": {
@@ -521,7 +589,6 @@
             "The Legend of Zelda - Oracle of Seasons": ["Progressive Feather"],
             "The Wind Waker": ["Golden Feather"],
             "The Legend of Zelda - Oracle of Ages": ["Feather"],
-            "Majora's Mask Recompiled": ["Deku Mask"],
             "Ori and the Will of the Wisps": ["Flap"],
             "Hollow Knight": ["Quill"],
             "Minecraft": ["32 Arrows"]
@@ -530,6 +597,7 @@
     {
         "count": 1,
         "name": "Cape",
+        "_comment": "Jump/glide",
         "category": ["linklink"],
         "progression": true,
         "linklink": {
@@ -537,6 +605,7 @@
             "A Link to the Past": ["Cape"],
             "SMZ3": ["Cape"],
             "The Legend of Zelda - Oracle of Seasons": ["Progressive Feather"],
+            "Majora's Mask Recompiled": ["Deku Mask"],
             "Ori and the Blind Forest": ["Glide"],
             "Ori and the Will of the Wisps": ["Glide"]
         }
@@ -548,10 +617,12 @@
         "progression": true,
         "linklink": {
             "Ocarina of Time": ["Slingshot"],
-            "The Legend of Zelda - Oracle of Seasons": ["Progressive Slingshot"],
+            "The Legend of Zelda - Oracle of Seasons": ["Seed Shooter", "Progressive Slingshot"],
             "TUNIC": ["Gun"],
             "The Legend of Zelda - Oracle of Ages": ["Seed Shooter"],
-            "ANIMAL WELL": ["B. Ball"]
+            "ANIMAL WELL": ["B. Ball"],
+            "Twilight Princess": ["Slingshot"],
+            "Skyward Sword": ["Progressive Slingshot"]
         }
     },
     {
@@ -563,7 +634,7 @@
             "Ocarina of Time": ["Gerudo Membership Card"],
             "The Legend of Zelda - Oracle of Seasons": ["Member's Card"],
             "The Wind Waker": ["Fill-Up Coupon"],
-            "Hollow Knight": ["Tram_Pass"]
+            "The Legend of Zelda - Phantom Hourglass": ["Member's Card (Progressive)"]
         }
     },
     {
@@ -576,11 +647,12 @@
             "The Legend of Zelda - Oracle of Seasons": ["Seed Satchel"],
             "The Wind Waker": ["Bait Bag"],
             "The Legend of Zelda - Oracle of Ages": ["Seed Satchel"],
-            "Majora's Mask Recompiled": ["Magic Bean"]
+            "Majora's Mask Recompiled": ["Magic Bean"],
+            "Skyward Sword": ["Small Seed Satchel", "Life Tree Seedling"]
         }
     },
     {
-        "count": 1,
+        "count": 2,
         "name": "Looking Glass",
         "category": ["linklink"],
         "progression": true,
@@ -588,12 +660,13 @@
             "A Link to the Past": ["Magic Mirror"],
             "SMZ3": ["Mirror"],
             "Links Awakening DX": ["Magnifying Glass"],
-            "Ocarina of Time": ["Lens of Truth"],
+            "Ocarina of Time": ["Lens of Truth", "Mask of Truth", "$Shuffle"],
             "The Wind Waker": ["Spyglass"],
-            "Majora's Mask Recompiled": ["Lens of Truth"],
-            "Outer Wilds": ["Imaging Rule"],
+            "Majora's Mask Recompiled": ["Lens of Truth", "Mask of Truth", "$Shuffle"],
+            "Outer Wilds": ["Scout", "Imaging Rule", "$Shuffle"],
             "Minecraft": ["Spyglass"],
-            "Hollow Knight": ["World_Sense"]
+            "Hollow Knight": ["World_Sense"],
+            "The Legend of Zelda - Phantom Hourglass": ["Kaleidoscope"]
         }
     },
     {
@@ -602,13 +675,18 @@
         "category": ["linklink"],
         "progression": true,
         "linklink": {
-            "The Legend of Zelda": ["Letter"],
+            "The Legend of Zelda": ["Letter", "Freebie Card"],
             "Ocarina of Time": ["Rutos Letter"],
-            "The Wind Waker": ["Delivery Bag"],
+            "The Wind Waker": ["Delivery Bag", "Fill-Up Coupon"],
             "TUNIC": ["Pages", "$Shuffle"],
             "Majora's Mask Recompiled": ["Letter to Kafei", "Priority Mail", "$Shuffle"],
             "Minecraft": ["Infinity Book", "Silk Touch Book", "Channeling Book", "Piercing IV Book", "Looting III Book", "$Shuffle"],
-            "Hollow Knight": ["Collector's_Map"]
+            "Hollow Knight": ["Collector's_Map"],
+            "Twilight Princess": ["Auru's Memo", "Ashei's Sketch"],
+            "The Legend of Zelda - Oracle of Ages": ["Letter of Introduction"],
+            "The Legend of Zelda - Spirit Tracks": ["Royal Engineer's Certificate"],
+            "The Legend of Zelda - Phantom Hourglass": ["Jolene's Letter"],
+            "Skyward Sword": ["Cawlin's Letter"]
         }
     },
     {
@@ -625,11 +703,14 @@
             "The Legend of Zelda - Oracle of Ages": ["Book of Seals"],
             "Hollow Knight": ["Hunter's_Journal"],
             "Minecraft": ["Enchanting"],
-            "Majora's Mask Recompiled": ["Bomber's Notebook"]
+            "Majora's Mask Recompiled": ["Bomber's Notebook"],
+            "Twilight Princess": ["Progressive Sky Book"],
+            "The Legend of Zelda - Spirit Tracks": ["Stamp Book"],
+            "The Legend of Zelda - Phantom Hourglass": ["Guard Notebook"]
         }
     },
     {
-        "count": 3,
+        "count": 4,
         "name": "Wallet",
         "category": ["linklink"],
         "progression": true,
@@ -642,7 +723,11 @@
             "Ori and the Blind Forest": ["EX200", "EX100"],
             "A Link Between Worlds": ["Pouch"],
             "Hollow Knight": ["BossGeo", "GeoChests", "$Shuffle"],
-            "Minecraft": ["8 Emeralds", "4 Emeralds", "8 Gold Ore", "4 Diamond Ore", "$Shuffle"]
+            "Minecraft": ["8 Emeralds", "4 Emeralds", "8 Gold Ore", "4 Diamond Ore", "$Shuffle"],
+            "Twilight Princess": ["Wallet"],
+            "The Legend of Zelda - Phantom Hourglass": ["Big Green Rupee (100)", "Big Red Rupee (200)", "Gold Rupee (300)", "Pre-Alpha Rupee (5000)", "$Shuffle"],
+            "The Legend of Zelda - Spirit Tracks": ["Big Green Rupee (100)", "Big Red Rupee (200)", "Gold Rupee (300)", "Pre-Alpha Rupee (5000)", "$Shuffle"],
+            "Skyward Sword": ["Progressive Wallet"]
         }
     },
     {
@@ -657,7 +742,7 @@
             "Links Awakening DX": ["Heart Container", "Heart Piece"],
             "Ocarina of Time": ["Heart Container", "Piece of Heart"],
             "The Legend of Zelda - Oracle of Seasons": ["Heart Container", "Piece of Heart", "Heart Piece"],
-            "The Wind Waker": ["Heart Container", "Piece of Heart", "$Shuffle"],
+            "The Wind Waker": ["Heart Container", "Piece of Heart"],
             "TUNIC": ["HP Offering", "Potion Flask", "Flask Shard", "$Shuffle"],
             "The Legend of Zelda - Oracle of Ages": ["Heart Container", "Piece of Heart", "Heart Piece"],
             "Majora's Mask Recompiled": ["Heart Container", "Piece of Heart", "Heart Piece"],
@@ -666,11 +751,16 @@
             "Ori and the Will of the Wisps": ["Health Fragment"],
             "Hollow Knight": ["MaskShards", "$Shuffle"],
             "Outer Wilds": ["Oxygen Capacity Upgrade"],
-            "ANIMAL WELL": ["Big Blue Fruit"]
+            "ANIMAL WELL": ["Big Blue Fruit"],
+            "Twilight Princess": ["Heart", "$Shuffle"],
+            "The Legend of Zelda - Phantom Hourglass": ["Heart Container"],
+            "The Legend of Zelda - Spirit Tracks": ["Heart Container"],
+            "Skyward Sword": ["Heart Container", "Heart Piece"]
         }
     },
     {
-        "count": 10,
+        "count": 16,
+        "_extra": 4,
         "name": "Energy Container",
         "category": ["linklink"],
         "progression": true,
@@ -680,7 +770,8 @@
             "Hollow Knight": ["VesselFragments", "$Shuffle"],
             "TUNIC": ["MP Offering", "MP Berry x2", "MP Berry x3"],
             "Outer Wilds": ["Fuel Capacity Upgrade", "Boost Duration Upgrade", "$Shuffle"],
-            "Minecraft": ["500 XP", "100 XP", "50 XP"]
+            "Minecraft": ["500 XP", "100 XP", "50 XP"],
+            "The Legend of Zelda - Phantom Hourglass": ["Sand of Hours (Boss)", "Sand of Hours (Small)", "Sand of Hours"]
         }
     },
     {
@@ -699,6 +790,7 @@
         "count": 2,
         "name": "Climb",
         "progression": true,
+        "category": ["linklink"],
         "linklink": {
             "Ori and the Blind Forest": ["WallJump", "Climb"],
             "Ori and the Will of the Wisps": ["Sticky"],
@@ -708,44 +800,54 @@
     {
         "count": 1,
         "name": "Vehicle",
+        "_comment": "Rename to mode of transportation or something",
         "progression": true,
+        "category": ["linklink"],
         "linklink": {
             "ANIMAL WELL": ["Wheel"],
             "A Hat in Time": ["Scooter Badge"],
             "Outer Wilds": ["Launch Codes"],
             "Minecraft": ["Saddle"],
             "Majora's Mask Recompiled": ["Epona's Song"],
-            "Ocarina of Time": ["Eponas Song"]
+            "Ocarina of Time": ["Eponas Song"],
+            "Twilight Princess": ["Horse Call"],
+            "Hollow Knight": ["Tram_Pass"],
+            "The Legend of Zelda - Phantom Hourglass": ["Ships"],
+            "Skyward Sword": ["Spiral Charge"]
         }
     },
     {
         "count": 10,
         "name": "Upgrades Slots",
         "progression": true,
+        "category": ["linklink"],
         "linklink": {
             "Hollow Knight": ["CharmNotches"],
             "A Hat in Time": ["Badge Pin", "$Buffer_3", "$Shuffle"],
             "Ori and the Blind Forest": ["AbilityCell"],
             "Ori and the Will of the Wisps": ["Shard Slot"],
-            "TUNIC": ["Card Slot", "$Buffer_3", "$Shuffle"]
+            "TUNIC": ["Card Slot", "$Buffer_3", "$Shuffle"],
+            "The Legend of Zelda - Phantom Hourglass": ["Sand of Hours", "Sand of Hours (Boss)", "Sand of Hours (Small)"],
+            "Skyward Sword": ["Progressive Pouch", "Extra Wallet", "$Shuffle"]
         }
     },
     {
         "count": 2,
         "name": "Dive",
         "progression": true,
+        "category": ["linklink"],
         "linklink": {
             "Hollow Knight": ["Dive", "$Shuffle"],
             "Ori and the Blind Forest": ["Stomp"],
             "Ori and the Will of the Wisps": ["Burrow"],
-            "Outer Wilds": ["Tornado Aerodynamic Adjustments", "Electrical Insulation"],
-            "Minecraft": ["Fishing Rod"]
+            "Outer Wilds": ["Tornado Aerodynamic Adjustments", "Electrical Insulation"]
         }
     },
     {
         "count": 2,
         "name": "Charged dash or jump",
         "progression": true,
+        "category": ["linklink"],
         "linklink": {
             "Hollow Knight": ["CDash", "$Shuffle"],
             "Ori and the Blind Forest": ["ChargeJump"],
@@ -756,10 +858,27 @@
         "count": 1,
         "name": "Magnet",
         "progression": true,
+        "category": ["linklink"],
         "linklink": {
             "Ori and the Will of the Wisps": ["Magnet"],
             "Hollow Knight": ["Gathering_Swarm"],
             "A Hat in Time": ["Item Magnet Badge"]
+        }
+    },
+    {
+        "name": "Net",
+        "_comment": "AKA catch something with it... yea I added fishing rod to it to include more games",
+        "count": 2,
+        "progression": true,
+        "category": ["linklink"],
+        "linklink": {
+            "The Legend of Zelda - Spirit Tracks": ["Rabbit Net"],
+            "The Legend of Zelda - Phantom Hourglass": ["Fishing Rod"],
+            "Minecraft": ["Fishing Rod"],
+            "A Link Between Worlds": ["Bug Net"],
+            "SMZ3": ["Bugnet"],
+            "A Link to the Past": ["Bug Catching Net"],
+            "Skyward Sword": ["Progressive Bug Net"]
         }
     },
     {
@@ -779,17 +898,28 @@
             "Outer Wilds": ["Frequencies", "Signals", "$Shuffle"],
             "Minecraft": ["Dragon Egg Shard"],
             "Majora's Mask Recompiled": ["Room Key", "Small Key (Woodfall)", "Boss Key (Woodfall)", "Small Key (Snowhead)", "Boss Key (Snowhead)", "Small Key (Great Bay)", "Boss Key (Great Bay)", "Small Key (Stone Tower)", "Boss Key (Stone Tower)", "$Shuffle"],
-            "Ocarina of Time": ["SmallKey", "BossKey", "$Shuffle"]
+            "Ocarina of Time": ["SmallKey", "BossKey", "$Shuffle"],
+            "Twilight Princess": ["Small Keys", "Big Keys", "Progressive Fused Shadow", "Progressive Mirror Shard", "$Shuffle" ],
+            "The Legend of Zelda - Oracle of Ages": ["Small Keys", "Boss Keys", "Master Keys", "Library Key", "Mermaid Key", "Old Mermaid Key", "$Shuffle"],
+            "The Legend of Zelda - Oracle of Seasons": ["Small Keys", "Boss Keys", "Master Keys", "$Shuffle"],
+            "The Legend of Zelda - Spirit Tracks": ["Small Keys", "Boss Keys", "$Shuffle"],
+            "The Legend of Zelda - Phantom Hourglass": ["Small Keys", "Boss Keys", "Keys", "$Shuffle"],
+            "Skyward Sword": ["Small Key", "Ancient Cistern Boss Key", "Fire Sanctuary Boss Key", "Sandship Boss Key", "Key Piece", "Skyview Boss Key", "Earth Temple Boss Key", "Lanayru Mining Facility Boss Key",
+            "Skyview Small Key", "Lanayru Mining Facility Small Key", "Ancient Cistern Small Key", "Fire Sanctuary Small Key", "Sandship Small Key", "Sky Keep Small Key", "Lanayru Caves Small Key", "$Shuffle"]
+
         }
     },
     {
         "count": 15,
         "name": "Teleporters",
+        "_comment": "Teleporter style items and items that let you go to other areas, get to important locations",
         "progression": true,
         "progression_skip_balancing": true,
+        "category": ["linklink"],
         "extra": 5,
         "linklink": {
-            "Ori and the Will of the Wisps": [ "Midnight Burrows TP", "Howl's Den TP", "Central Luma TP", "Mouldwood Depths TP", "Wellspring TP", "Baur's Reach TP", "Kwolok's Hollow TP", "Woods Entrance TP", "Woods Exit TP", "Feeding Grounds TP", "Central Wastes TP", "Outer Ruins TP", "Willow's End TP", "Inkwater Marsh TP", "Glades TP", "Luma Boss TP", "Inner Ruins TP", "Shriek TP", "$Shuffle"],
+            "Ori and the Will of the Wisps": [ "Midnight Burrows TP", "Howl's Den TP", "Central Luma TP", "Mouldwood Depths TP", "Wellspring TP", "Baur's Reach TP", "Kwolok's Hollow TP", "Woods Entrance TP",
+             "Woods Exit TP", "Feeding Grounds TP", "Central Wastes TP", "Outer Ruins TP", "Willow's End TP", "Inkwater Marsh TP", "Glades TP", "Luma Boss TP", "Inner Ruins TP", "Shriek TP", "$Shuffle"],
             "Ori and the Blind Forest": ["TPGlades", "TPGrove", "TPSwamp", "TPGrotto", "TPGinso", "TPValley", "TPForlorn", "TPSorrow", "TPHoru", "TPBlackroot", "$Shuffle"],
             "Hollow Knight": ["Stags", "$Shuffle"],
             "Outer Wilds": ["Nomai Warp Codes", "$Buffer_3", "Entanglement Rule", "$Buffer_3", "Shrine Door Codes", "$Shuffle"],
@@ -797,23 +927,32 @@
             "A Hat in Time": ["Time Piece", "Yarn", "$Shuffle"],
             "Minecraft": ["Structure Compass (Village)", "Structure Compass (Pillager Outpost)", "Structure Compass (Nether Fortress)", "Structure Compass (Bastion Remnant)", "Structure Compass (End City)", "$Shuffle"],
             "Majora's Mask Recompiled": ["Song of Soaring"],
-            "Ocarina of Time": ["WarpSong", "$Shuffle" ]
+            "Ocarina of Time": ["WarpSong", "$Shuffle" ],
+            "The Legend of Zelda - Oracle of Ages": ["Progressive Harp"],
+            "The Legend of Zelda - Phantom Hourglass": ["Sea Charts", "Golden Frog Glyphs", "Cyclone Slate", "$Shuffle"],
+            "The Legend of Zelda - Spirit Tracks": ["Wooded Temple Tracks", "Blizzard Temple Tracks", "Snowdrift Station Tracks", "Slippery Station Tracks", "Forest Realm Ocean Shortcut Tracks",
+             "E Mayscore Bridge Tracks", "Forest Realm SE Portal Tracks", "W Castle Town Tracks", "W Forest Realm Tracks", "Forest Realm SW Cave Tracks", "W Wooded Temple Tracks", "N Castle Town Tracks",
+             "Snow Realm Bridge Tracks", "N Icy Spring Tracks", "Forest Source", "Snow Source", "Ocean Source", "Fire Source", "$Shuffle"],
+             "Skyward Sword": ["Emerald Tablet", "Ruby Tablet", "Amber Tablet"]
         }
     },
     {
         "count": 20,
-        "extra": 5,
         "name": "Fun Surprise",
         "trap": true,
         "progression_skip_balancing": true,
+        "category": ["linklink"],
         "linklink": {
             "A Link to the Past": ["Bee Trap", "Bee", "Bomb Trap", "Rupoor", "Red Clock", "Nothing", "$Shuffle"],
             "Links Awakening DX": ["Gel", "Zol Attack", "$Shuffle"],
             "Ocarina of Time": ["Ice Trap"],
-            "Outer Wilds": ["Ship Damage Trap", "Audio Trap", "Nap Trap", "$Shuffle"],
+            "Outer Wilds": ["Ship Damage Trap", "Audio Trap", "Nap Trap", "Ship Damage Trap", "HUD Corruption Trap", "Ice Physics Trap", "Map Disable Trap", "Suit Puncture Trap", "Supernova Trap", "$Shuffle"],
             "TUNIC": ["Fool Trap"],
             "A Hat in Time": ["Baby Trap", "Laser Trap", "Parade Trap", "$Shuffle"],
-            "Minecraft": ["Bee Trap"]
+            "Minecraft": ["Bee Trap"],
+            "Twilight Princess": ["Trap", "$Shuffle"],
+            "The Legend of Zelda - Phantom Hourglass": ["Rupoors"],
+            "Skyward Sword": ["Rupoor", "Cursed Medal"]
         }
     }
 ]}
