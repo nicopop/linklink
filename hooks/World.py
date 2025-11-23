@@ -114,8 +114,8 @@ def before_create_items_all(item_config: dict[str, int|dict], world: World, mult
             for item, count in world.linklink_item_config.items():
                 if item in item_config:
                     item_config[item] = count
-            item_config[FILLER_NAME] = world.linklink_item_config[FILLER_NAME]
-
+                else:
+                    item_config[item] = 0
     return item_config
 
 # The item pool before starting items are processed, in case you want to see the raw item pool at that stage
