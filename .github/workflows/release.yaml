@@ -22,6 +22,7 @@ env:
   VERSION_NUM_TEXT: 0.0.0
   AP_WORLD_PATH: ""
   AP_WORLD_YAML_PATH: ""
+  ACT: False
 
 permissions:
   actions: read
@@ -66,10 +67,10 @@ jobs:
       - name: Format changelog input as multiline string and put into env
         run: |
           echo 'CHANGELOG<<EOF' >> "$GITHUB_ENV"
-          echo "This release contains the following changes:\n\n" >> "$GITHUB_ENV"
+          echo "This release contains the following changes:\n"
           echo "${{ github.event.inputs.changelog }}" >> "$GITHUB_ENV"
-          echo "\n\nAs always, report any bugs in our Discord!"
-          echo "\nBased on Silasary's [linklink](https://github.com/silasary/linklink)"
+          echo "\n\nDo report any bugs/issues either on [Github](https://github.com/nicopop/linklink/issues) or on Discord" >> "$GITHUB_ENV"
+          echo "\nBased on Silasary's [linklink](https://github.com/silasary/linklink)\n" >> "$GITHUB_ENV"
           echo 'EOF' >> "$GITHUB_ENV"
       - name: Change in apworld's version
         # version = 2025_03_24_00 # YYYYMMDD
@@ -96,12 +97,21 @@ jobs:
         run: echo -en "${{ env.CHANGELOG }}" > bodyFile.txt
       - name: Create a LinkLink release
         uses: ncipollo/release-action@v1
+        if: ${{ !env.ACT }}
         with:
           draft: true
           name: "${{ env.AP_WORLD_NAME }} - ${{ env.VERSION_NUM_TEXT }}"
           bodyFile: bodyFile.txt
           tag: "${{ env.VERSION_NUM }}"
           commit: "main"
+          generateReleaseNotes: true
           artifacts: |
             ${{ env.AP_WORLD_PATH }}
             ${{ env.AP_WORLD_YAML_PATH }}
+      - name: ACT Result
+        if: ${{ env.ACT }}
+        run: |
+          echo Act Fake Release:
+          echo ${{ env.AP_WORLD_NAME }} - ${{ env.VERSION_NUM_TEXT }}
+          echo tag: "${{ env.VERSION_NUM }}"
+          echo -en "${{ env.CHANGELOG }}"
