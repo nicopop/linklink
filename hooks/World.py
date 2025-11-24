@@ -88,7 +88,7 @@ def before_create_items_all(item_config: dict[str, int|dict], world: World, mult
     if not world.is_ut:
         for item_data in item_table:
             item_data = cast(dict[str, Any], item_data)
-            if item_config.get(item_data['name']) and item_data.get("extra"): # 'linklink' in item_data:
+            if item_config.get(item_data['name']):
                 classification = ItemClassification.filler
 
                 if item_data.get("trap"):
@@ -97,17 +97,24 @@ def before_create_items_all(item_config: dict[str, int|dict], world: World, mult
                 if item_data.get("useful"):
                     classification |= ItemClassification.useful
 
+                if item_data.get("deprioritized"):
+                    classification |= ItemClassification.deprioritized
+
                 if item_data.get("progression_skip_balancing"):
                     classification |= ItemClassification.progression_skip_balancing
                 elif item_data.get("progression"):
                     classification |= ItemClassification.progression
 
-                extra_classification = ItemClassification(classification)
-                if ItemClassification.useful not in classification:
-                    extra_classification |= ItemClassification.useful
-                extra_classification &= ~ItemClassification.progression_skip_balancing
+                item_config[item_data['name']] = {classification: item_data['count']}
 
-                item_config[item_data['name']] = {classification: item_data['count'] - item_data['extra'], extra_classification: item_data['extra']}
+                if item_data.get("extra"):
+                    extra_classification = ItemClassification(classification)
+                    if ItemClassification.useful not in classification:
+                        extra_classification |= ItemClassification.useful
+                    extra_classification &= ~ItemClassification.progression_skip_balancing
+                    extra_classification &= ~ItemClassification.deprioritized
+
+                    item_config[item_data['name']].update({extra_classification: item_data['extra']}) # pyright: ignore[reportAttributeAccessIssue]
 
     elif world.is_ut_regen:
         if hasattr(world, "linklink_item_config"):
@@ -263,7 +270,7 @@ def after_generate_basic(world: "ManualWorld", multiworld: MultiWorld, player: i
             if 'linklink' in item_data:
                 # logging.debug(repr(linklink))
                 linklink: dict[str, list[str]] = item_data['linklink']
-                item_count: int = item_data['count'] - item_data['extra']
+                item_count: int = item_data['count'] # - item_data['extra']
                 extras += item_data['extra']
                 item_name: str = item_data['name']
                 filler_to_make_for_player: dict[int, int] = {}
