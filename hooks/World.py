@@ -131,24 +131,22 @@ def before_create_items_starting(item_pool: list, world: World, multiworld: Mult
 
 # The item pool after starting items are processed but before filler is added, in case you want to see the raw item pool at that stage
 def before_create_items_filler(item_pool: list, world: World, multiworld: MultiWorld, player: int) -> list:
-    # To get the total of non-filler items without counting later.
-    world.linklink_keys = len(item_pool)
     return item_pool
 
 
 # The complete item pool prior to being set for generation is provided here, in case you want to make changes to it
 def after_create_items(item_pool: list[Item], world: World, multiworld: MultiWorld, player: int) -> list:
-    if not world.is_ut_regen:
-        fillers = len(item_pool) - int(world.linklink_keys)
-        locations: dict[str, Location] = {n:l for n, l in world.location_name_to_location.items() if not (l.get('victory') or l.get("linklink", None) is None)}
-        todo = len(locations) - fillers
-    else:
-        #max for datapackage reason
-        todo = max(1, len(world.linklink_locations) - len([i for i in item_pool if i.name == FILLER_NAME]) - 1)
+    unplaced_nothing = [i for i in item_pool if i.name == FILLER_NAME]
+    ll_locations = [l for l in world.get_locations() if " l$l " in l.name]
 
-    if todo > 0:
-        for _ in range(todo):
-            item_pool.append(world.create_filler())
+    # Doing the placing on locked items here since its faster than Manual's place_item
+    for location in ll_locations:
+        if len(unplaced_nothing) > 0:
+            item = unplaced_nothing.pop()
+            try_remove_specific_item(item_pool, item)
+        else:
+            item = world.create_filler()
+        location.place_locked_item(item)
     return item_pool
 
 def try_remove_specific_item(items: list[Item], item: Item):
