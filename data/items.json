@@ -1,589 +1,593 @@
-[
-    {
-		"count": 4,
-		"name": "Sword",
-		"category": [],
-		"progression": true,
-		"linklink": {
-            "The Legend of Zelda": ["Sword", "White Sword", "Magical Sword"],
-            "A Link to the Past": ["Progressive Sword"],
-            "SMZ3": ["ProgressiveSword"],
-			"Links Awakening DX": ["Progressive Sword"],
-			"Ocarina of Time": ["Kokiri Sword", "Giants Knife"],
-			"The Legend of Zelda - Oracle of Seasons": ["Progressive Sword"],
-			"The Wind Waker": ["Progressive Sword"],
-			"TUNIC": ["Sword Upgrade"],
-			"The Legend of Zelda - Oracle of Ages": ["Progressive Sword"],
-			"Majora's Mask Recompiled": ["Progressive Sword"],
-			"A Link Between Worlds": ["Progressive Sword"]
+{
+    "$schema": "items.schema.json",
+    "data": [
+        {
+            "count": 4,
+            "name": "Sword",
+            "category": [],
+            "progression": true,
+            "linklink": {
+                "A Link Between Worlds": ["Progressive Sword"],
+                "A Link to the Past": ["Progressive Sword"],
+                "Links Awakening DX": ["Progressive Sword"],
+                "Majora's Mask Recompiled": ["Progressive Sword"],
+                "Ocarina of Time": ["Kokiri Sword", "Giants Knife"],
+                "SMZ3": ["ProgressiveSword"],
+                "The Legend of Zelda": ["Sword", "White Sword", "Magical Sword"],
+                "The Legend of Zelda - Oracle of Ages": ["Progressive Sword"],
+                "The Legend of Zelda - Oracle of Seasons": ["Progressive Sword"],
+                "The Wind Waker": ["Progressive Sword"],
+                "TUNIC": ["Sword Upgrade"]
+            }
+        },
+        {
+            "count": 1,
+            "name": "Biggoron's Sword",
+            "category": [],
+            "progression": true,
+            "linklink": {
+                "A Link Between Worlds": ["Progressive Sword"],
+                "A Link to the Past": ["Progressive Sword"],
+                "Majora's Mask Recompiled": ["Great Fairy Sword"],
+                "Ocarina of Time": ["Biggoron Sword"],
+                "SMZ3": ["ProgressiveSword"],
+                "The Legend of Zelda - Oracle of Ages": ["Biggoron's Sword"],
+                "The Legend of Zelda - Oracle of Seasons": ["Biggoron's Sword"],
+                "The Wind Waker": ["Progressive Sword"],
+                "TUNIC": ["Sword Upgrade"]
+            }
+        },
+        {
+            "count": 1,
+            "name": "Shield (Basic)",
+            "category": [],
+            "progression": true,
+            "linklink": {
+                "A Link Between Worlds": ["Hylian Shield"],
+                "A Link to the Past": ["Progressive Shield", "Blue Shield"],
+                "Links Awakening DX": ["Progressive Shield"],
+                "Ocarina of Time": ["Deku Shield"],
+                "SMZ3": ["ProgressiveShield"],
+                "The Legend of Zelda": ["Magical Shield"],
+                "The Legend of Zelda - Oracle of Ages": ["Progressive Shield"],
+                "The Legend of Zelda - Oracle of Seasons": ["Progressive Shield"],
+                "The Wind Waker": ["Progressive Shield"],
+                "TUNIC": ["Shield"]
+            }
+        },
+        {
+            "count": 1,
+            "name": "Shield (Intermediate)",
+            "category": [],
+            "progression": true,
+            "linklink": {
+                "A Link to the Past": ["Progressive Shield", "Red Shield"],
+                "Ocarina of Time": ["Hylian Shield"],
+                "SMZ3": ["ProgressiveShield"],
+                "The Legend of Zelda": ["Magical Shield"],
+                "The Legend of Zelda - Oracle of Ages": ["Progressive Shield"],
+                "The Legend of Zelda - Oracle of Seasons": ["Progressive Shield"]
+            }
+        },
+        {
+            "count": 1,
+            "name": "Shield (Mirror)",
+            "category": [],
+            "progression": true,
+            "linklink": {
+                "A Link to the Past": ["Progressive Shield", "Mirror Shield"],
+                "Links Awakening DX": ["Progressive Shield"],
+                "Ocarina of Time": ["Mirror Shield", "Hylian Shield", "Deku Shield"],
+                "SMZ3": ["ProgressiveShield"],
+                "The Legend of Zelda": ["Magical Shield"],
+                "The Legend of Zelda - Oracle of Ages": ["Progressive Shield"],
+                "The Legend of Zelda - Oracle of Seasons": ["Progressive Shield"],
+                "The Wind Waker": ["Progressive Shield"]
+            }
+        },
+        {
+            "count": 2,
+            "name": "Fire Magic",
+            "category": [],
+            "progression": true,
+            "linklink": {
+                "A Link Between Worlds": ["Fire Rod"],
+                "A Link to the Past": ["Fire Rod"],
+                "Majora's Mask Recompiled": ["Fire Arrow"],
+                "Ocarina of Time": ["Fire Arrows"],
+                "SMZ3": ["Firerod"],
+                "The Wind Waker": ["Progressive Bow"],
+                "TUNIC": ["Glass Cannon"]
+            }
+        },
+        {
+            "count": 2,
+            "name": "Ice Magic",
+            "category": [],
+            "progression": true,
+            "linklink": {
+                "A Link Between Worlds": ["Ice Rod"],
+                "A Link to the Past": ["Ice Rod"],
+                "Majora's Mask Recompiled": ["Ice Arrow"],
+                "Ocarina of Time": ["Ice Arrows"],
+                "SMZ3": ["Icerod"],
+                "TUNIC": ["Magic Dagger"]
+            }
+        },
+        {
+            "count": 1,
+            "name": "Light Arrows",
+            "category": [],
+            "progression": true,
+            "linklink": {
+                "A Link Between Worlds": ["Bow of Light"],
+                "A Link to the Past": ["Silver Bow", "Progressive Bow (Alt)"],
+                "Majora's Mask Recompiled": ["Light Arrow"],
+                "Ocarina of Time": ["Light Arrows"],
+                "SMZ3": ["SilverArrows"],
+                "The Legend of Zelda": ["Silver Arrow"],
+                "The Wind Waker": ["Progressive Bow"]
+            }
+        },
+        {
+            "count": 3,
+            "name": "Bow",
+            "category": [],
+            "progression": true,
+            "linklink": {
+                "A Link Between Worlds": ["Bow"],
+                "A Link to the Past": ["Progressive Bow", "Bow", "Arrow Upgrade (70)", "Arrow Upgrade (+10)", "Arrow Upgrade (+5)", "Arrows (10)"],
+                "Links Awakening DX": ["Bow", "Max Arrows Upgrade", "10 Arrows"],
+                "Majora's Mask Recompiled": ["Progressive Bow"],
+                "Ocarina of Time": ["Bow"],
+                "SMZ3": ["Bow", "ArrowUpgrade10", "ArrowUpgrade5"],
+                "The Legend of Zelda": ["Bow"],
+                "The Wind Waker": ["Progressive Bow", "Progressive Quiver"]
+            }
+        },
+        {
+            "count": 2,
+            "name": "Boomerang",
+            "category": [],
+            "progression": true,
+            "linklink": {
+                "A Link Between Worlds": ["Boomerang"],
+                "A Link to the Past": ["Blue Boomerang", "Red Boomerang"],
+                "Links Awakening DX": ["Boomerang"],
+                "Ocarina of Time": ["Boomerang"],
+                "SMZ3": ["BlueBoomerang", "RedBoomerang"],
+                "The Legend of Zelda": ["Boomerang", "Magical Boomerang"],
+                "The Legend of Zelda - Oracle of Ages": ["Boomerang"],
+                "The Legend of Zelda - Oracle of Seasons": ["Progressive Boomerang"],
+                "The Wind Waker": ["Boomerang"]
+            }
+        },
+        {
+            "count": 3,
+            "name": "Bombs",
+            "category": [],
+            "progression": true,
+            "linklink": {
+                "A Link Between Worlds": ["Bombs"],
+                "A Link to the Past": ["Bomb Upgrade (50)", "Bomb Upgrade (+10)", "Bomb Upgrade (+5)", "Bombs (10)"],
+                "Links Awakening DX": ["Max Bombs Upgrade", "Bombs"],
+                "Majora's Mask Recompiled": ["Progressive Bomb Bag"],
+                "Ocarina of Time": ["Bomb Bag"],
+                "SMZ3": ["BombUpgrade10", "BombUpgrade5"],
+                "The Legend of Zelda": ["Bombs"],
+                "The Legend of Zelda - Oracle of Ages": ["Bombs (10)"],
+                "The Legend of Zelda - Oracle of Seasons": ["Bombs (10)"],
+                "The Wind Waker": ["Bombs", "Progressive Bomb Bag"],
+                "TUNIC": ["Firecracker x6", "Firecracker x5", "Firecracker x4", "Firecracker x3"]
+            }
+        },
+        {
+            "count": 2,
+            "name": "Flute",
+            "category": [],
+            "progression": true,
+            "linklink": {
+                "A Link Between Worlds": ["Bell"],
+                "A Link to the Past": ["Flute"],
+                "Links Awakening DX": ["Ocarina"],
+                "Ocarina of Time": ["Ocarina"],
+                "SMZ3": ["Flute"],
+                "The Legend of Zelda": ["Recorder"],
+                "The Legend of Zelda - Oracle of Ages": ["Moosh's Flute", "Ricky's Flute", "Dimitri's Flute"],
+                "The Legend of Zelda - Oracle of Seasons": ["Moosh's Flute", "Ricky's Flute", "Dimitri's Flute"],
+                "The Wind Waker": ["Wind Waker"]
+            }
+        },
+        {
+            "count": 1,
+            "name": "Magic Armor",
+            "category": [],
+            "progression": true,
+            "linklink": {
+                "Ocarina of Time": ["Double Defense"],
+                "The Wind Waker": ["Magic Armor"],
+                "TUNIC": ["DEF Offering"]
+            }
+        },
+        {
+            "count": 1,
+            "name": "Blue Tunic",
+            "category": [],
+            "progression": true,
+            "linklink": {
+                "A Link Between Worlds": ["Progressive Mail"],
+                "A Link to the Past": ["Progressive Mail", "Blue Mail"],
+                "Links Awakening DX": ["Blue Tunic"],
+                "Ocarina of Time": ["Zora Tunic"],
+                "SMZ3": ["ProgressiveTunic"],
+                "The Legend of Zelda": ["Blue Ring"],
+                "TUNIC": ["DEF Offering"]
+            }
+        },
+        {
+            "count": 1,
+            "name": "Red Tunic",
+            "category": [],
+            "progression": true,
+            "linklink": {
+                "A Link Between Worlds": ["Progressive Mail"],
+                "A Link to the Past": ["Progressive Mail", "Red Mail"],
+                "Links Awakening DX": ["Red Tunic"],
+                "Ocarina of Time": ["Goron Tunic"],
+                "SMZ3": ["ProgressiveTunic"],
+                "The Legend of Zelda": ["Red Ring"],
+                "TUNIC": ["DEF Offering"]
+            }
+        },
+        {
+            "count": 3,
+            "name": "Strength",
+            "category": [],
+            "progression": true,
+            "linklink": {
+                "A Link Between Worlds": ["Progressive Glove"],
+                "A Link to the Past": ["Progressive Glove"],
+                "Links Awakening DX": ["Progressive Power Bracelet"],
+                "Majora's Mask Recompiled": ["Goron Mask"],
+                "Ocarina of Time": ["Progressive Strength Upgrade"],
+                "SMZ3": ["ProgressiveGlove"],
+                "The Legend of Zelda": ["Power Bracelet"],
+                "The Legend of Zelda - Oracle of Ages": ["Progressive Bracelet"],
+                "The Legend of Zelda - Oracle of Seasons": ["Power Bracelet"],
+                "The Wind Waker": ["Power Bracelets"],
+                "TUNIC": ["ATT Offering"]
+            }
+        },
+        {
+            "count": 2,
+            "name": "Hookshot",
+            "category": [],
+            "progression": true,
+            "linklink": {
+                "A Link Between Worlds": ["Hookshot"],
+                "A Link to the Past": ["Hookshot"],
+                "Links Awakening DX": ["Hookshot"],
+                "Majora's Mask Recompiled": ["Hookshot"],
+                "Ocarina of Time": ["Progressive Hookshot"],
+                "SMZ3": ["Hookshot"],
+                "The Legend of Zelda": ["Stepladder"],
+                "The Legend of Zelda - Oracle of Ages": ["Progressive Hook"],
+                "The Legend of Zelda - Oracle of Seasons": ["Magnetic Gloves"],
+                "The Wind Waker": ["Grappling Hook", "Hookshot"],
+                "TUNIC": ["Magic Orb"]
+            }
+        },
+        {
+            "count": 2,
+            "name": "Swimming",
+            "category": [],
+            "progression": true,
+            "linklink": {
+                "A Link Between Worlds": ["Flippers"],
+                "A Link to the Past": ["Flippers"],
+                "Links Awakening DX": ["Flippers"],
+                "Majora's Mask Recompiled": ["Zora Mask"],
+                "Ocarina of Time": ["Progressive Scale"],
+                "SMZ3": ["Flippers"],
+                "The Legend of Zelda": ["Raft"],
+                "The Legend of Zelda - Oracle of Ages": ["Progressive Flippers"],
+                "The Legend of Zelda - Oracle of Seasons": ["Flippers", "Swimmer's Ring", "Zora Ring"]
+            }
+        },
+        {
+            "count": 2,
+            "name": "Hammer",
+            "category": [],
+            "progression": true,
+            "linklink": {
+                "A Link Between Worlds": ["Hammer"],
+                "A Link to the Past": ["Hammer"],
+                "Ocarina of Time": ["Megaton Hammer"],
+                "SMZ3": ["Hammer"],
+                "The Wind Waker": ["Skull Hammer"]
+            }
+        },
+        {
+            "count": 5,
+            "name": "Bottle",
+            "category": [],
+            "progression": true,
+            "linklink": {
+                "A Link Between Worlds": ["Premium Milk", "Bottle"],
+                "A Link to the Past": ["Bottle", "Bottle (Bee)", "Bottle (Blue Potion)", "Bottle (Fairy)", "Bottle (Good Bee)", "Bottle (Green Potion)", "Bottle (Red Potion)"],
+                "Majora's Mask Recompiled": ["Bottle of Chateau Romani", "Bottle of Red Potion"],
+                "Ocarina of Time": ["Bottle", "Bottle with Big Poe", "Bottle with Blue Fire", "Bottle with Blue Potion", "Bottle with Bugs",
+                    "Bottle with Fairy", "Bottle with Fish", "Bottle with Green Potion", "Bottle with Milk", "Bottle with Poe", "Bottle with Red Potion"],
+                "SMZ3": ["Bottle", "BottleWithBee", "BottleWithBluePotion", "BottleWithFairy", "BottleWithGoldBee", "BottleWithGreenPotion", "BottleWithRedPotion"],
+                "The Wind Waker": ["Empty Bottle"],
+                "TUNIC": ["Potion Flask"]
+            }
+        },
+        {
+            "count": 1,
+            "name": "Magical Rod",
+            "category": [],
+            "progression": true,
+            "linklink": {
+                "A Link to the Past": ["Cane of Somaria"],
+                "Links Awakening DX": ["Magic Rod"],
+                "SMZ3": ["Somaria"],
+                "The Legend of Zelda": ["Magical Rod"],
+                "The Legend of Zelda - Oracle of Ages": ["Cane of Somaria"],
+                "TUNIC": ["Magic Wand"]
+            }
+        },
+        {
+            "count": 2,
+            "name": "Shovel",
+            "category": [],
+            "progression": true,
+            "linklink": {
+                "A Link Between Worlds": ["Sand Rod"],
+                "A Link to the Past": ["Shovel"],
+                "Links Awakening DX": ["Shovel"],
+                "SMZ3": ["Shovel"],
+                "The Legend of Zelda - Oracle of Ages": ["Shovel"],
+                "The Legend of Zelda - Oracle of Seasons": ["Shovel"]
+            }
+        },
+        {
+            "count": 1,
+            "name": "Pegasus Boots",
+            "category": [],
+            "progression": true,
+            "linklink": {
+                "A Link Between Worlds": ["Pegasus Boots"],
+                "A Link to the Past": ["Pegasus Boots"],
+                "Links Awakening DX": ["Pegasus Boots"],
+                "Ocarina of Time": ["Hover Boots"],
+                "SMZ3": ["Boots"],
+                "TUNIC": ["Anklet"]
+            }
+        },
+        {
+            "count": 2,
+            "name": "Magic Meter",
+            "category": [],
+            "progression": true,
+            "linklink": {
+                "A Link Between Worlds": ["Progressive Bracelet", "Stamina Scroll"],
+                "A Link to the Past": ["Magic Upgrade (1/2)", "Magic Upgrade (1/4)"],
+                "Majora's Mask Recompiled": ["Progressive Magic Upgrade"],
+                "Ocarina of Time": ["Magic Meter"],
+                "SMZ3": ["HalfMagic"],
+                "The Wind Waker": ["Progressive Magic Meter"],
+                "TUNIC": ["MP Offering"]
+            }
+        },
+        {
+            "count": 2,
+            "name": "Lamp",
+            "category": [],
+            "progression": true,
+            "linklink": {
+                "A Link Between Worlds": ["Lamp"],
+                "A Link to the Past": ["Lamp"],
+                "SMZ3": ["Lamp"],
+                "The Legend of Zelda": ["Candle", "Red Candle"],
+                "TUNIC": ["Lantern"]
+            }
+        },
+        {
+            "count": 1,
+            "name": "Book",
+            "category": [],
+            "progression": true,
+            "linklink": {
+                "A Link to the Past": ["Book of Mudora"],
+                "SMZ3": ["Book"],
+                "The Legend of Zelda": ["Book of Magic"],
+                "The Legend of Zelda - Oracle of Ages": ["Book of Seals"],
+                "The Legend of Zelda - Oracle of Seasons": ["Cuccodex"],
+                "TUNIC": ["Pages 2-3"]
+            }
+        },
+        {
+            "count": 1,
+            "name": "Magic Powder",
+            "category": [],
+            "progression": true,
+            "linklink": {
+                "A Link to the Past": ["Magic Powder"],
+                "Links Awakening DX": ["Magic Powder"],
+                "SMZ3": ["Powder"],
+                "The Legend of Zelda - Oracle of Ages": ["Fairy Powder"]
+            }
+        },
+        {
+            "count": 1,
+            "name": "Mushroom",
+            "category": [],
+            "progression": true,
+            "linklink": {
+                "A Link to the Past": ["Mushroom"],
+                "Links Awakening DX": ["Toadstool"],
+                "Majora's Mask Recompiled": ["Mask of Scents"],
+                "Ocarina of Time": ["Odd Mushroom"],
+                "SMZ3": ["Mushroom"],
+                "The Legend of Zelda - Oracle of Seasons": ["Mushroom"],
+                "TUNIC": ["Hero Relic - MP"]
+            }
+        },
+        {
+            "count": 3,
+            "name": "Magic Spell",
+            "category": [],
+            "progression": true,
+            "linklink": {
+                "A Link Between Worlds": ["Quake", "Great Spin"],
+                "A Link to the Past": ["Quake", "Ether", "Bombos"],
+                "Ocarina of Time": ["Dins Fire", "Farores Wind", "Nayrus Love"],
+                "SMZ3": ["Quake", "Ether", "Bombos"],
+                "TUNIC": ["Pages 24-25 (Prayer)", "Pages 42-43 (Holy Cross)", "Pages 52-53 (Icebolt)"]
+            }
+        },
+        {
+            "count": 1,
+            "name": "Iron Boots",
+            "category": [],
+            "progression": true,
+            "linklink": {
+                "Ocarina of Time": ["Iron Boots"],
+                "The Wind Waker": ["Iron Boots"]
+            }
+        },
+        {
+            "count": 1,
+            "name": "Feather",
+            "category": [],
+            "progression": true,
+            "linklink": {
+                "Links Awakening DX": ["Feather"],
+                "The Legend of Zelda - Oracle of Ages": ["Feather"],
+                "The Legend of Zelda - Oracle of Seasons": ["Progressive Feather"],
+                "The Wind Waker": ["Golden Feather"]
+            }
+        },
+        {
+            "count": 1,
+            "name": "Cape",
+            "category": [],
+            "progression": true,
+            "linklink": {
+                "A Link to the Past": ["Cape"],
+                "SMZ3": ["Cape"],
+                "The Legend of Zelda": ["Magical Shield"],
+                "The Legend of Zelda - Oracle of Seasons": ["Progressive Feather"]
+            }
+        },
+        {
+            "count": 3,
+            "name": "Slingshot",
+            "category": [],
+            "progression": true,
+            "linklink": {
+                "Ocarina of Time": ["Slingshot"],
+                "The Legend of Zelda - Oracle of Ages": ["Seed Shooter"],
+                "The Legend of Zelda - Oracle of Seasons": ["Progressive Slingshot"],
+                "TUNIC": ["Gun"]
+            }
+        },
+        {
+            "count": 1,
+            "name": "Membership Card",
+            "category": [],
+            "progression": true,
+            "linklink": {
+                "Ocarina of Time": ["Gerudo Membership Card"],
+                "The Legend of Zelda - Oracle of Seasons": ["Member's Card"],
+                "The Wind Waker": ["Fill-Up Coupon"]
+            }
+        },
+        {
+            "count": 3,
+            "name": "Seed Bag",
+            "category": [],
+            "progression": true,
+            "linklink": {
+                "Ocarina of Time": ["Deku Nut Capacity"],
+                "The Legend of Zelda - Oracle of Ages": ["Seed Satchel"],
+                "The Legend of Zelda - Oracle of Seasons": ["Seed Satchel"],
+                "The Wind Waker": ["Bait Bag"]
+            }
+        },
+        {
+            "count": 1,
+            "name": "Looking Glass",
+            "category": [],
+            "progression": true,
+            "linklink": {
+                "A Link to the Past": ["Magic Mirror"],
+                "Links Awakening DX": ["Magnifying Glass"],
+                "Majora's Mask Recompiled": ["Lens of Truth"],
+                "Ocarina of Time": ["Lens of Truth"],
+                "SMZ3": ["Mirror"],
+                "The Wind Waker": ["Spyglass"]
+            }
+        },
+        {
+            "count": 1,
+            "name": "Letter",
+            "category": [],
+            "progression": true,
+            "linklink": {
+                "Majora's Mask Recompiled": ["Letter to Kafei"],
+                "Ocarina of Time": ["Rutos Letter"],
+                "The Legend of Zelda": ["Letter"],
+                "The Wind Waker": ["Delivery Bag"],
+                "TUNIC": ["Pages 0-1"]
+            }
+        },
+        {
+            "count": 4,
+            "name": "Key Jewels",
+            "category": [],
+            "progression": true,
+            "linklink": {
+                "A Link to the Past": ["Moon Pearl"],
+                "SMZ3": ["MoonPearl"],
+                "The Legend of Zelda - Oracle of Ages": ["Slate"],
+                "The Legend of Zelda - Oracle of Seasons": ["Round Jewel", "Pyramid Jewel", "X-Shaped Jewel", "Square Jewel"],
+                "The Wind Waker": ["Din's Pearl", "Farore's Pearl", "Nayru's Pearl"],
+                "TUNIC": ["Red Questagon", "Green Questagon", "Blue Questagon"]
+            }
+        },
+        {
+            "count": 3,
+            "name": "Wallet",
+            "category": [],
+            "progression": true,
+            "linklink": {
+                "A Link Between Worlds": ["Pouch"],
+                "Majora's Mask Recompiled": ["Progressive Wallet"],
+                "Ocarina of Time": ["Progressive Wallet"],
+                "The Wind Waker": ["Progressive Wallet"],
+                "TUNIC": ["Effigy"]
+            }
+        },
+        {
+            "count": 10,
+            "name": "Heart Container",
+            "category": [],
+            "progression": true,
+            "linklink": {
+                "A Link Between Worlds": ["Heart Container", "Piece of Heart", "Heart Piece"],
+                "A Link to the Past": ["Boss Heart Container", "Piece of Heart"],
+                "Links Awakening DX": ["Heart Container", "Heart Piece"],
+                "Majora's Mask Recompiled": ["Heart Container", "Piece of Heart", "Heart Piece"],
+                "Ocarina of Time": ["Heart Container", "Piece of Heart"],
+                "SMZ3": ["HeartContainer", "HeartPiece"],
+                "The Legend of Zelda": ["Heart Container"],
+                "The Legend of Zelda - Oracle of Ages": ["Heart Container", "Piece of Heart", "Heart Piece"],
+                "The Legend of Zelda - Oracle of Seasons": ["Heart Container", "Piece of Heart", "Heart Piece"],
+                "The Wind Waker": ["Heart Container", "Piece of Heart"],
+                "TUNIC": ["HP Offering", "Potion Flask", "Flask Shard"]
+            }
         }
-	},
-    {
-		"count": 1,
-		"name": "Biggoron's Sword",
-		"category": [],
-		"progression": true,
-		"linklink": {
-            "A Link to the Past": ["Progressive Sword"],
-            "SMZ3": ["ProgressiveSword"],
-			"Ocarina of Time": ["Biggoron Sword"],
-			"The Legend of Zelda - Oracle of Seasons": ["Biggoron's Sword"],
-			"The Wind Waker": ["Progressive Sword"],
-			"TUNIC": ["Sword Upgrade"],
-			"The Legend of Zelda - Oracle of Ages": ["Biggoron's Sword"],
-			"Majora's Mask Recompiled": ["Great Fairy Sword"],
-			"A Link Between Worlds": ["Progressive Sword"]
-        }
-	},
-	{
-		"count": 1,
-		"name": "Shield (Basic)",
-		"category": [],
-		"progression": true,
-		"linklink": {
-            "The Legend of Zelda": ["Magical Shield"],
-            "A Link to the Past": ["Progressive Shield", "Blue Shield"],
-            "SMZ3": ["ProgressiveShield"],
-			"Links Awakening DX": ["Progressive Shield"],
-			"Ocarina of Time": ["Deku Shield"],
-			"The Legend of Zelda - Oracle of Seasons": ["Progressive Shield"],
-			"The Wind Waker": ["Progressive Shield"],
-			"TUNIC": ["Shield"],
-			"The Legend of Zelda - Oracle of Ages": ["Progressive Shield"],
-			"A Link Between Worlds": ["Hylian Shield"]
-		}
-	},
-	{
-		"count": 1,
-		"name": "Shield (Intermediate)",
-		"category": [],
-		"progression": true,
-		"linklink": {
-            "The Legend of Zelda": ["Magical Shield"],
-            "A Link to the Past": ["Progressive Shield", "Red Shield"],
-            "SMZ3": ["ProgressiveShield"],
-			"Ocarina of Time": ["Hylian Shield"],
-			"The Legend of Zelda - Oracle of Seasons": ["Progressive Shield"],
-			"The Legend of Zelda - Oracle of Ages": ["Progressive Shield"]
-		}
-	},
-	{
-		"count": 1,
-		"name": "Shield (Mirror)",
-		"category": [],
-		"progression": true,
-		"linklink": {
-            "The Legend of Zelda": ["Magical Shield"],
-            "A Link to the Past": ["Progressive Shield", "Mirror Shield"],
-            "SMZ3": ["ProgressiveShield"],
-			"Links Awakening DX": ["Progressive Shield"],
-			"Ocarina of Time": ["Mirror Shield", "Hylian Shield", "Deku Shield"],
-			"The Legend of Zelda - Oracle of Seasons": ["Progressive Shield"],
-			"The Wind Waker": ["Progressive Shield"],
-			"The Legend of Zelda - Oracle of Ages": ["Progressive Shield"]
-		}
-	},
-    {
-		"count": 2,
-		"name": "Fire Magic",
-		"category": [],
-		"progression": true,
-		"linklink": {
-            "A Link to the Past": ["Fire Rod"],
-            "SMZ3": ["Firerod"],
-			"Ocarina of Time": ["Fire Arrows"],
-			"The Wind Waker": ["Progressive Bow"],
-			"TUNIC": ["Glass Cannon"],
-			"Majora's Mask Recompiled": ["Fire Arrow"],
-			"A Link Between Worlds": ["Fire Rod"]
-        }
-	},
-    {
-		"count": 2,
-		"name": "Ice Magic",
-		"category": [],
-		"progression": true,
-		"linklink": {
-            "A Link to the Past": ["Ice Rod"],
-            "SMZ3": ["Icerod"],
-			"Ocarina of Time": ["Ice Arrows"],
-			"TUNIC": ["Magic Dagger"],
-			"Majora's Mask Recompiled": ["Ice Arrow"],
-			"A Link Between Worlds": ["Ice Rod"]
-        }
-	},
-	{
-		"count": 1,
-		"name": "Light Arrows",
-		"category": [],
-		"progression": true,
-		"linklink": {
-            "The Legend of Zelda": ["Silver Arrow"],
-            "A Link to the Past": ["Silver Bow", "Progressive Bow (Alt)"],
-            "SMZ3": ["SilverArrows"],
-			"Ocarina of Time": ["Light Arrows"],
-			"The Wind Waker": ["Progressive Bow"],
-			"Majora's Mask Recompiled": ["Light Arrow"],
-			"A Link Between Worlds": ["Bow of Light"]
-		}
-	},
-	{
-		"count": 3,
-		"name": "Bow",
-		"category": [],
-		"progression": true,
-		"linklink": {
-            "The Legend of Zelda": ["Bow"],
-            "A Link to the Past": ["Progressive Bow", "Bow", "Arrow Upgrade (70)", "Arrow Upgrade (+10)", "Arrow Upgrade (+5)", "Arrows (10)"],
-            "SMZ3": ["Bow", "ArrowUpgrade10", "ArrowUpgrade5"],
-			"Links Awakening DX": ["Bow", "Max Arrows Upgrade", "10 Arrows"],
-			"Ocarina of Time": ["Bow"],
-			"The Wind Waker": ["Progressive Bow", "Progressive Quiver"],
-			"Majora's Mask Recompiled": ["Progressive Bow"],
-			"A Link Between Worlds": ["Bow"]
-		}
-	},
-	{
-		"count": 2,
-		"name": "Boomerang",
-		"category": [],
-		"progression": true,
-		"linklink": {
-            "The Legend of Zelda": ["Boomerang", "Magical Boomerang"],
-            "A Link to the Past": ["Blue Boomerang", "Red Boomerang"],
-            "SMZ3": ["BlueBoomerang", "RedBoomerang"],
-			"Links Awakening DX": ["Boomerang"],
-			"Ocarina of Time": ["Boomerang"],
-			"The Legend of Zelda - Oracle of Seasons": ["Progressive Boomerang"],
-			"The Wind Waker": ["Boomerang"],
-			"The Legend of Zelda - Oracle of Ages": ["Boomerang"],
-			"A Link Between Worlds": ["Boomerang"]
-		}
-	},
-	{
-		"count": 3,
-		"name": "Bombs",
-		"category": [],
-		"progression": true,
-		"linklink": {
-            "The Legend of Zelda": ["Bombs"],
-            "A Link to the Past": ["Bomb Upgrade (50)","Bomb Upgrade (+10)", "Bomb Upgrade (+5)", "Bombs (10)"],
-            "SMZ3": ["BombUpgrade10", "BombUpgrade5"],
-			"Links Awakening DX": ["Max Bombs Upgrade", "Bombs"],
-			"Ocarina of Time": ["Bomb Bag"],
-			"The Legend of Zelda - Oracle of Seasons": ["Bombs (10)"],
-			"The Wind Waker": ["Bombs", "Progressive Bomb Bag"],
-			"TUNIC": ["Firecracker x6", "Firecracker x5", "Firecracker x4", "Firecracker x3"],
-			"The Legend of Zelda - Oracle of Ages": ["Bombs (10)"],
-			"Majora's Mask Recompiled": ["Progressive Bomb Bag"],
-			"A Link Between Worlds": ["Bombs"]
-		}
-	},
-	{
-		"count": 2,
-		"name": "Flute",
-		"category": [],
-		"progression": true,
-		"linklink": {
-            "The Legend of Zelda": ["Recorder"],
-            "A Link to the Past": ["Flute"],
-            "SMZ3": ["Flute"],
-			"Links Awakening DX": ["Ocarina"],
-			"Ocarina of Time": ["Ocarina"],
-			"The Legend of Zelda - Oracle of Seasons": ["Moosh's Flute", "Ricky's Flute", "Dimitri's Flute"],
-			"The Wind Waker": ["Wind Waker"],
-			"The Legend of Zelda - Oracle of Ages": ["Moosh's Flute", "Ricky's Flute", "Dimitri's Flute"],
-			"A Link Between Worlds": ["Bell"]
-		}
-	},
-	{
-		"count": 1,
-		"name": "Magic Armor",
-		"category": [],
-		"progression": true,
-		"linklink": {
-			"Ocarina of Time": ["Double Defense"],
-			"The Wind Waker": ["Magic Armor"],
-			"TUNIC": ["DEF Offering"]
-		}
-	},
-	{
-		"count": 1,
-		"name": "Blue Tunic",
-		"category": [],
-		"progression": true,
-		"linklink": {
-            "The Legend of Zelda": ["Blue Ring"],
-            "A Link to the Past": ["Progressive Mail", "Blue Mail"],
-            "SMZ3": ["ProgressiveTunic"],
-			"Links Awakening DX": ["Blue Tunic"],
-			"Ocarina of Time": ["Zora Tunic"],
-			"TUNIC": ["DEF Offering"],
-			"A Link Between Worlds": ["Progressive Mail"]
-		}
-	},
-	{
-		"count": 1,
-		"name": "Red Tunic",
-		"category": [],
-		"progression": true,
-		"linklink": {
-            "The Legend of Zelda": ["Red Ring"],
-            "A Link to the Past": ["Progressive Mail", "Red Mail"],
-            "SMZ3": ["ProgressiveTunic"],
-			"Links Awakening DX": ["Red Tunic"],
-			"Ocarina of Time": ["Goron Tunic"],
-			"TUNIC": ["DEF Offering"],
-			"A Link Between Worlds": ["Progressive Mail"]
-		}
-	},
-    {
-		"count": 3,
-		"name": "Strength",
-		"category": [],
-		"progression": true,
-		"linklink": {
-            "The Legend of Zelda": ["Power Bracelet"],
-            "A Link to the Past": ["Progressive Glove"],
-            "SMZ3": ["ProgressiveGlove"],
-			"Links Awakening DX": ["Progressive Power Bracelet"],
-			"Ocarina of Time": ["Progressive Strength Upgrade"],
-			"The Legend of Zelda - Oracle of Seasons": ["Power Bracelet"],
-			"The Wind Waker": ["Power Bracelets"],
-			"TUNIC": ["ATT Offering"],
-			"The Legend of Zelda - Oracle of Ages": ["Progressive Bracelet"],
-			"Majora's Mask Recompiled": ["Goron Mask"],
-			"A Link Between Worlds": ["Progressive Glove"]
-        }
-	},
-    {
-		"count": 2,
-		"name": "Hookshot",
-		"category": [],
-		"progression": true,
-		"linklink": {
-            "The Legend of Zelda": ["Stepladder"],
-            "A Link to the Past": ["Hookshot"],
-            "SMZ3": ["Hookshot"],
-			"Links Awakening DX": ["Hookshot"],
-			"Ocarina of Time": ["Progressive Hookshot"],
-			"The Legend of Zelda - Oracle of Seasons": ["Magnetic Gloves"],
-			"The Wind Waker": ["Grappling Hook", "Hookshot"],
-			"TUNIC": ["Magic Orb"],
-			"The Legend of Zelda - Oracle of Ages": ["Progressive Hook"],
-			"Majora's Mask Recompiled": ["Hookshot"],
-			"A Link Between Worlds": ["Hookshot"]
-        }
-	},
-    {
-		"count": 2,
-		"name": "Swimming",
-		"category": [],
-		"progression": true,
-		"linklink": {
-            "The Legend of Zelda": ["Raft"],
-            "A Link to the Past": ["Flippers"],
-            "SMZ3": ["Flippers"],
-			"Links Awakening DX": ["Flippers"],
-			"Ocarina of Time": ["Progressive Scale"],
-			"The Legend of Zelda - Oracle of Seasons": ["Flippers", "Swimmer's Ring", "Zora Ring"],
-			"The Legend of Zelda - Oracle of Ages": ["Progressive Flippers"],
-			"Majora's Mask Recompiled": ["Zora Mask"],
-			"A Link Between Worlds": ["Flippers"]
-        }
-	},
-    {
-		"count": 2,
-		"name": "Hammer",
-		"category": [],
-		"progression": true,
-		"linklink": {
-            "A Link to the Past": ["Hammer"],
-            "SMZ3": ["Hammer"],
-			"Ocarina of Time": ["Megaton Hammer"],
-			"The Wind Waker": ["Skull Hammer"],
-			"A Link Between Worlds": ["Hammer"]
-        }
-	},
-    {
-		"count": 5,
-		"name": "Bottle",
-		"category": [],
-		"progression": true,
-		"linklink": {
-            "A Link to the Past": ["Bottle","Bottle (Bee)","Bottle (Blue Potion)","Bottle (Fairy)","Bottle (Good Bee)","Bottle (Green Potion)","Bottle (Red Potion)"],
-            "SMZ3": ["Bottle","BottleWithBee","BottleWithBluePotion","BottleWithFairy","BottleWithGoldBee","BottleWithGreenPotion","BottleWithRedPotion"],
-			"Ocarina of Time": ["Bottle","Bottle with Big Poe","Bottle with Blue Fire","Bottle with Blue Potion","Bottle with Bugs","Bottle with Fairy","Bottle with Fish","Bottle with Green Potion","Bottle with Milk","Bottle with Poe","Bottle with Red Potion"],
-			"The Wind Waker": ["Empty Bottle"],
-			"TUNIC": ["Potion Flask"],
-			"Majora's Mask Recompiled": ["Bottle of Chateau Romani", "Bottle of Red Potion"],
-			"A Link Between Worlds": ["Premium Milk", "Bottle"]
-        }
-	},
-	{
-		"count": 1,
-		"name": "Magical Rod",
-		"category": [],
-		"progression": true,
-		"linklink": {
-            "The Legend of Zelda": ["Magical Rod"],
-            "A Link to the Past": ["Cane of Somaria"],
-            "SMZ3": ["Somaria"],
-			"Links Awakening DX": ["Magic Rod"],
-			"TUNIC": ["Magic Wand"],
-			"The Legend of Zelda - Oracle of Ages": ["Cane of Somaria"]
-		}
-	},
-    {
-		"count": 2,
-		"name": "Shovel",
-		"category": [],
-		"progression": true,
-		"linklink": {
-            "A Link to the Past": ["Shovel"],
-            "SMZ3": ["Shovel"],
-			"Links Awakening DX": ["Shovel"],
-			"The Legend of Zelda - Oracle of Seasons": ["Shovel"],
-			"The Legend of Zelda - Oracle of Ages": ["Shovel"],
-			"A Link Between Worlds": ["Sand Rod"]
-        }
-	},
-    {
-		"count": 1,
-		"name": "Pegasus Boots",
-		"category": [],
-		"progression": true,
-		"linklink": {
-            "A Link to the Past": ["Pegasus Boots"],
-            "SMZ3": ["Boots"],
-			"Links Awakening DX": ["Pegasus Boots"],
-			"Ocarina of Time": ["Hover Boots"],
-			"TUNIC": ["Anklet"],
-			"A Link Between Worlds": ["Pegasus Boots"]
-        }
-	},
-	{
-		"count": 2,
-		"name": "Magic Meter",
-		"category": [],
-		"progression": true,
-		"linklink": {
-            "A Link to the Past": ["Magic Upgrade (1/2)", "Magic Upgrade (1/4)"],
-			"Ocarina of Time": ["Magic Meter"],
-			"The Wind Waker": ["Progressive Magic Meter"],
-            "SMZ3": ["HalfMagic"],
-			"TUNIC": ["MP Offering"],
-			"Majora's Mask Recompiled": ["Progressive Magic Upgrade"],
-			"A Link Between Worlds": ["Progressive Bracelet", "Stamina Scroll"]
-        }
-	},
-    {
-		"count": 2,
-		"name": "Lamp",
-		"category": [],
-		"progression": true,
-		"linklink": {
-            "The Legend of Zelda": ["Candle", "Red Candle"],
-            "A Link to the Past": ["Lamp"],
-            "SMZ3": ["Lamp"],
-			"TUNIC": ["Lantern"],
-			"A Link Between Worlds": ["Lamp"]
-        }
-	},
-	{
-		"count": 1,
-		"name": "Book",
-		"category": [],
-		"progression": true,
-		"linklink": {
-            "The Legend of Zelda": ["Book of Magic"],
-            "A Link to the Past": ["Book of Mudora"],
-            "SMZ3": ["Book"],
-			"The Legend of Zelda - Oracle of Seasons": ["Cuccodex"],
-			"TUNIC": ["Pages 2-3"],
-			"The Legend of Zelda - Oracle of Ages": ["Book of Seals"]
-		}
-	},
-	{
-		"count": 1,
-		"name": "Magic Powder",
-		"category": [],
-		"progression": true,
-		"linklink": {
-            "A Link to the Past": ["Magic Powder"],
-            "SMZ3": ["Powder"],
-			"Links Awakening DX": ["Magic Powder"],
-			"The Legend of Zelda - Oracle of Ages": ["Fairy Powder"]
-		}
-	},
-	{
-		"count": 1,
-		"name": "Mushroom",
-		"category": [],
-		"progression": true,
-		"linklink": {
-            "A Link to the Past": ["Mushroom"],
-            "SMZ3": ["Mushroom"],
-			"Links Awakening DX": ["Toadstool"],
-			"Ocarina of Time": ["Odd Mushroom"],
-			"The Legend of Zelda - Oracle of Seasons": ["Mushroom"],
-			"TUNIC": ["Hero Relic - MP"],
-			"Majora's Mask Recompiled": ["Mask of Scents"]
-		}
-	},
-	{
-		"count": 3,
-		"name": "Magic Spell",
-		"category": [],
-		"progression": true,
-		"linklink": {
-            "A Link to the Past": ["Quake", "Ether", "Bombos"],
-            "SMZ3": ["Quake", "Ether", "Bombos"],
-			"Ocarina of Time": ["Dins Fire", "Farores Wind", "Nayrus Love"],
-			"TUNIC": ["Pages 24-25 (Prayer)", "Pages 42-43 (Holy Cross)", "Pages 52-53 (Icebolt)"],
-			"A Link Between Worlds": ["Quake", "Great Spin"]
-		}
-	},
-	{
-		"count": 1,
-		"name": "Iron Boots",
-		"category": [],
-		"progression": true,
-		"linklink": {
-			"Ocarina of Time": ["Iron Boots"],
-			"The Wind Waker": ["Iron Boots"]
-		}
-	},
-	{
-		"count": 1,
-		"name": "Feather",
-		"category": [],
-		"progression": true,
-		"linklink": {
-			"Links Awakening DX": ["Feather"],
-			"The Legend of Zelda - Oracle of Seasons": ["Progressive Feather"],
-			"The Wind Waker": ["Golden Feather"],
-			"The Legend of Zelda - Oracle of Ages": ["Feather"]
-		}
-	},
-	{
-		"count": 1,
-		"name": "Cape",
-		"category": [],
-		"progression": true,
-		"linklink": {
-            "The Legend of Zelda": ["Magical Shield"],
-            "A Link to the Past": ["Cape"],
-            "SMZ3": ["Cape"],
-			"The Legend of Zelda - Oracle of Seasons": ["Progressive Feather"]
-		}
-	},
-	{
-		"count": 3,
-		"name": "Slingshot",
-		"category": [],
-		"progression": true,
-		"linklink": {
-			"Ocarina of Time": ["Slingshot"],
-			"The Legend of Zelda - Oracle of Seasons": ["Progressive Slingshot"],
-			"TUNIC": ["Gun"],
-			"The Legend of Zelda - Oracle of Ages": ["Seed Shooter"]
-		}
-	},
-	{
-		"count": 1,
-		"name": "Membership Card",
-		"category": [],
-		"progression": true,
-		"linklink": {
-			"Ocarina of Time": ["Gerudo Membership Card"],
-			"The Legend of Zelda - Oracle of Seasons": ["Member's Card"],
-			"The Wind Waker": ["Fill-Up Coupon"]
-		}
-	},
-	{
-		"count": 3,
-		"name": "Seed Bag",
-		"category": [],
-		"progression": true,
-		"linklink": {
-			"Ocarina of Time": ["Deku Nut Capacity"],
-			"The Legend of Zelda - Oracle of Seasons": ["Seed Satchel"],
-			"The Wind Waker": ["Bait Bag"],
-			"The Legend of Zelda - Oracle of Ages": ["Seed Satchel"]
-		}
-	},
-	{
-		"count": 1,
-		"name": "Looking Glass",
-		"category": [],
-		"progression": true,
-		"linklink": {
-            "A Link to the Past": ["Magic Mirror"],
-            "SMZ3": ["Mirror"],
-			"Links Awakening DX": ["Magnifying Glass"],
-			"Ocarina of Time": ["Lens of Truth"],
-			"The Wind Waker": ["Spyglass"],
-			"Majora's Mask Recompiled": ["Lens of Truth"]
-		}
-	},
-	{
-		"count": 1,
-		"name": "Letter",
-		"category": [],
-		"progression": true,
-		"linklink": {
-            "The Legend of Zelda": ["Letter"],
-			"Ocarina of Time": ["Rutos Letter"],
-			"The Wind Waker": ["Delivery Bag"],
-			"TUNIC": ["Pages 0-1"],
-			"Majora's Mask Recompiled": ["Letter to Kafei"]
-		}
-	},
-	{
-		"count": 4,
-		"name": "Key Jewels",
-		"category": [],
-		"progression": true,
-		"linklink": {
-            "A Link to the Past": ["Moon Pearl"],
-            "SMZ3": ["MoonPearl"],
-			"The Legend of Zelda - Oracle of Seasons": ["Round Jewel", "Pyramid Jewel", "X-Shaped Jewel", "Square Jewel"],
-			"The Wind Waker": ["Din's Pearl", "Farore's Pearl", "Nayru's Pearl"],
-			"TUNIC": ["Red Questagon", "Green Questagon", "Blue Questagon"],
-			"The Legend of Zelda - Oracle of Ages": ["Slate"]
-		}
-	},
-	{
-		"count": 3,
-		"name": "Wallet",
-		"category": [],
-		"progression": true,
-		"linklink": {
-			"Ocarina of Time": ["Progressive Wallet"],
-			"The Wind Waker": ["Progressive Wallet"],
-			"TUNIC": ["Effigy"],
-			"Majora's Mask Recompiled": ["Progressive Wallet"],
-			"A Link Between Worlds": ["Pouch"]
-		}
-	},
-	{
-		"count": 10,
-		"name": "Heart Container",
-		"category": [],
-		"progression": true,
-		"linklink": {
-            "The Legend of Zelda": ["Heart Container"],
-            "A Link to the Past": ["Boss Heart Container", "Piece of Heart"],
-            "SMZ3": ["HeartContainer", "HeartPiece"],
-			"Links Awakening DX": ["Heart Container", "Heart Piece"],
-			"Ocarina of Time": ["Heart Container", "Piece of Heart"],
-			"The Legend of Zelda - Oracle of Seasons": ["Heart Container", "Piece of Heart", "Heart Piece"],
-			"The Wind Waker": ["Heart Container", "Piece of Heart"],
-			"TUNIC": ["HP Offering", "Potion Flask", "Flask Shard"],
-			"The Legend of Zelda - Oracle of Ages": ["Heart Container", "Piece of Heart", "Heart Piece"],
-			"Majora's Mask Recompiled": ["Heart Container", "Piece of Heart", "Heart Piece"],
-			"A Link Between Worlds": ["Heart Container", "Piece of Heart", "Heart Piece"]
-		}
-	}
-]
+    ]
+}
