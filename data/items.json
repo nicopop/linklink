@@ -891,6 +891,7 @@
             "extra": 10,
             "progression": true,
             "progression_skip_balancing": true,
+            "progression_deprioritized": true,
             "linklink": {
                 "Majora's Mask Recompiled": ["Room Key", "Small Key (Woodfall)", "Boss Key (Woodfall)", "Small Key (Snowhead)", "Boss Key (Snowhead)",
                     "Small Key (Great Bay)", "Boss Key (Great Bay)", "Small Key (Stone Tower)", "Boss Key (Stone Tower)", "$Shuffle"],
@@ -921,6 +922,7 @@
             "_comment": "Teleporter style items and items that let you go to other areas, get to important locations",
             "progression": true,
             "progression_skip_balancing": true,
+            "progression_deprioritized": true,
             "category": ["linklink"],
             "extra": 5,
             "linklink": {
@@ -952,6 +954,7 @@
             "name": "Fun Surprise",
             "trap": true,
             "progression_skip_balancing": true,
+            "progression_deprioritized": true,
             "category": ["linklink"],
             "linklink": {
                 "A Link to the Past": ["Bee Trap", "Bee", "Bomb Trap", "Rupoor", "Red Clock", "Nothing", "$Shuffle"],

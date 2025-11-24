@@ -49,7 +49,6 @@ def hook_get_filler_item_name(world: World, multiworld: MultiWorld, player: int)
 # Called before regions and locations are created. Not clear why you'd want this, but it's here. Victory location is included, but Victory event is not placed yet.
 def before_create_regions(world: World, multiworld: MultiWorld, player: int):
     world.is_ut = hasattr(multiworld, "generation_is_fake")
-    world.ut_can_gen_without_yaml = True
     if world.is_ut and hasattr(multiworld, "re_gen_passthrough"):
         if world.game in multiworld.re_gen_passthrough:
             world.is_ut_regen = True
@@ -97,7 +96,9 @@ def before_create_items_all(item_config: dict[str, int|dict], world: World, mult
                 if item_data.get("useful"):
                     classification |= ItemClassification.useful
 
-                if item_data.get("deprioritized"):
+                if item_data.get("progression_deprioritized"):
+                    classification |= ItemClassification.progression_deprioritized
+                elif item_data.get("deprioritized"):
                     classification |= ItemClassification.deprioritized
 
                 if item_data.get("progression_skip_balancing"):
