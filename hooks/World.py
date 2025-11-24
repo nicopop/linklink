@@ -119,11 +119,11 @@ def before_create_items_all(item_config: dict[str, int|dict], world: World, mult
 
     elif world.is_ut_regen:
         if hasattr(world, "linklink_item_config"):
-            for item, count in world.linklink_item_config.items():
-                if item in item_config:
-                    item_config[item] = count
+            for item_name in dict(item_config).keys():
+                if item_name in world.linklink_item_config.keys():
+                    item_config[item_name] = world.linklink_item_config[item_name]
                 else:
-                    item_config[item] = 0
+                    item_config[item_name] = 0
     return item_config
 
 # The item pool before starting items are processed, in case you want to see the raw item pool at that stage
@@ -496,7 +496,7 @@ def after_generate_basic(world: "ManualWorld", multiworld: MultiWorld, player: i
             items_iter = iter([i for i in precollected_items if i.name == item])
             for _ in range(count):
                 precollected_items.remove(next(items_iter))
-        pool = get_items_for_player(multiworld, player)
+        pool = [item for item in get_items_for_player(multiworld, player) if not item.is_event]
         real_pool = pool + precollected_items
         world.item_counts[player] = world.get_item_counts(pool=real_pool)
         world.item_counts_progression[player] = world.get_item_counts(pool=real_pool, only_progression=True)
@@ -608,10 +608,9 @@ def after_remove_item(world: World, state: CollectionState, Changed: bool, item:
 def before_fill_slot_data(slot_data: dict, world: "ManualWorld", multiworld: MultiWorld, player: int) -> dict:
     slot_data["linklink"] = {}
     slot_data["linklink"]["key_counts"] = world.item_counts_progression[player]
-    slot_data["linklink"]["key_counts"][FILLER_NAME] = len([l for l in world.get_locations() if "l$l" in l.name])
 
-    locations_ids = [l.address for l in world.get_locations()]
-    removed_smaller = len(locations_ids) > len(world.linklink_removed_location)
+    locations_ids = [l.address for l in world.get_locations() if l.address is not None]
+    removed_smaller = len(world.linklink_removed_location) < len(locations_ids)
     # To send as little ids as possible pick the one with less locs in the list
     slot_data["linklink"]["filtered_removed"] = removed_smaller
     slot_data["linklink"]["filtered_locations"] = world.linklink_removed_location if removed_smaller else locations_ids
