@@ -459,8 +459,18 @@ def after_generate_basic(world: "ManualWorld", multiworld: MultiWorld, player: i
             if extras > 0:
                 logging.warning(f"Failed to remove {extras} extra keys, you might see a message later talking about too many items.")
 
-        personal_precol: int = len([i for i in multiworld.precollected_items.get(player, []) if i.name != world.filler_item_name]) \
-                                    if count_precollected_items else 0
+        precollected_items = list(multiworld.precollected_items.get(player, []))
+
+        precollected_exceptions = world.options.start_inventory.value
+        if not in_pre_fill: # outside of pre_fill the items are still in the main item pool
+            precollected_exceptions += world.options.start_inventory_from_pool.value # type: ignore
+
+        for item_name, count in precollected_exceptions.items():
+            items_iter = iter([i for i in precollected_items if i.name == item_name])
+            for _ in range(count):
+                precollected_items.remove(next(items_iter))
+
+        personal_precol: int = len(precollected_items) if in_pre_fill else 0
 
         nothing_total = filler_to_make + len(multiworld.get_unfilled_locations(player))
         nothing_to_make = nothing_total - len(unplaced_nothing) + personal_precol - extras
@@ -488,14 +498,6 @@ def after_generate_basic(world: "ManualWorld", multiworld: MultiWorld, player: i
 
         # Update item counts for potential rules usage
         # Filter Precollected items for those not in logic aka created by start_inventory(_from_pool)
-        precollected_items = list(multiworld.precollected_items[player])
-
-        # UT doesn't precollect the exceptions so this can be skipped
-        precollected_exceptions = world.options.start_inventory.value + world.options.start_inventory_from_pool.value # type: ignore
-        for item, count in precollected_exceptions.items():
-            items_iter = iter([i for i in precollected_items if i.name == item])
-            for _ in range(count):
-                precollected_items.remove(next(items_iter))
         pool = [item for item in get_items_for_player(multiworld, player) if not item.is_event]
         real_pool = pool + precollected_items
         world.item_counts[player] = world.get_item_counts(pool=real_pool)
