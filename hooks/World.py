@@ -237,7 +237,7 @@ def after_generate_basic(world: "ManualWorld", multiworld: MultiWorld, player: i
             if location.address is not None: #Which it should never unless we have events
                 world.linklink_removed_location.append(location.address)
 
-    def linklink_magic(count_precollected_items = True):
+    def linklink_magic(in_pre_fill = False):
         from operator import indexOf
         start_time = time.time()
         victims = get_victims(world, True)
@@ -264,7 +264,7 @@ def after_generate_basic(world: "ManualWorld", multiworld: MultiWorld, player: i
             item.location = location
             location.locked = True
 
-        logging.info(f"{multiworld.player_name[player]} is casting some {world.game} version {pretty_version()}{' black' if count_precollected_items else ''} magic with {', '.join([multiworld.player_name[p] for p in victims]) if len(world.options.victims.value) > 0 else 'everyone'}") # type: ignore
+        logging.info(f"{multiworld.player_name[player]} is casting some {world.game} version {pretty_version()}{' black' if in_pre_fill else ''} magic with {', '.join([multiworld.player_name[p] for p in victims]) if len(world.options.victims.value) > 0 else 'everyone'}") # type: ignore
         for item_data in item_table:
             if 'linklink' in item_data:
                 # logging.debug(repr(linklink))
@@ -507,10 +507,10 @@ def after_generate_basic(world: "ManualWorld", multiworld: MultiWorld, player: i
     if not world.is_ut:
         if world.options.magic_in_pre_fill.value:
             def pre_fill():
-                linklink_magic()
+                linklink_magic(in_pre_fill=True)
             setattr(world, "pre_fill", pre_fill)
         else:
-            linklink_magic(False)
+            linklink_magic()
 
 def get_filler_item_name(self: World) -> str:
         multiworld = self.multiworld
