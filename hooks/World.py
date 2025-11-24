@@ -269,7 +269,7 @@ def after_generate_basic(world: "ManualWorld", multiworld: MultiWorld, player: i
             if 'linklink' in item_data:
                 # logging.debug(repr(linklink))
                 linklink: dict[str, list[str]] = item_data['linklink']
-                item_count: int = item_data['count'] # - item_data['extra']
+                item_count: int = item_data['count']
                 extras += item_data['extra']
                 item_name: str = item_data['name']
                 filler_to_make_for_player: dict[int, int] = {}
