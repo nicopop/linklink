@@ -625,43 +625,51 @@ def before_extend_hint_information(hint_data: dict[int, dict[int, str]], world: 
     from itertools import groupby
     items = [loc.item for loc in multiworld.get_filled_locations() if loc.item is not None and loc.item.player == player]
     items.extend(multiworld.precollected_items.get(player, []))
+    items = [i for i in items if i.advancement]
 
     groups: dict[str,list] = {}
     keyfunc = lambda i: i.name
     data = sorted(items, key=keyfunc)
     for k, g in groupby(data, keyfunc):
         if k not in groups.keys():
-            groups[k] = list(g)      # Store group iterator as a list
+            groups[k] = list(g)
 
     if player not in hint_data:
         hint_data.update({player: {}})
 
-    queues: dict[str,Iterator] = {}
-    victims: dict[str,list[Item]] = {}
-    next_item: dict[str,Item|None] = {}
+    iterators: dict[str, dict[str,Iterator]] = {}
+    next_item: dict[str, dict[str,Item|None]] = {}
+    # hintsdone: dict[str, list[str]] = {}
     for location in multiworld.get_locations(player):
         if not location.address:
             continue
         elif location.parent_region is not None and location.parent_region.name == 'Free Items':
             continue
 
-        item_name = location.name.split("l$l")[0].strip() # re.split(r'\d+', location.name)[0].strip()
+        item_name, rest = location.name.split("l$l") # re.split(r'\d+', location.name)[0].strip()
+        item_name = item_name.strip()
+        p_num = str(location.item.player)
+        if p_num not in iterators.keys():
+            iterators[p_num] = {}
+            next_item[p_num] = {}
+            # hintsdone[p_num] = []
 
-        if next_item.get(item_name, None) is None or item_name not in queues.keys():
-            victims[item_name] = groups.get(item_name, [])
-            # TODO somehow shuffle per player so a player wont get the same hint twice
-            world.random.shuffle(victims[item_name])
-            queues[item_name] = iter(v for v in victims[item_name])
-            next_item[item_name] = next(queues[item_name], None)
+        if next_item[p_num].get(item_name, None) is None or item_name not in iterators[p_num].keys():
+            ll_keys = list(groups.get(item_name, []))
+            world.random.shuffle(ll_keys)
 
-        current_item = next_item[item_name]
+            iterators[p_num][item_name] = iter(ll_keys)
+            next_item[p_num][item_name] = next(iterators[p_num][item_name], None)
+
+        current_item = next_item[p_num][item_name]
         if current_item is not None:
             if current_item.location is not None:
                 hint_data[player][location.address] = f"{str(current_item.location)}"
             else:
                 hint_data[player][location.address] = f"In {multiworld.player_name[player]}'s start inventory"
             pass
-        next_item[item_name] = next(queues[item_name], None)
+        # hintsdone[p_num].append(f"{rest.strip()}: {hint_data[player][location.address]}")
+        next_item[p_num][item_name] = next(iterators[p_num][item_name], None)
     pass
 
 def after_extend_hint_information(hint_data: dict[int, dict[int, str]], world: World, multiworld: MultiWorld, player: int) -> None:
