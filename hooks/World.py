@@ -1,8 +1,8 @@
 # Object classes from AP core, to represent an entire MultiWorld and this individual World that's part of it
 import logging
 from worlds.AutoWorld import World
-from BaseClasses import MultiWorld, CollectionState
-from typing import TYPE_CHECKING
+from BaseClasses import MultiWorld, CollectionState, Item
+from typing import TYPE_CHECKING, Iterator
 
 # Object classes from Manual -- extending AP core -- representing items and locations that are used in generation
 from ..Items import ManualItem
@@ -245,19 +245,56 @@ def before_write_spoiler(world: World, multiworld: MultiWorld, spoiler_handle) -
 
 # This is called when you want to add information to the hint text
 def before_extend_hint_information(hint_data: dict[int, dict[int, str]], world: World, multiworld: MultiWorld, player: int) -> None:
+    from itertools import groupby
+    items = [loc.item for loc in multiworld.get_filled_locations() if loc.item is not None and loc.item.player == player]
+    items.extend(multiworld.precollected_items.get(player, []))
+    items = [i for i in items if i.advancement]
 
-    ### Example way to use this hook:
-    # if player not in hint_data:
-    #     hint_data.update({player: {}})
-    # for location in multiworld.get_locations(player):
-    #     if not location.address:
-    #         continue
-    #
-    #     use this section to calculate the hint string
-    #
-    #     hint_data[player][location.address] = hint_string
+    groups: dict[str,list] = {}
+    def keyfunc(i):
+        return i.name
 
-    pass
+    data = sorted(items, key=keyfunc)
+    for k, g in groupby(data, key=keyfunc):
+        if k not in groups.keys():
+            groups[k] = list(g)
+
+    if player not in hint_data:
+        hint_data.update({player: {}})
+
+    iterators: dict[str, dict[str, Iterator]] = {}
+    next_item: dict[str, dict[str, Item|None]] = {}
+    # hintsdone: dict[str, list[str]] = {}
+    for location in multiworld.get_locations(player):
+        if not location.address:
+            continue
+        elif location.parent_region is not None and location.parent_region.name == 'Free Items':
+            continue
+
+        item_name, rest = location.name.split("l$l") # re.split(r'\d+', location.name)[0].strip()
+        item_name = item_name.strip()
+        p_num = str(location.item.player)
+        if p_num not in iterators.keys():
+            iterators[p_num] = {}
+            next_item[p_num] = {}
+            # hintsdone[p_num] = []
+
+        if next_item[p_num].get(item_name, None) is None or item_name not in iterators[p_num].keys():
+            ll_keys = list(groups.get(item_name, []))
+            world.random.shuffle(ll_keys)
+
+            iterators[p_num][item_name] = iter(ll_keys)
+            next_item[p_num][item_name] = next(iterators[p_num][item_name], None)
+
+        current_item = next_item[p_num][item_name]
+        if current_item is not None:
+            if current_item.location is not None:
+                hint_data[player][location.address] = f"{str(current_item.location)}"
+            else:
+                hint_data[player][location.address] = f"In {multiworld.player_name[player]}'s start inventory"
+            pass
+        # hintsdone[p_num].append(f"{rest.strip()}: {hint_data[player][location.address]}")
+        next_item[p_num][item_name] = next(iterators[p_num][item_name], None)
 
 def after_extend_hint_information(hint_data: dict[int, dict[int, str]], world: World, multiworld: MultiWorld, player: int) -> None:
     pass
