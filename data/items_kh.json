@@ -4,7 +4,6 @@
         {
             "count": 3,
             "name": "Cure",
-            "category": [],
             "progression": true,
             "linklink": {
                 "Kingdom Hearts": ["Progressive Cure"],
@@ -16,7 +15,6 @@
         {
             "count": 3,
             "name": "Fire",
-            "category": [],
             "progression": true,
             "linklink": {
                 "Kingdom Hearts": ["Progressive Fire"],
@@ -28,7 +26,6 @@
         {
             "count": 3,
             "name": "Blizzard",
-            "category": [],
             "progression": true,
             "linklink": {
                 "Kingdom Hearts": ["Progressive Blizzard"],
@@ -40,7 +37,6 @@
         {
             "count": 3,
             "name": "Thunder",
-            "category": [],
             "progression": true,
             "linklink": {
                 "Kingdom Hearts": ["Progressive Thunder"],
@@ -52,7 +48,6 @@
         {
             "count": 3,
             "name": "Gravity",
-            "category": [],
             "progression": true,
             "linklink": {
                 "Kingdom Hearts": ["Progressive Gravity"],
@@ -63,7 +58,6 @@
         {
             "count": 3,
             "name": "Stop",
-            "category": [],
             "progression": true,
             "linklink": {
                 "Kingdom Hearts": ["Progressive Stop"],
@@ -74,7 +68,6 @@
         {
             "count": 3,
             "name": "Aero+Reflect",
-            "category": [],
             "progression": true,
             "linklink": {
                 "Kingdom Hearts": ["Progressive Aero"],
@@ -86,7 +79,6 @@
         {
             "count": 3,
             "name": "Magnet",
-            "category": [],
             "progression": true,
             "linklink": {
                 "Kingdom Hearts 2": ["Magnet Element"],
@@ -96,7 +88,6 @@
         {
             "count": 4,
             "name": "High Jump",
-            "category": [],
             "progression": true,
             "linklink": {
                 "Kingdom Hearts": ["High Jump"],
@@ -107,7 +98,6 @@
         {
             "count": 4,
             "name": "Dodge Roll",
-            "category": [],
             "progression": true,
             "linklink": {
                 "Kingdom Hearts": ["Dodge Roll"],
@@ -118,7 +108,6 @@
         {
             "count": 4,
             "name": "Glide",
-            "category": [],
             "progression": true,
             "linklink": {
                 "Kingdom Hearts": ["Progressive Glide"],
@@ -129,7 +118,6 @@
         {
             "count": 4,
             "name": "Quick Run + Slide",
-            "category": [],
             "progression": true,
             "linklink": {
                 "Kingdom Hearts 2": ["Quick Run"],
@@ -139,7 +127,6 @@
         {
             "count": 1,
             "name": "Scan",
-            "category": [],
             "progression": true,
             "linklink": {
                 "Kingdom Hearts": ["Scan"],
@@ -149,7 +136,6 @@
         {
             "count": 1,
             "name": "Leaf Bracer",
-            "category": [],
             "progression": true,
             "linklink": {
                 "Kingdom Hearts": ["Leaf Bracer"],
@@ -160,7 +146,6 @@
         {
             "count": 1,
             "name": "Second Chance",
-            "category": [],
             "progression": true,
             "linklink": {
                 "Kingdom Hearts": ["Second Chance"],
@@ -171,7 +156,6 @@
         {
             "count": 1,
             "name": "Once More",
-            "category": [],
             "progression": true,
             "linklink": {
                 "Kingdom Hearts 2": ["Once More"],
@@ -181,7 +165,6 @@
         {
             "count": 1,
             "name": "Guard",
-            "category": [],
             "progression": true,
             "linklink": {
                 "Kingdom Hearts": ["Guard+Barrier"],
@@ -192,7 +175,6 @@
         {
             "count": 1,
             "name": "Aerial Recovery",
-            "category": [],
             "progression": true,
             "linklink": {
                 "Kingdom Hearts 2": ["Aerial Recovery"],
@@ -202,7 +184,6 @@
         {
             "count": 1,
             "name": "Blitz",
-            "category": [],
             "progression": true,
             "linklink": {
                 "Kingdom Hearts": ["Blitz"],
@@ -213,7 +194,6 @@
         {
             "count": 1,
             "name": "Sliding Dash",
-            "category": [],
             "progression": true,
             "linklink": {
                 "Kingdom Hearts": ["Sliding Dash"],
@@ -225,7 +205,6 @@
         {
             "count": 1,
             "name": "Sonic Blade+Limit",
-            "category": [],
             "progression": true,
             "linklink": {
                 "Kingdom Hearts": ["Sonic Blade"],
@@ -237,7 +216,6 @@
         {
             "count": 1,
             "name": "Ars Arcanum+Valor",
-            "category": [],
             "progression": true,
             "linklink": {
                 "Kingdom Hearts": ["Ars Arcanum"],
@@ -249,7 +227,6 @@
         {
             "count": 1,
             "name": "Strike Raid+Master",
-            "category": [],
             "progression": true,
             "linklink": {
                 "Kingdom Hearts": ["Strike Raid"],
@@ -261,7 +238,6 @@
         {
             "count": 1,
             "name": "Ragnarok+Wisdom",
-            "category": [],
             "progression": true,
             "linklink": {
                 "Kingdom Hearts": ["Ragnarok"],
@@ -273,7 +249,6 @@
         {
             "count": 1,
             "name": "Zantetsuken",
-            "category": [],
             "progression": true,
             "linklink": {
                 "Kingdom Hearts": ["Zantetsuken"],
@@ -284,7 +259,6 @@
         {
             "count": 1,
             "name": "Simba",
-            "category": [],
             "progression": true,
             "linklink": {
                 "Kingdom Hearts": ["Simba"],
@@ -294,7 +268,6 @@
         {
             "count": 1,
             "name": "Genie",
-            "category": [],
             "progression": true,
             "linklink": {
                 "Kingdom Hearts": ["Genie"],
@@ -305,7 +278,6 @@
         {
             "count": 1,
             "name": "Bambi",
-            "category": [],
             "progression": true,
             "linklink": {
                 "Kingdom Hearts": ["Bambi"],
@@ -315,7 +287,6 @@
         {
             "count": 1,
             "name": "Dumbo",
-            "category": [],
             "progression": true,
             "linklink": {
                 "Kingdom Hearts": ["Dumbo"],
@@ -325,7 +296,6 @@
         {
             "count": 1,
             "name": "Tinker Bell+Peter Pan",
-            "category": [],
             "progression": true,
             "linklink": {
                 "Kingdom Hearts": ["Tinker Bell"],
@@ -337,7 +307,6 @@
         {
             "count": 1,
             "name": "Stitch",
-            "category": [],
             "progression": true,
             "linklink": {
                 "Kingdom Hearts 2": ["Stitch"],
@@ -347,7 +316,6 @@
         {
             "count": 2,
             "name": "Destiny Islands",
-            "category": [],
             "progression": true,
             "linklink": {
                 "Kingdom Hearts": ["Destiny Islands"],
@@ -357,7 +325,6 @@
         {
             "count": 2,
             "name": "Wonderland",
-            "category": [],
             "progression": true,
             "linklink": {
                 "Kingdom Hearts": ["Wonderland"],
@@ -367,7 +334,6 @@
         {
             "count": 2,
             "name": "Olympus Coliseum",
-            "category": [],
             "progression": true,
             "linklink": {
                 "Kingdom Hearts": ["Olympus Coliseum"],
@@ -379,7 +345,6 @@
         {
             "count": 2,
             "name": "Agrabah",
-            "category": [],
             "progression": true,
             "linklink": {
                 "Kingdom Hearts": ["Agrabah"],
@@ -390,7 +355,6 @@
         {
             "count": 2,
             "name": "Monstro+Mirage Arena",
-            "category": [],
             "progression": true,
             "linklink": {
                 "Kingdom Hearts": ["Monstro"],
@@ -401,7 +365,6 @@
         {
             "count": 2,
             "name": "Halloween Town",
-            "category": [],
             "progression": true,
             "linklink": {
                 "Kingdom Hearts": ["Halloween Town"],
@@ -412,7 +375,6 @@
         {
             "count": 2,
             "name": "Atlantica",
-            "category": [],
             "progression": true,
             "linklink": {
                 "Kingdom Hearts": ["Atlantica"],
@@ -422,7 +384,6 @@
         {
             "count": 2,
             "name": "Neverland",
-            "category": [],
             "progression": true,
             "linklink": {
                 "Kingdom Hearts": ["Neverland"],
@@ -433,7 +394,6 @@
         {
             "count": 2,
             "name": "Radiant Garden",
-            "category": [],
             "progression": true,
             "linklink": {
                 "Kingdom Hearts": ["Hollow Bastion"],
@@ -445,7 +405,6 @@
         {
             "count": 3,
             "name": "Twilight Town+ Mysterious Tower",
-            "category": [],
             "progression": true,
             "linklink": {
                 "Kingdom Hearts 2": ["Ice Cream"],
@@ -456,7 +415,6 @@
         {
             "count": 2,
             "name": "Disney Castle Town",
-            "category": [],
             "progression": true,
             "linklink": {
                 "Kingdom Hearts 2": ["Disney Castle Key"],
@@ -466,7 +424,6 @@
         {
             "count": 5,
             "name": "Torn Page",
-            "category": [],
             "progression": true,
             "linklink": {
                 "Kingdom Hearts": ["Torn Page"],

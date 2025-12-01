@@ -4,7 +4,6 @@
         {
             "count": 1,
             "name": "HM01 Cut",
-            "category": [],
             "progression": true,
             "linklink": {
                 "Pokemon Crystal": ["HM01 Cut"],
@@ -15,7 +14,6 @@
         {
             "count": 1,
             "name": "HM02 Fly",
-            "category": [],
             "progression": true,
             "linklink": {
                 "Pokemon Crystal": ["HM02 Fly"],
@@ -26,7 +24,6 @@
         {
             "count": 1,
             "name": "HM03 Surf",
-            "category": [],
             "progression": true,
             "linklink": {
                 "Pokemon Crystal": ["HM03 Surf"],
@@ -37,7 +34,6 @@
         {
             "count": 1,
             "name": "HM04 Strength",
-            "category": [],
             "progression": true,
             "linklink": {
                 "Pokemon Crystal": ["HM04 Strength"],
@@ -48,7 +44,6 @@
         {
             "count": 1,
             "name": "HM05 Flash",
-            "category": [],
             "progression": true,
             "linklink": {
                 "Pokemon Crystal": ["HM05 Flash"],
@@ -59,7 +54,6 @@
         {
             "count": 1,
             "name": "HM06 Rock Smash",
-            "category": [],
             "progression": true,
             "linklink": {
                 "Pokemon Crystal": ["TM08 Rock Smash"],
@@ -69,7 +63,6 @@
         {
             "count": 1,
             "name": "HM07 Waterfall",
-            "category": [],
             "progression": true,
             "linklink": {
                 "Pokemon Crystal": ["HM07 Waterfall"],
@@ -79,7 +72,6 @@
         {
             "count": 0,
             "name": "HM Whirlpool/ Dive",
-            "category": [],
             "progression": true,
             "linklink": {
                 "Pokemon Crystal": ["HM_WHIRLPOOL"],
@@ -88,7 +80,6 @@
         },
         {
             "name": "Poke Flute",
-            "category": [],
             "progression": true,
             "linklink": {
                 "Pokemon Crystal": ["Poke Flute"],
@@ -97,7 +88,6 @@
         },
         {
             "name": "Bicycle",
-            "category": [],
             "progression": true,
             "linklink": {
                 "Pokemon Crystal": ["Bicycle"],
@@ -107,7 +97,6 @@
         },
         {
             "name": "S.S. Ticket",
-            "category": [],
             "progression": true,
             "linklink": {
                 "Pokemon Crystal": ["S.S. Ticket"],
@@ -117,7 +106,6 @@
         },
         {
             "name": "Card Key",
-            "category": [],
             "progression": true,
             "linklink": {
                 "Pokemon Crystal": ["Card Key"],
@@ -126,7 +114,6 @@
         },
         {
             "name": "Scope",
-            "category": [],
             "progression": true,
             "linklink": {
                 "Pokemon Emerald": ["Devon Scope"],
@@ -135,7 +122,6 @@
         },
         {
             "name": "Coin Case",
-            "category": [],
             "progression": true,
             "linklink": {
                 "Pokemon Crystal": ["Coin Case"],

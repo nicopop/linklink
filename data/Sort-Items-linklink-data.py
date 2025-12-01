@@ -71,6 +71,9 @@ if __name__ == '__main__':
                     continue
                 else:
                     item["linklink"] = dict(sorted(item["linklink"].items(), key=lambda item: (0 if item[0] in known_loz_keys else 1, item[0])))
+                # Clean up any empty categories
+                if "category" in item and not item["category"]:
+                    del item["category"]
 
             # Third and finally write the change to the file
             write_data_file(filename, itemsjson)

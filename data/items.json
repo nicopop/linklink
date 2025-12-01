@@ -4,7 +4,6 @@
         {
             "count": 4,
             "name": "Sword",
-            "category": [],
             "progression": true,
             "linklink": {
                 "A Link Between Worlds": ["Progressive Sword"],
@@ -23,7 +22,6 @@
         {
             "count": 1,
             "name": "Biggoron's Sword",
-            "category": [],
             "progression": true,
             "linklink": {
                 "A Link Between Worlds": ["Progressive Sword"],
@@ -40,7 +38,6 @@
         {
             "count": 1,
             "name": "Shield (Basic)",
-            "category": [],
             "progression": true,
             "linklink": {
                 "A Link Between Worlds": ["Hylian Shield"],
@@ -58,7 +55,6 @@
         {
             "count": 1,
             "name": "Shield (Intermediate)",
-            "category": [],
             "progression": true,
             "linklink": {
                 "A Link to the Past": ["Progressive Shield", "Red Shield"],
@@ -72,7 +68,6 @@
         {
             "count": 1,
             "name": "Shield (Mirror)",
-            "category": [],
             "progression": true,
             "linklink": {
                 "A Link to the Past": ["Progressive Shield", "Mirror Shield"],
@@ -88,7 +83,6 @@
         {
             "count": 2,
             "name": "Fire Magic",
-            "category": [],
             "progression": true,
             "linklink": {
                 "A Link Between Worlds": ["Fire Rod"],
@@ -103,7 +97,6 @@
         {
             "count": 2,
             "name": "Ice Magic",
-            "category": [],
             "progression": true,
             "linklink": {
                 "A Link Between Worlds": ["Ice Rod"],
@@ -117,7 +110,6 @@
         {
             "count": 1,
             "name": "Light Arrows",
-            "category": [],
             "progression": true,
             "linklink": {
                 "A Link Between Worlds": ["Bow of Light"],
@@ -132,7 +124,6 @@
         {
             "count": 3,
             "name": "Bow",
-            "category": [],
             "progression": true,
             "linklink": {
                 "A Link Between Worlds": ["Bow"],
@@ -148,7 +139,6 @@
         {
             "count": 2,
             "name": "Boomerang",
-            "category": [],
             "progression": true,
             "linklink": {
                 "A Link Between Worlds": ["Boomerang"],
@@ -165,7 +155,6 @@
         {
             "count": 3,
             "name": "Bombs",
-            "category": [],
             "progression": true,
             "linklink": {
                 "A Link Between Worlds": ["Bombs"],
@@ -184,7 +173,6 @@
         {
             "count": 2,
             "name": "Flute",
-            "category": [],
             "progression": true,
             "linklink": {
                 "A Link Between Worlds": ["Bell"],
@@ -201,7 +189,6 @@
         {
             "count": 1,
             "name": "Magic Armor",
-            "category": [],
             "progression": true,
             "linklink": {
                 "Ocarina of Time": ["Double Defense"],
@@ -212,7 +199,6 @@
         {
             "count": 1,
             "name": "Blue Tunic",
-            "category": [],
             "progression": true,
             "linklink": {
                 "A Link Between Worlds": ["Progressive Mail"],
@@ -227,7 +213,6 @@
         {
             "count": 1,
             "name": "Red Tunic",
-            "category": [],
             "progression": true,
             "linklink": {
                 "A Link Between Worlds": ["Progressive Mail"],
@@ -242,7 +227,6 @@
         {
             "count": 3,
             "name": "Strength",
-            "category": [],
             "progression": true,
             "linklink": {
                 "A Link Between Worlds": ["Progressive Glove"],
@@ -261,7 +245,6 @@
         {
             "count": 2,
             "name": "Hookshot",
-            "category": [],
             "progression": true,
             "linklink": {
                 "A Link Between Worlds": ["Hookshot"],
@@ -280,7 +263,6 @@
         {
             "count": 2,
             "name": "Swimming",
-            "category": [],
             "progression": true,
             "linklink": {
                 "A Link Between Worlds": ["Flippers"],
@@ -297,7 +279,6 @@
         {
             "count": 2,
             "name": "Hammer",
-            "category": [],
             "progression": true,
             "linklink": {
                 "A Link Between Worlds": ["Hammer"],
@@ -310,7 +291,6 @@
         {
             "count": 5,
             "name": "Bottle",
-            "category": [],
             "progression": true,
             "linklink": {
                 "A Link Between Worlds": ["Premium Milk", "Bottle"],
@@ -326,7 +306,6 @@
         {
             "count": 1,
             "name": "Magical Rod",
-            "category": [],
             "progression": true,
             "linklink": {
                 "A Link to the Past": ["Cane of Somaria"],
@@ -340,7 +319,6 @@
         {
             "count": 2,
             "name": "Shovel",
-            "category": [],
             "progression": true,
             "linklink": {
                 "A Link Between Worlds": ["Sand Rod"],
@@ -354,7 +332,6 @@
         {
             "count": 1,
             "name": "Pegasus Boots",
-            "category": [],
             "progression": true,
             "linklink": {
                 "A Link Between Worlds": ["Pegasus Boots"],
@@ -368,7 +345,6 @@
         {
             "count": 2,
             "name": "Magic Meter",
-            "category": [],
             "progression": true,
             "linklink": {
                 "A Link Between Worlds": ["Progressive Bracelet", "Stamina Scroll"],
@@ -383,7 +359,6 @@
         {
             "count": 2,
             "name": "Lamp",
-            "category": [],
             "progression": true,
             "linklink": {
                 "A Link Between Worlds": ["Lamp"],
@@ -396,7 +371,6 @@
         {
             "count": 1,
             "name": "Book",
-            "category": [],
             "progression": true,
             "linklink": {
                 "A Link to the Past": ["Book of Mudora"],
@@ -410,7 +384,6 @@
         {
             "count": 1,
             "name": "Magic Powder",
-            "category": [],
             "progression": true,
             "linklink": {
                 "A Link to the Past": ["Magic Powder"],
@@ -422,7 +395,6 @@
         {
             "count": 1,
             "name": "Mushroom",
-            "category": [],
             "progression": true,
             "linklink": {
                 "A Link to the Past": ["Mushroom"],
@@ -437,7 +409,6 @@
         {
             "count": 3,
             "name": "Magic Spell",
-            "category": [],
             "progression": true,
             "linklink": {
                 "A Link Between Worlds": ["Quake", "Great Spin"],
@@ -450,7 +421,6 @@
         {
             "count": 1,
             "name": "Iron Boots",
-            "category": [],
             "progression": true,
             "linklink": {
                 "Ocarina of Time": ["Iron Boots"],
@@ -460,7 +430,6 @@
         {
             "count": 1,
             "name": "Feather",
-            "category": [],
             "progression": true,
             "linklink": {
                 "Links Awakening DX": ["Feather"],
@@ -472,7 +441,6 @@
         {
             "count": 1,
             "name": "Cape",
-            "category": [],
             "progression": true,
             "linklink": {
                 "A Link to the Past": ["Cape"],
@@ -484,7 +452,6 @@
         {
             "count": 3,
             "name": "Slingshot",
-            "category": [],
             "progression": true,
             "linklink": {
                 "Ocarina of Time": ["Slingshot"],
@@ -496,7 +463,6 @@
         {
             "count": 1,
             "name": "Membership Card",
-            "category": [],
             "progression": true,
             "linklink": {
                 "Ocarina of Time": ["Gerudo Membership Card"],
@@ -507,7 +473,6 @@
         {
             "count": 3,
             "name": "Seed Bag",
-            "category": [],
             "progression": true,
             "linklink": {
                 "Ocarina of Time": ["Deku Nut Capacity"],
@@ -519,7 +484,6 @@
         {
             "count": 1,
             "name": "Looking Glass",
-            "category": [],
             "progression": true,
             "linklink": {
                 "A Link to the Past": ["Magic Mirror"],
@@ -533,7 +497,6 @@
         {
             "count": 1,
             "name": "Letter",
-            "category": [],
             "progression": true,
             "linklink": {
                 "Majora's Mask Recompiled": ["Letter to Kafei"],
@@ -546,7 +509,6 @@
         {
             "count": 4,
             "name": "Key Jewels",
-            "category": [],
             "progression": true,
             "linklink": {
                 "A Link to the Past": ["Moon Pearl"],
@@ -560,7 +522,6 @@
         {
             "count": 3,
             "name": "Wallet",
-            "category": [],
             "progression": true,
             "linklink": {
                 "A Link Between Worlds": ["Pouch"],
@@ -573,7 +534,6 @@
         {
             "count": 10,
             "name": "Heart Container",
-            "category": [],
             "progression": true,
             "linklink": {
                 "A Link Between Worlds": ["Heart Container", "Piece of Heart", "Heart Piece"],
