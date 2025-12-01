@@ -1,476 +1,478 @@
-
-[
-    {
-        "count": 3,
-        "name": "Cure",
-        "category": [],
-        "progression": true,
-        "linklink": {
-            "Kingdom Hearts": ["Progressive Cure"],
-            "Kingdom Hearts RE Chain of Memories": ["Card Set Cure","Sleight Cura","Sleight Curaga"],
-            "Kingdom Hearts 2": ["Cure Element"],
-            "Kingdom Hearts Birth by Sleep": ["Cure","Cura","Curaga"]
-        }
-    },
-    {
-        "count": 3,
-        "name": "Fire",
-        "category": [],
-        "progression": true,
-        "linklink": {
-            "Kingdom Hearts": ["Progressive Fire"],
-            "Kingdom Hearts RE Chain of Memories": ["Card Set Fire","Sleight Fira","Sleight Firaga"],
-            "Kingdom Hearts 2": ["Fire Element"],
-            "Kingdom Hearts Birth by Sleep": ["Fire","Fira","Firaga"]
+{
+    "$schema": "items.schema.json",
+    "data": [
+        {
+            "count": 3,
+            "name": "Cure",
+            "category": [],
+            "progression": true,
+            "linklink": {
+                "Kingdom Hearts": ["Progressive Cure"],
+                "Kingdom Hearts 2": ["Cure Element"],
+                "Kingdom Hearts Birth by Sleep": ["Cure", "Cura", "Curaga"],
+                "Kingdom Hearts RE Chain of Memories": ["Card Set Cure", "Sleight Cura", "Sleight Curaga"]
             }
-    },
-    {
-        "count": 3,
-        "name": "Blizzard",
-        "category": [],
-        "progression": true,
-        "linklink": {
-            "Kingdom Hearts": ["Progressive Blizzard"],
-            "Kingdom Hearts RE Chain of Memories": ["Card Set Blizzard","Sleight Blizzara","Sleight Blizzaga"],
-            "Kingdom Hearts 2": ["Blizzard Element"],
-            "Kingdom Hearts Birth by Sleep": ["Blizzard","Blizzara","Blizzaga"]
+        },
+        {
+            "count": 3,
+            "name": "Fire",
+            "category": [],
+            "progression": true,
+            "linklink": {
+                "Kingdom Hearts": ["Progressive Fire"],
+                "Kingdom Hearts 2": ["Fire Element"],
+                "Kingdom Hearts Birth by Sleep": ["Fire", "Fira", "Firaga"],
+                "Kingdom Hearts RE Chain of Memories": ["Card Set Fire", "Sleight Fira", "Sleight Firaga"]
+            }
+        },
+        {
+            "count": 3,
+            "name": "Blizzard",
+            "category": [],
+            "progression": true,
+            "linklink": {
+                "Kingdom Hearts": ["Progressive Blizzard"],
+                "Kingdom Hearts 2": ["Blizzard Element"],
+                "Kingdom Hearts Birth by Sleep": ["Blizzard", "Blizzara", "Blizzaga"],
+                "Kingdom Hearts RE Chain of Memories": ["Card Set Blizzard", "Sleight Blizzara", "Sleight Blizzaga"]
+            }
+        },
+        {
+            "count": 3,
+            "name": "Thunder",
+            "category": [],
+            "progression": true,
+            "linklink": {
+                "Kingdom Hearts": ["Progressive Thunder"],
+                "Kingdom Hearts 2": ["Thunder Element"],
+                "Kingdom Hearts Birth by Sleep": ["Thunder", "Thundara", "Thundaga"],
+                "Kingdom Hearts RE Chain of Memories": ["Card Set Thunder", "Sleight Thundara", "Sleight Thundaga"]
+            }
+        },
+        {
+            "count": 3,
+            "name": "Gravity",
+            "category": [],
+            "progression": true,
+            "linklink": {
+                "Kingdom Hearts": ["Progressive Gravity"],
+                "Kingdom Hearts Birth by Sleep": ["Zero Gravity", "Zero Gravira", "Zero Graviga"],
+                "Kingdom Hearts RE Chain of Memories": ["Card Set Gravity", "Sleight Gravira", "Sleight Graviga"]
+            }
+        },
+        {
+            "count": 3,
+            "name": "Stop",
+            "category": [],
+            "progression": true,
+            "linklink": {
+                "Kingdom Hearts": ["Progressive Stop"],
+                "Kingdom Hearts Birth by Sleep": ["Stop", "Stopra", "Stopga"],
+                "Kingdom Hearts RE Chain of Memories": ["Card Set Stop", "Sleight Stopra", "Sleight Stopga"]
+            }
+        },
+        {
+            "count": 3,
+            "name": "Aero+Reflect",
+            "category": [],
+            "progression": true,
+            "linklink": {
+                "Kingdom Hearts": ["Progressive Aero"],
+                "Kingdom Hearts 2": ["Reflect Element"],
+                "Kingdom Hearts Birth by Sleep": ["Aero", "Aerora", "Aeroga"],
+                "Kingdom Hearts RE Chain of Memories": ["Card Set Aero", "Sleight Aerora", "Sleight Aeroga"]
+            }
+        },
+        {
+            "count": 3,
+            "name": "Magnet",
+            "category": [],
+            "progression": true,
+            "linklink": {
+                "Kingdom Hearts 2": ["Magnet Element"],
+                "Kingdom Hearts Birth by Sleep": ["Magnet", "Magnera", "Magnega"]
+            }
+        },
+        {
+            "count": 4,
+            "name": "High Jump",
+            "category": [],
+            "progression": true,
+            "linklink": {
+                "Kingdom Hearts": ["High Jump"],
+                "Kingdom Hearts 2": ["High Jump"],
+                "Kingdom Hearts Birth by Sleep": ["High Jump", "Doubleflight"]
+            }
+        },
+        {
+            "count": 4,
+            "name": "Dodge Roll",
+            "category": [],
+            "progression": true,
+            "linklink": {
+                "Kingdom Hearts": ["Dodge Roll"],
+                "Kingdom Hearts 2": ["Dodge Roll"],
+                "Kingdom Hearts Birth by Sleep": ["Thunder Roll", "Firewheel"]
+            }
+        },
+        {
+            "count": 4,
+            "name": "Glide",
+            "category": [],
+            "progression": true,
+            "linklink": {
+                "Kingdom Hearts": ["Progressive Glide"],
+                "Kingdom Hearts 2": ["Glide"],
+                "Kingdom Hearts Birth by Sleep": ["Glide", "Fire Glide", "Superglide"]
+            }
+        },
+        {
+            "count": 4,
+            "name": "Quick Run + Slide",
+            "category": [],
+            "progression": true,
+            "linklink": {
+                "Kingdom Hearts 2": ["Quick Run"],
+                "Kingdom Hearts Birth by Sleep": ["Air Slide", "Ice Slide"]
+            }
+        },
+        {
+            "count": 1,
+            "name": "Scan",
+            "category": [],
+            "progression": true,
+            "linklink": {
+                "Kingdom Hearts": ["Scan"],
+                "Kingdom Hearts 2": ["Scan"]
+            }
+        },
+        {
+            "count": 1,
+            "name": "Leaf Bracer",
+            "category": [],
+            "progression": true,
+            "linklink": {
+                "Kingdom Hearts": ["Leaf Bracer"],
+                "Kingdom Hearts 2": ["Leaf Bracer"],
+                "Kingdom Hearts Birth by Sleep": ["Leaf Bracer"]
+            }
+        },
+        {
+            "count": 1,
+            "name": "Second Chance",
+            "category": [],
+            "progression": true,
+            "linklink": {
+                "Kingdom Hearts": ["Second Chance"],
+                "Kingdom Hearts 2": ["Second Chance"],
+                "Kingdom Hearts Birth by Sleep": ["Second Chance"]
+            }
+        },
+        {
+            "count": 1,
+            "name": "Once More",
+            "category": [],
+            "progression": true,
+            "linklink": {
+                "Kingdom Hearts 2": ["Once More"],
+                "Kingdom Hearts Birth by Sleep": ["Once More"]
+            }
+        },
+        {
+            "count": 1,
+            "name": "Guard",
+            "category": [],
+            "progression": true,
+            "linklink": {
+                "Kingdom Hearts": ["Guard+Barrier"],
+                "Kingdom Hearts 2": ["Guard"],
+                "Kingdom Hearts Birth by Sleep": ["Renewal Barrier"]
+            }
+        },
+        {
+            "count": 1,
+            "name": "Aerial Recovery",
+            "category": [],
+            "progression": true,
+            "linklink": {
+                "Kingdom Hearts 2": ["Aerial Recovery"],
+                "Kingdom Hearts Birth by Sleep": ["Aerial Recovery"]
+            }
+        },
+        {
+            "count": 1,
+            "name": "Blitz",
+            "category": [],
+            "progression": true,
+            "linklink": {
+                "Kingdom Hearts": ["Blitz"],
+                "Kingdom Hearts Birth by Sleep": ["Blitz"],
+                "Kingdom Hearts RE Chain of Memories": ["Sleight Blitz"]
+            }
+        },
+        {
+            "count": 1,
+            "name": "Sliding Dash",
+            "category": [],
+            "progression": true,
+            "linklink": {
+                "Kingdom Hearts": ["Sliding Dash"],
+                "Kingdom Hearts 2": ["Slide Dash"],
+                "Kingdom Hearts Birth by Sleep": ["Sliding Dash"],
+                "Kingdom Hearts RE Chain of Memories": ["Sleight Sliding Dash"]
+            }
+        },
+        {
+            "count": 1,
+            "name": "Sonic Blade+Limit",
+            "category": [],
+            "progression": true,
+            "linklink": {
+                "Kingdom Hearts": ["Sonic Blade"],
+                "Kingdom Hearts 2": ["Limit Form"],
+                "Kingdom Hearts Birth by Sleep": ["Sonic Blade"],
+                "Kingdom Hearts RE Chain of Memories": ["Sleight Sonic Blade"]
+            }
+        },
+        {
+            "count": 1,
+            "name": "Ars Arcanum+Valor",
+            "category": [],
+            "progression": true,
+            "linklink": {
+                "Kingdom Hearts": ["Ars Arcanum"],
+                "Kingdom Hearts 2": ["Valor Form"],
+                "Kingdom Hearts Birth by Sleep": ["Ars Arcanum"],
+                "Kingdom Hearts RE Chain of Memories": ["Sleight Ars Arcanum"]
+            }
+        },
+        {
+            "count": 1,
+            "name": "Strike Raid+Master",
+            "category": [],
+            "progression": true,
+            "linklink": {
+                "Kingdom Hearts": ["Strike Raid"],
+                "Kingdom Hearts 2": ["Master Form"],
+                "Kingdom Hearts Birth by Sleep": ["Strike Raid"],
+                "Kingdom Hearts RE Chain of Memories": ["Sleight Strike Raid"]
+            }
+        },
+        {
+            "count": 1,
+            "name": "Ragnarok+Wisdom",
+            "category": [],
+            "progression": true,
+            "linklink": {
+                "Kingdom Hearts": ["Ragnarok"],
+                "Kingdom Hearts 2": ["Wisdom Form"],
+                "Kingdom Hearts Birth by Sleep": ["Ragnarok"],
+                "Kingdom Hearts RE Chain of Memories": ["Sleight Ragnarok"]
+            }
+        },
+        {
+            "count": 1,
+            "name": "Zantetsuken",
+            "category": [],
+            "progression": true,
+            "linklink": {
+                "Kingdom Hearts": ["Zantetsuken"],
+                "Kingdom Hearts Birth by Sleep": ["Zantetsuken"],
+                "Kingdom Hearts RE Chain of Memories": ["Sleight Zantetsuken"]
+            }
+        },
+        {
+            "count": 1,
+            "name": "Simba",
+            "category": [],
+            "progression": true,
+            "linklink": {
+                "Kingdom Hearts": ["Simba"],
+                "Kingdom Hearts RE Chain of Memories": ["Card Set Simba"]
+            }
+        },
+        {
+            "count": 1,
+            "name": "Genie",
+            "category": [],
+            "progression": true,
+            "linklink": {
+                "Kingdom Hearts": ["Genie"],
+                "Kingdom Hearts 2": ["Genie"],
+                "Kingdom Hearts RE Chain of Memories": ["Card Set Genie"]
+            }
+        },
+        {
+            "count": 1,
+            "name": "Bambi",
+            "category": [],
+            "progression": true,
+            "linklink": {
+                "Kingdom Hearts": ["Bambi"],
+                "Kingdom Hearts RE Chain of Memories": ["Card Set Bambi"]
+            }
+        },
+        {
+            "count": 1,
+            "name": "Dumbo",
+            "category": [],
+            "progression": true,
+            "linklink": {
+                "Kingdom Hearts": ["Dumbo"],
+                "Kingdom Hearts RE Chain of Memories": ["Card Set Dumbo"]
+            }
+        },
+        {
+            "count": 1,
+            "name": "Tinker Bell+Peter Pan",
+            "category": [],
+            "progression": true,
+            "linklink": {
+                "Kingdom Hearts": ["Tinker Bell"],
+                "Kingdom Hearts 2": ["Peter Pan"],
+                "Kingdom Hearts Birth by Sleep": ["Peter Pan D-Link"],
+                "Kingdom Hearts RE Chain of Memories": ["Card Set Tinker Bell"]
+            }
+        },
+        {
+            "count": 1,
+            "name": "Stitch",
+            "category": [],
+            "progression": true,
+            "linklink": {
+                "Kingdom Hearts 2": ["Stitch"],
+                "Kingdom Hearts Birth by Sleep": ["Experiment 626 D-Link"]
+            }
+        },
+        {
+            "count": 2,
+            "name": "Destiny Islands",
+            "category": [],
+            "progression": true,
+            "linklink": {
+                "Kingdom Hearts": ["Destiny Islands"],
+                "Kingdom Hearts RE Chain of Memories": ["World Card Destiny Islands", "Key to Rewards Destiny Islands"]
+            }
+        },
+        {
+            "count": 2,
+            "name": "Wonderland",
+            "category": [],
+            "progression": true,
+            "linklink": {
+                "Kingdom Hearts": ["Wonderland"],
+                "Kingdom Hearts RE Chain of Memories": ["World Card Wonderland", "Key to Rewards Wonderland"]
+            }
+        },
+        {
+            "count": 2,
+            "name": "Olympus Coliseum",
+            "category": [],
+            "progression": true,
+            "linklink": {
+                "Kingdom Hearts": ["Olympus Coliseum"],
+                "Kingdom Hearts 2": ["Battlefields of War"],
+                "Kingdom Hearts Birth by Sleep": ["Olympus Coliseum", "Zack D-Link"],
+                "Kingdom Hearts RE Chain of Memories": ["World Card Olympus Coliseum", "Key to Rewards Olympus Coliseum"]
+            }
+        },
+        {
+            "count": 2,
+            "name": "Agrabah",
+            "category": [],
+            "progression": true,
+            "linklink": {
+                "Kingdom Hearts": ["Agrabah"],
+                "Kingdom Hearts 2": ["Scimitar"],
+                "Kingdom Hearts RE Chain of Memories": ["World Card Agrabah", "Key to Rewards Agrabah"]
+            }
+        },
+        {
+            "count": 2,
+            "name": "Monstro+Mirage Arena",
+            "category": [],
+            "progression": true,
+            "linklink": {
+                "Kingdom Hearts": ["Monstro"],
+                "Kingdom Hearts Birth by Sleep": ["Mirage Arena"],
+                "Kingdom Hearts RE Chain of Memories": ["World Card Monstro", "Key to Rewards Monstro"]
+            }
+        },
+        {
+            "count": 2,
+            "name": "Halloween Town",
+            "category": [],
+            "progression": true,
+            "linklink": {
+                "Kingdom Hearts": ["Halloween Town"],
+                "Kingdom Hearts 2": ["Bone Fist"],
+                "Kingdom Hearts RE Chain of Memories": ["World Card Halloween Town", "Key to Rewards Halloween Town"]
+            }
+        },
+        {
+            "count": 2,
+            "name": "Atlantica",
+            "category": [],
+            "progression": true,
+            "linklink": {
+                "Kingdom Hearts": ["Atlantica"],
+                "Kingdom Hearts RE Chain of Memories": ["World Card Atlantica", "Key to Rewards Atlantica"]
+            }
+        },
+        {
+            "count": 2,
+            "name": "Neverland",
+            "category": [],
+            "progression": true,
+            "linklink": {
+                "Kingdom Hearts": ["Neverland"],
+                "Kingdom Hearts Birth by Sleep": ["Never Land"],
+                "Kingdom Hearts RE Chain of Memories": ["World Card Neverland", "Key to Rewards Neverland"]
+            }
+        },
+        {
+            "count": 2,
+            "name": "Radiant Garden",
+            "category": [],
+            "progression": true,
+            "linklink": {
+                "Kingdom Hearts": ["Hollow Bastion"],
+                "Kingdom Hearts 2": ["Membership Card"],
+                "Kingdom Hearts Birth by Sleep": ["Radiant Garden", "Maleficent D-Link"],
+                "Kingdom Hearts RE Chain of Memories": ["World Card Hollow Bastion", "Key to Rewards Hollow Bastion"]
+            }
+        },
+        {
+            "count": 3,
+            "name": "Twilight Town+ Mysterious Tower",
+            "category": [],
+            "progression": true,
+            "linklink": {
+                "Kingdom Hearts 2": ["Ice Cream"],
+                "Kingdom Hearts Birth by Sleep": ["The Mysterious Tower", "Donald D-Link", "Goofy D-Link"],
+                "Kingdom Hearts RE Chain of Memories": ["World Card Twilight Town", "Key to Rewards Twilight Town"]
+            }
+        },
+        {
+            "count": 2,
+            "name": "Disney Castle Town",
+            "category": [],
+            "progression": true,
+            "linklink": {
+                "Kingdom Hearts 2": ["Disney Castle Key"],
+                "Kingdom Hearts Birth by Sleep": ["Disney Town", "Mickey D-Link"]
+            }
+        },
+        {
+            "count": 5,
+            "name": "Torn Page",
+            "category": [],
+            "progression": true,
+            "linklink": {
+                "Kingdom Hearts": ["Torn Page"],
+                "Kingdom Hearts 2": ["Torn Page"],
+                "Kingdom Hearts RE Chain of Memories": ["Key to Rewards Traverse Town", "Key to Rewards Castle Oblivion", "World Card 100 Acre Wood"]
+            }
         }
-    },
-    {
-        "count": 3,
-        "name": "Thunder",
-        "category": [],
-        "progression": true,
-        "linklink": {
-            "Kingdom Hearts": ["Progressive Thunder"],
-            "Kingdom Hearts RE Chain of Memories": ["Card Set Thunder","Sleight Thundara","Sleight Thundaga"],
-            "Kingdom Hearts 2": ["Thunder Element"],
-            "Kingdom Hearts Birth by Sleep": ["Thunder","Thundara","Thundaga"]
-        }
-    },
-    {
-        "count": 3,
-        "name": "Gravity",
-        "category": [],
-        "progression": true,
-        "linklink": {
-            "Kingdom Hearts": ["Progressive Gravity"],
-            "Kingdom Hearts RE Chain of Memories": ["Card Set Gravity","Sleight Gravira","Sleight Graviga"],
-            "Kingdom Hearts Birth by Sleep": ["Zero Gravity","Zero Gravira","Zero Graviga"]
-        }
-    },
-    {
-        "count": 3,
-        "name": "Stop",
-        "category": [],
-        "progression": true,
-        "linklink": {
-            "Kingdom Hearts": ["Progressive Stop"],
-            "Kingdom Hearts RE Chain of Memories": ["Card Set Stop","Sleight Stopra","Sleight Stopga"],
-            "Kingdom Hearts Birth by Sleep": ["Stop","Stopra","Stopga"]
-        }
-    },
-    {
-        "count": 3,
-        "name": "Aero+Reflect",
-        "category": [],
-        "progression": true,
-        "linklink": {
-            "Kingdom Hearts": ["Progressive Aero"],
-            "Kingdom Hearts RE Chain of Memories": ["Card Set Aero","Sleight Aerora","Sleight Aeroga"],
-            "Kingdom Hearts 2": ["Reflect Element"],
-            "Kingdom Hearts Birth by Sleep": ["Aero","Aerora","Aeroga"]
-        }
-    },
-    {
-        "count": 3,
-        "name": "Magnet",
-        "category": [],
-        "progression": true,
-        "linklink": {
-                        "Kingdom Hearts 2": ["Magnet Element"],
-            "Kingdom Hearts Birth by Sleep": ["Magnet","Magnera","Magnega"]
-        }
-    },
-    {
-        "count": 4,
-        "name": "High Jump",
-        "category": [],
-        "progression": true,
-        "linklink": {
-            "Kingdom Hearts": ["High Jump"],
-                   "Kingdom Hearts 2": ["High Jump"],
-            "Kingdom Hearts Birth by Sleep": ["High Jump","Doubleflight"]
-        }
-    },
-    {
-        "count": 4,
-        "name": "Dodge Roll",
-        "category": [],
-        "progression": true,
-        "linklink": {
-            "Kingdom Hearts": ["Dodge Roll"],
-                  "Kingdom Hearts 2": ["Dodge Roll"],
-            "Kingdom Hearts Birth by Sleep": ["Thunder Roll","Firewheel"]
-        }
-    },
-    {
-        "count": 4,
-        "name": "Glide",
-        "category": [],
-        "progression": true,
-        "linklink": {
-            "Kingdom Hearts": ["Progressive Glide"],
-                  "Kingdom Hearts 2": ["Glide"],
-            "Kingdom Hearts Birth by Sleep": ["Glide","Fire Glide","Superglide"]
-        }
-    },
-    {
-        "count": 4,
-        "name": "Quick Run + Slide",
-        "category": [],
-        "progression": true,
-        "linklink": {
-                  "Kingdom Hearts 2": ["Quick Run"],
-            "Kingdom Hearts Birth by Sleep": ["Air Slide","Ice Slide"]
-        }
-    },
-    {
-        "count": 1,
-        "name": "Scan",
-        "category": [],
-        "progression": true,
-        "linklink": {
-            "Kingdom Hearts": ["Scan"],
-                  "Kingdom Hearts 2": ["Scan"],
-        }
-    },
-    {
-        "count": 1,
-        "name": "Leaf Bracer",
-        "category": [],
-        "progression": true,
-        "linklink": {
-            "Kingdom Hearts": ["Leaf Bracer"],
-                  "Kingdom Hearts 2": ["Leaf Bracer"],
-            "Kingdom Hearts Birth by Sleep": ["Leaf Bracer"]
-        }
-    },
-    {
-        "count": 1,
-        "name": "Second Chance",
-        "category": [],
-        "progression": true,
-        "linklink": {
-            "Kingdom Hearts": ["Second Chance"],
-                  "Kingdom Hearts 2": ["Second Chance"],
-            "Kingdom Hearts Birth by Sleep": ["Second Chance"]
-        }
-    },
-    {
-        "count": 1,
-        "name": "Once More",
-        "category": [],
-        "progression": true,
-        "linklink": {
-        "Kingdom Hearts 2": ["Once More"],
-            "Kingdom Hearts Birth by Sleep":  ["Once More"]
-        }
-    },
-    {
-        "count": 1,
-        "name": "Guard",
-        "category": [],
-        "progression": true,
-        "linklink": {
-            "Kingdom Hearts": ["Guard+Barrier"],
-                  "Kingdom Hearts 2": ["Guard"],
-            "Kingdom Hearts Birth by Sleep":  ["Renewal Barrier"]
-        }
-    },
-    {
-        "count": 1,
-        "name": "Aerial Recovery",
-        "category": [],
-        "progression": true,
-        "linklink": {
-           "Kingdom Hearts 2": ["Aerial Recovery"],
-            "Kingdom Hearts Birth by Sleep":  ["Aerial Recovery"]
-        }
-    },
-    {
-        "count": 1,
-        "name": "Blitz",
-        "category": [],
-        "progression": true,
-        "linklink": {
-            "Kingdom Hearts": ["Blitz"],
-            "Kingdom Hearts RE Chain of Memories": ["Sleight Blitz"],
-            "Kingdom Hearts Birth by Sleep": ["Blitz"]
-        }
-    },
-    {
-        "count": 1,
-        "name": "Sliding Dash",
-        "category": [],
-        "progression": true,
-        "linklink": {
-            "Kingdom Hearts": ["Sliding Dash"],
-            "Kingdom Hearts RE Chain of Memories": ["Sleight Sliding Dash"],
-            "Kingdom Hearts 2": ["Slide Dash"],
-            "Kingdom Hearts Birth by Sleep": ["Sliding Dash"]
-        }
-    },
-    {
-        "count": 1,
-        "name": "Sonic Blade+Limit",
-        "category": [],
-        "progression": true,
-        "linklink": {
-            "Kingdom Hearts": ["Sonic Blade"],
-            "Kingdom Hearts RE Chain of Memories": ["Sleight Sonic Blade"],
-            "Kingdom Hearts 2": ["Limit Form"],
-            "Kingdom Hearts Birth by Sleep": ["Sonic Blade"]
-        }
-    },
-    {
-        "count": 1,
-        "name": "Ars Arcanum+Valor",
-        "category": [],
-        "progression": true,
-        "linklink": {
-            "Kingdom Hearts": ["Ars Arcanum"],
-            "Kingdom Hearts RE Chain of Memories": ["Sleight Ars Arcanum"],
-            "Kingdom Hearts 2": ["Valor Form"],
-            "Kingdom Hearts Birth by Sleep": ["Ars Arcanum"]
-        }
-    },
-    {
-        "count": 1,
-        "name": "Strike Raid+Master",
-        "category": [],
-        "progression": true,
-        "linklink": {
-            "Kingdom Hearts": ["Strike Raid"],
-            "Kingdom Hearts RE Chain of Memories": ["Sleight Strike Raid"],
-            "Kingdom Hearts 2": ["Master Form"],
-            "Kingdom Hearts Birth by Sleep": ["Strike Raid"]
-        }
-    },
-    {
-        "count": 1,
-        "name": "Ragnarok+Wisdom",
-        "category": [],
-        "progression": true,
-        "linklink": {
-            "Kingdom Hearts": ["Ragnarok"],
-            "Kingdom Hearts RE Chain of Memories": ["Sleight Ragnarok"],
-            "Kingdom Hearts 2": ["Wisdom Form"],
-            "Kingdom Hearts Birth by Sleep": ["Ragnarok"]
-        }
-    },
-    {
-        "count": 1,
-        "name": "Zantetsuken",
-        "category": [],
-        "progression": true,
-        "linklink": {
-            "Kingdom Hearts": ["Zantetsuken"],
-            "Kingdom Hearts RE Chain of Memories": ["Sleight Zantetsuken"],
-            "Kingdom Hearts Birth by Sleep": ["Zantetsuken"]
-        }
-    },
-    {
-        "count": 1,
-        "name": "Simba",
-        "category": [],
-        "progression": true,
-        "linklink": {
-            "Kingdom Hearts": ["Simba"],
-            "Kingdom Hearts RE Chain of Memories": ["Card Set Simba"]
-        }
-    },
-    {
-        "count": 1,
-        "name": "Genie",
-        "category": [],
-        "progression": true,
-        "linklink": {
-            "Kingdom Hearts": ["Genie"],
-            "Kingdom Hearts RE Chain of Memories": ["Card Set Genie"],
-            "Kingdom Hearts 2": ["Genie"],
-        }
-    },
-    {
-        "count": 1,
-        "name": "Bambi",
-        "category": [],
-        "progression": true,
-        "linklink": {
-            "Kingdom Hearts": ["Bambi"],
-            "Kingdom Hearts RE Chain of Memories": ["Card Set Bambi"]
-        }
-    },
-    {
-        "count": 1,
-        "name": "Dumbo",
-        "category": [],
-        "progression": true,
-        "linklink": {
-            "Kingdom Hearts": ["Dumbo"],
-            "Kingdom Hearts RE Chain of Memories": ["Card Set Dumbo"]
-        }
-    },
-    {
-        "count": 1,
-        "name": "Tinker Bell+Peter Pan",
-        "category": [],
-        "progression": true,
-        "linklink": {
-            "Kingdom Hearts": ["Tinker Bell"],
-            "Kingdom Hearts RE Chain of Memories": ["Card Set Tinker Bell"],
-            "Kingdom Hearts 2": ["Peter Pan"],
-            "Kingdom Hearts Birth by Sleep": ["Peter Pan D-Link"]
-        }
-    },
-    {
-        "count": 1,
-        "name": "Stitch",
-        "category": [],
-        "progression": true,
-        "linklink": {
-            "Kingdom Hearts 2": ["Stitch"],
-            "Kingdom Hearts Birth by Sleep": ["Experiment 626 D-Link"]
-        }
-    },
-    {
-        "count": 2,
-        "name": "Destiny Islands",
-        "category": [],
-        "progression": true,
-        "linklink": {
-            "Kingdom Hearts": ["Destiny Islands"],
-            "Kingdom Hearts RE Chain of Memories": ["World Card Destiny Islands","Key to Rewards Destiny Islands"]
-        }
-    },
-    {
-        "count": 2,
-        "name": "Wonderland",
-        "category": [],
-        "progression": true,
-        "linklink": {
-            "Kingdom Hearts": ["Wonderland"],
-            "Kingdom Hearts RE Chain of Memories": ["World Card Wonderland","Key to Rewards Wonderland"]
-        }
-    },
-    {
-        "count": 2,
-        "name": "Olympus Coliseum",
-        "category": [],
-        "progression": true,
-        "linklink": {
-            "Kingdom Hearts": ["Olympus Coliseum"],
-            "Kingdom Hearts RE Chain of Memories": ["World Card Olympus Coliseum","Key to Rewards Olympus Coliseum"],
-            "Kingdom Hearts 2": ["Battlefields of War"],
-            "Kingdom Hearts Birth by Sleep": ["Olympus Coliseum","Zack D-Link"]
-        }
-    },
-    {
-        "count": 2,
-        "name": "Agrabah",
-        "category": [],
-        "progression": true,
-        "linklink": {
-            "Kingdom Hearts": ["Agrabah"],
-            "Kingdom Hearts RE Chain of Memories": ["World Card Agrabah","Key to Rewards Agrabah"],
-            "Kingdom Hearts 2": ["Scimitar"]
-        }
-    },
-    {
-        "count": 2,
-        "name": "Monstro+Mirage Arena",
-        "category": [],
-        "progression": true,
-        "linklink": {
-            "Kingdom Hearts": ["Monstro"],
-            "Kingdom Hearts RE Chain of Memories": ["World Card Monstro","Key to Rewards Monstro"],
-            "Kingdom Hearts Birth by Sleep": ["Mirage Arena"]
-        }
-    },
-    {
-        "count": 2,
-        "name": "Halloween Town",
-        "category": [],
-        "progression": true,
-        "linklink": {
-            "Kingdom Hearts": ["Halloween Town"],
-            "Kingdom Hearts RE Chain of Memories": ["World Card Halloween Town","Key to Rewards Halloween Town"],
-            "Kingdom Hearts 2": ["Bone Fist"]
-        }
-    },
-    {
-        "count": 2,
-        "name": "Atlantica",
-        "category": [],
-        "progression": true,
-        "linklink": {
-            "Kingdom Hearts": ["Atlantica"],
-            "Kingdom Hearts RE Chain of Memories": ["World Card Atlantica","Key to Rewards Atlantica"]
-        }
-    },
-    {
-        "count": 2,
-        "name": "Neverland",
-        "category": [],
-        "progression": true,
-        "linklink": {
-            "Kingdom Hearts": ["Neverland"],
-            "Kingdom Hearts RE Chain of Memories": ["World Card Neverland","Key to Rewards Neverland"],
-            "Kingdom Hearts Birth by Sleep": ["Never Land"]
-        }
-    },
-    {
-        "count": 2,
-        "name": "Radiant Garden",
-        "category": [],
-        "progression": true,
-        "linklink": {
-            "Kingdom Hearts": ["Hollow Bastion"],
-            "Kingdom Hearts RE Chain of Memories": ["World Card Hollow Bastion","Key to Rewards Hollow Bastion"],
-            "Kingdom Hearts 2": ["Membership Card"],
-            "Kingdom Hearts Birth by Sleep": ["Radiant Garden","Maleficent D-Link"]
-        }
-    },
-    {
-        "count": 3,
-        "name": "Twilight Town+ Mysterious Tower",
-        "category": [],
-        "progression": true,
-        "linklink": {
-          "Kingdom Hearts RE Chain of Memories": ["World Card Twilight Town","Key to Rewards Twilight Town"],
-            "Kingdom Hearts 2": ["Ice Cream"],
-            "Kingdom Hearts Birth by Sleep": ["The Mysterious Tower","Donald D-Link","Goofy D-Link"]
-        }
-    },
-    {
-        "count": 2,
-        "name": "Disney Castle Town",
-        "category": [],
-        "progression": true,
-        "linklink": {
-            "Kingdom Hearts 2": ["Disney Castle Key"],
-            "Kingdom Hearts Birth by Sleep": ["Disney Town","Mickey D-Link"]
-        }
-    },
-    {
-        "count": 5,
-        "name": "Torn Page",
-        "category": [],
-        "progression": true,
-        "linklink": {
-            "Kingdom Hearts": ["Torn Page"],
-            "Kingdom Hearts RE Chain of Memories": ["Key to Rewards Traverse Town","Key to Rewards Castle Oblivion","World Card 100 Acre Wood "],
-            "Kingdom Hearts 2": ["Torn Page"]
-        }
-    }
-]
+    ]
+}
