@@ -1,3 +1,6 @@
+from typing import Any
+
+
 ITEM_TABLE = []
 MAX_PLAYERS = 40
 FREE_ITEMS = 0
@@ -33,18 +36,23 @@ def after_load_progressive_item_file(progressive_item_table: list) -> list:
 def after_load_location_file(location_table: list) -> list:
     for item in ITEM_TABLE:
         if 'linklink' in item:
-            for i in range(1, item['count'] + 1):
+            count = item['count']
+            digit = len(str(count + 1))
+            players_digits = len(str(MAX_PLAYERS))
+
+            for i in range(1, count + 1):
                 for j in range(1, MAX_PLAYERS + 1):
                     location_table.append({
-                        "name": f"{item['name']} {i} Player {j}",
-                        "region": f"{item['name']} {i}",
+                        "name": f"{item['name']} l$l {str(i).zfill(digit)} Player {str(j).zfill(players_digits)}",
+                        "region": f"{item['name']} {str(i).zfill(digit)}",
                         "category": [item['name']],
                         "requires": "",
                         "linklink": item['linklink'],
                     })
+    digit = len(str(FREE_ITEMS + 1))
     for i in range(1, FREE_ITEMS + 1):
         location_table.append({
-            "name": f"Free Item {i}",
+            "name": f"Free Item {str(i).zfill(digit)}",
             "region": "Free Items",
             "category": ["Free Items"],
             "requires": "",
@@ -57,8 +65,9 @@ def after_load_location_file(location_table: list) -> list:
 def after_load_region_file(region_table: dict) -> dict:
     for item in ITEM_TABLE:
         if 'linklink' in item:
+            digit = len(str(item['count'] + 1))
             for i in range(1, item['count'] + 1):
-                name = f"{item['name']} {i}"
+                name = f"{item['name']} {str(i).zfill(digit)}"
                 if name not in region_table:
                     region_table[name] = {
                         "name": name,
@@ -78,7 +87,7 @@ def after_load_meta_file(meta_table: dict) -> dict:
 # called when an external tool (eg Univeral Tracker) ask for slot data to be read
 # use this if you want to restore more data
 # return True if you want to trigger a regeneration if you changed anything
-def hook_interpret_slot_data(world, player: int, slot_data: dict[str, any]) -> bool:
+def hook_interpret_slot_data(world, player: int, slot_data: dict[str, Any]) -> bool:
     return False
 
 
