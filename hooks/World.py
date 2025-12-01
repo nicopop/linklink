@@ -210,11 +210,11 @@ def after_generate_basic(world: "ManualWorld", multiworld: MultiWorld, player: i
                     logging.info(f'Removing surplus {item.name}')
                     multiworld.itempool.remove(item)
                     unplaced_items.remove(item)
-            for location in multiworld.get_unfilled_locations(player):
-                if location.name.startswith(f"{item_data['name']} "):
-                    location.parent_region.locations.remove(location)
-                    remove_nothing()
-
+            if not getattr(multiworld, 'generation_is_fake', False):
+                for location in multiworld.get_unfilled_locations(player):
+                    if location.name.startswith(f"{item_data['name']} "):
+                        location.parent_region.locations.remove(location)
+                        remove_nothing()
     replace_nothings(world, multiworld, player)
 
 
