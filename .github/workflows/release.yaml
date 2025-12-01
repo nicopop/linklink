@@ -38,6 +38,8 @@ jobs:
         with:
           repository: ArchipelagoMW/Archipelago
           path: .
+          ref: "0.6.4"
+
       - name: Checkout this Repo
         uses: actions/checkout@v4
         with:
