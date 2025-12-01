@@ -1,7 +1,7 @@
 ITEM_TABLE = []
 MAX_PLAYERS = 40
 FREE_ITEMS = 0
-PKMN = False
+extra_item_files = ['items_pkmn.json', 'items_kh.json']
 
 # called after the game.json file has been loaded
 def after_load_game_file(game_table: dict) -> dict:
@@ -11,9 +11,11 @@ def after_load_game_file(game_table: dict) -> dict:
 # if you need access to the items after processing to add ids, etc., you should use the hooks in World.py
 def after_load_item_file(item_table: list) -> list:
     # Store a reference to this
-    if PKMN:
+    for i, extra_file in enumerate(extra_item_files):
         from ..Data import load_data_file
-        item_table.extend(load_data_file('items_pkmn.json'))
+        new_table = load_data_file(extra_file)
+        new_table[0]['id'] += i * 1000  # Plenty of room for expansion
+        item_table.extend(new_table)
 
     for item in item_table:
         if 'count' not in item:
