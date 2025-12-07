@@ -15,7 +15,8 @@ def after_load_game_file(game_table: dict) -> dict:
 def after_load_item_file(item_table: list) -> list:
     # Store a reference to this
     for i, extra_file in enumerate(extra_item_files):
-        from ..Data import convert_to_list, load_data_file
+        from ..Data import convert_to_list
+        from ..Helpers import load_data_file
 
         new_table = convert_to_list(load_data_file(extra_file), "data")
         new_table[0]["id"] = (i + 1) * 1000  # Plenty of room for expansion
