@@ -1,8 +1,11 @@
 # Object classes from AP core, to represent an entire MultiWorld and this individual World that's part of it
 import logging
+import re
 from worlds.AutoWorld import World
 from BaseClasses import MultiWorld, CollectionState, Item
 from typing import TYPE_CHECKING, Iterator
+
+from worlds.linklink.hooks.Data import MAX_PLAYERS
 
 # Object classes from Manual -- extending AP core -- representing items and locations that are used in generation
 from ..Items import ManualItem
@@ -95,15 +98,21 @@ def after_create_items(item_pool: list[ManualItem], world: World, multiworld: Mu
 def replace_nothings(world: World, multiworld: MultiWorld, player: int):
     # Remove "Nothing" items and replace them with filler items from other players
     item_pool = [i for i in multiworld.itempool if i.player == player]
-    item_count = len(item_pool)
+    my_item_count = len([i for i in item_pool if i.player == player])
     location_count = len(multiworld.get_locations(player))
+    unfilled_count = len(multiworld.get_unfilled_locations(player))
 
-    filler_blacklist = ["SMZ3", "Links Awakening DX", "Manual_LinkLink_Silasary"]  # These games don't have filler items or don't implement them correctly
+    filler_blacklist = ["Manual_LinkLink_Silasary"]
     victims = get_victims(multiworld, player)
     victims = [v for v in victims if v != player and multiworld.worlds[v].game not in filler_blacklist]  # Only include players with filler items
 
     other_player = None
-    for item in [i for i in item_pool.copy() if i.name == "Nothing"]:
+    for item in [i for i in item_pool.copy() if i.name == "Nothing" and i.player == player]:
+        item_pool.remove(item)
+
+    my_item_count = len([i for i in item_pool if i.player == player])
+    needed = location_count - my_item_count
+    for _ in range(needed):
         if other_player is None:
             queue = iter(v for v in victims if v != player)
             other_player = next(queue)
@@ -161,14 +170,7 @@ def before_generate_basic(world: World, multiworld: MultiWorld, player: int) -> 
 # This method is run at the very end of pre-generation, once the place_item options have been handled and before AP generation occurs
 def after_generate_basic(world: "ManualWorld", multiworld: MultiWorld, player: int):
     victims = get_victims(multiworld, player)
-
-    def remove_nothing():
-        for i in multiworld.itempool.copy():
-            if i.name == "Nothing" and i.player == player:
-                multiworld.itempool.remove(i)
-                return
-        logging.error("Could not find Nothing to remove")
-        return None
+    players_digits = len(str(MAX_PLAYERS))
 
     unplaced_items = [i for i in multiworld.itempool if i.location is None]
     for item_data in item_table:
@@ -176,6 +178,7 @@ def after_generate_basic(world: "ManualWorld", multiworld: MultiWorld, player: i
             logging.debug(repr(item_data))
             linklink: dict[str, list[str]] = item_data['linklink']
             item_count = item_data['count']
+            digit = len(str(item_count + 1))
             for i in range(1, item_count + 1):
                 any_placed = False
                 n = 1
@@ -183,12 +186,14 @@ def after_generate_basic(world: "ManualWorld", multiworld: MultiWorld, player: i
                     if j == player or j not in victims:
                         continue
                     placed = False
-                    location = multiworld.get_location(f"{item_data['name']} {i} Player {n}", player)
+                    location_name = f"{item_data['name']} {str(i).zfill(digit)} Player {str(n).zfill(players_digits)}"
+                    location = multiworld.get_location(location_name, player)
                     if location is None:
                         continue
                     if multiworld.worlds[j].game not in linklink:
                         logging.debug(f"Game {multiworld.worlds[j].game} not in linklink for {item_data['name']}")
                         continue
+                    location.ll_item_name = item_data['name']
                     options = [item for item in unplaced_items if item.name in linklink[multiworld.worlds[j].game] and item.player == j]
                     options.sort(key=lambda x: linklink[multiworld.worlds[j].game].index(x.name))
                     if i == 1 and len(options) == 0:
@@ -214,7 +219,7 @@ def after_generate_basic(world: "ManualWorld", multiworld: MultiWorld, player: i
                 for location in multiworld.get_unfilled_locations(player):
                     if location.name.startswith(f"{item_data['name']} "):
                         location.parent_region.locations.remove(location)
-                        remove_nothing()
+                        # remove_nothing()
     replace_nothings(world, multiworld, player)
 
 
@@ -268,10 +273,11 @@ def before_extend_hint_information(hint_data: dict[int, dict[int, str]], world: 
     for location in multiworld.get_locations(player):
         if not location.address:
             continue
-        elif location.parent_region is not None and location.parent_region.name == 'Free Items':
+
+        if location.parent_region is not None and location.parent_region.name == "Free Items":
             continue
 
-        item_name, rest = location.name.split("l$l") # re.split(r'\d+', location.name)[0].strip()
+        item_name = location.ll_item_name  #re.split(r"\d+", location.name)[0].strip()
         item_name = item_name.strip()
         p_num = str(location.item.player)
         if p_num not in iterators.keys():

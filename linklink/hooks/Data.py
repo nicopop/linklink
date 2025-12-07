@@ -45,7 +45,7 @@ def after_load_location_file(location_table: list) -> list:
             for i in range(1, count + 1):
                 for j in range(1, MAX_PLAYERS + 1):
                     location_table.append({
-                        "name": f"{item['name']} l$l {str(i).zfill(digit)} Player {str(j).zfill(players_digits)}",
+                        "name": f"{item['name']} {str(i).zfill(digit)} Player {str(j).zfill(players_digits)}",
                         "region": f"{item['name']} {str(i).zfill(digit)}",
                         "category": [item['name']],
                         "requires": "",
