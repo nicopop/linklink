@@ -25,7 +25,7 @@ jobs:
                   fetch-depth: 1
             - name: Set up venv and install dependencies
               run: |
-                  ln -s ${{ github.workspace }} Archipelago/worlds/${{ env.world }}
+                  ln -s ${{ github.workspace }}/linklink Archipelago/worlds/${{ env.world }}
                   python -m venv venv
                   source venv/bin/activate
                   pip install --upgrade pip
