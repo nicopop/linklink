@@ -1,0 +1,10 @@
+{
+    "game": "Manual_LinkLink_Silasary",
+    "world_version": "4.0.0",
+    "changelog": [
+        "* A bunch of code cleanup and refactoring.",
+        "* Added Hint improvements (Thanks Nicopop for the code)",
+        "* Added Kingdom Hearts items (Thanks Twilight for the data)",
+        "* UT should work again now"
+    ]
+}
