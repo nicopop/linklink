@@ -3,7 +3,8 @@ import logging
 import re
 from worlds.AutoWorld import World
 from BaseClasses import MultiWorld, CollectionState, Item
-from typing import TYPE_CHECKING, Iterator
+from typing import TYPE_CHECKING
+from collections.abc import Iterator
 
 from .Data import MAX_PLAYERS
 
