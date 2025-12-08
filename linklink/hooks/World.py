@@ -5,7 +5,7 @@ from worlds.AutoWorld import World
 from BaseClasses import MultiWorld, CollectionState, Item
 from typing import TYPE_CHECKING, Iterator
 
-from worlds.linklink.hooks.Data import MAX_PLAYERS
+from .Data import MAX_PLAYERS
 
 # Object classes from Manual -- extending AP core -- representing items and locations that are used in generation
 from ..Items import ManualItem
