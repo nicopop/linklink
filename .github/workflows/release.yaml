@@ -33,13 +33,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Get Latest Regular AP Version
+        id: get-ap-version
+        uses: pozetroninc/github-action-get-latest-release@master
+        with:
+          repository: ArchipelagoMW/Archipelago
+          excludes: prerelease, draft
       - name: Checkout AP
         uses: actions/checkout@v4
         with:
           repository: ArchipelagoMW/Archipelago
           path: .
-          ref: "0.6.4"
-
+          ref: ${{ steps.get-ap-version.outputs.release }}
       - name: Checkout this Repo
         uses: actions/checkout@v4
         with:
@@ -55,7 +60,7 @@ jobs:
       - name: Move this repo to worlds folder
         run: |
           mkdir -p worlds/${{ env.AP_WORLD_DIR }}
-          rsync -a temp/* worlds/${{ env.AP_WORLD_DIR }} --exclude='.[!.]*'
+          rsync -a temp/linklink/* worlds/${{ env.AP_WORLD_DIR }} --exclude='.[!.]*'
       - name: Install python
         uses: actions/setup-python@v5
         with:
@@ -76,9 +81,13 @@ jobs:
       - name: Change in apworld's version
         # version = 2025_03_24_00 # YYYYMMDD
         run: |
+          cd worlds/${{ env.AP_WORLD_DIR }}
+          json="$(jq --arg version_num ${{ env.VERSION_NUM }} '.version = $version_num' data/game.json)"
+          echo $json
+          echo "${json}" > data/game.json
           tmp=$(mktemp)
-          sed -r 's/version = .*/version = "${{ env.VERSION_NUM }}"/' worlds/${{ env.AP_WORLD_DIR }}/hooks/World.py > "$tmp"
-          mv "$tmp" worlds/${{ env.AP_WORLD_DIR }}/hooks/World.py
+          sed -r 's/version = .*/version = "${{ env.VERSION_NUM }}"/' hooks/World.py > "$tmp"
+          mv "$tmp" hooks/World.py
       - name: Update World Version in Manifest
         run:  |
           cd worlds/${{ env.AP_WORLD_DIR }}
@@ -104,7 +113,7 @@ jobs:
           bodyFile: bodyFile.txt
           tag: "${{ env.VERSION_NUM }}"
           commit: "main"
-          generateReleaseNotes: true
+          generateReleaseNotes: false
           artifacts: |
             ${{ env.AP_WORLD_PATH }}
             ${{ env.AP_WORLD_YAML_PATH }}
