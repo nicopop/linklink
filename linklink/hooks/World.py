@@ -35,12 +35,6 @@ if TYPE_CHECKING:
 ## The fill_slot_data method will be used to send data to the Manual client for later use, like deathlink.
 ########################################################################################
 
-version = 2025_11_21_00 # YYYYMMDD
-def pretty_version() -> str:
-    if isinstance(version, int):
-        return str(version)[:4] + '-' +str(version)[4:6] + '-' +str(version)[6:8] + f'({str(version)[8:]})'
-    else:
-        return version
 # Use this function to change the valid filler items to be created to replace item links or starting items.
 # Default value is the `filler_item_name` from game.json
 def hook_get_filler_item_name(world: World, multiworld: MultiWorld, player: int) -> str | bool:
@@ -112,8 +106,7 @@ def before_create_items_all(item_config: dict[str, int|dict], world: World, mult
                     extra_classification = ItemClassification(classification)
                     if ItemClassification.useful not in classification:
                         extra_classification |= ItemClassification.useful
-                    extra_classification &= ~ItemClassification.progression_skip_balancing
-                    extra_classification &= ~ItemClassification.deprioritized
+                    extra_classification &= ~ItemClassification.progression_deprioritized_skip_balancing
 
                     item_config[item_data['name']].update({extra_classification: item_data['extra']}) # pyright: ignore[reportAttributeAccessIssue]
 
@@ -136,9 +129,9 @@ def before_create_items_filler(item_pool: list, world: World, multiworld: MultiW
 
 
 # The complete item pool prior to being set for generation is provided here, in case you want to make changes to it
-def after_create_items(item_pool: list[Item], world: World, multiworld: MultiWorld, player: int) -> list:
+def after_create_items(item_pool: list[Item], world: "ManualWorld", multiworld: MultiWorld, player: int) -> list:
     unplaced_nothing = [i for i in item_pool if i.name == FILLER_NAME]
-    ll_locations = [l for l in world.get_locations() if " l$l " in l.name]
+    ll_locations = [l for l in world.get_locations() if world.location_name_to_location.get(l.name, {}).get("linklink", None) is not None]
 
     # Doing the placing on locked items here since its faster than Manual's place_item
     for location in ll_locations:
@@ -264,7 +257,7 @@ def after_generate_basic(world: "ManualWorld", multiworld: MultiWorld, player: i
             item.location = location
             location.locked = True
 
-        logging.info(f"{multiworld.player_name[player]} is casting some {world.game} version {pretty_version()}{' black' if in_pre_fill else ''} magic with {', '.join([multiworld.player_name[p] for p in victims]) if len(world.options.victims.value) > 0 else 'everyone'}") # type: ignore
+        logging.info(f"{multiworld.player_name[player]} is casting some {world.game}{' black' if in_pre_fill else ''} magic with {', '.join([multiworld.player_name[p] for p in victims]) if len(world.options.victims.value) > 0 else f'{len(victims)} players'}") # type: ignore
         for item_data in item_table:
             if 'linklink' in item_data:
                 # logging.debug(repr(linklink))
@@ -292,10 +285,10 @@ def after_generate_basic(world: "ManualWorld", multiworld: MultiWorld, player: i
                         if filler_to_make_for_player.get(j, None) is None:
                             filler_to_make_for_player[j] = 0
 
-                        location = multiworld.get_location(f"{item_name} l$l {str(i).zfill(digit)} Player {str(n).zfill(players_digits)}", player)
+                        location_name = f"{item_name} {str(i).zfill(digit)} Player {str(n).zfill(players_digits)}"
+                        location = multiworld.get_location(location_name, player)
                         if location is None:
                             continue
-
                         if hasattr(jworld, "item_name_groups") and "$item_name_groups" not in linklink[game]:
                             for name in list(linklink[game]):
                                 if name in jworld.item_name_groups.keys():
@@ -627,8 +620,7 @@ def before_write_spoiler(world: World, multiworld: MultiWorld, spoiler_handle) -
     pass
 
 # This is called when you want to add information to the hint text
-def before_extend_hint_information(hint_data: dict[int, dict[int, str]], world: World, multiworld: MultiWorld, player: int) -> None:
-    import re
+def before_extend_hint_information(hint_data: dict[int, dict[int, str]], world: "ManualWorld", multiworld: MultiWorld, player: int) -> None:
     from itertools import groupby
     items = [loc.item for loc in multiworld.get_filled_locations() if loc.item is not None and loc.item.player == player]
     items.extend(multiworld.precollected_items.get(player, []))
@@ -642,19 +634,18 @@ def before_extend_hint_information(hint_data: dict[int, dict[int, str]], world: 
             groups[k] = list(g)
 
     if player not in hint_data:
-        hint_data.update({player: {}})
+        hint_data[player] = {}
 
     iterators: dict[str, dict[str,Iterator]] = {}
     next_item: dict[str, dict[str,Item|None]] = {}
     # hintsdone: dict[str, list[str]] = {}
     for location in multiworld.get_locations(player):
-        if not location.address:
+        if not location.address or location.item is None:
             continue
-        elif location.parent_region is not None and location.parent_region.name == 'Free Items':
+        elif world.location_name_to_location.get(location.name, {}).get("linklink", None) is None:
             continue
 
-        item_name, rest = location.name.split("l$l") # re.split(r'\d+', location.name)[0].strip()
-        item_name = item_name.strip()
+        item_name= cast(str, world.location_name_to_location[location.name]["linklink"])
         p_num = str(location.item.player)
         if p_num not in iterators.keys():
             iterators[p_num] = {}
@@ -673,9 +664,9 @@ def before_extend_hint_information(hint_data: dict[int, dict[int, str]], world: 
             if current_item.location is not None:
                 hint_data[player][location.address] = f"{str(current_item.location)}"
             else:
-                hint_data[player][location.address] = f"In {multiworld.player_name[player]}'s start inventory"
+                hint_data[player][location.address] = f"In {world.player_name}'s start inventory"
             pass
-        # hintsdone[p_num].append(f"{rest.strip()}: {hint_data[player][location.address]}")
+        # hintsdone[p_num].append(f"{item_name}: {hint_data[player][location.address]}")
         next_item[p_num][item_name] = next(iterators[p_num][item_name], None)
     pass
 
