@@ -1,8 +1,17 @@
-from typing import Any
+from typing import Any, cast
+from pydantic import BaseModel, ValidationError
+
+class Dict_item(BaseModel):
+    count: int = 0
+    extra: int = 0
+    name: str
+    category: list[str] = []
+    linklink: dict[str, list[str]] | None = None
+
 ITEM_TABLE = []
 MAX_PLAYERS = 40
 FREE_ITEMS = 12
-PKMN = False
+extra_item_files = ['items_pkmn.json', 'items_kh.json']
 FILLER_NAME = ""
 
 # called after the game.json file has been loaded
@@ -15,9 +24,30 @@ def after_load_game_file(game_table: dict) -> dict:
 # if you need access to the items after processing to add ids, etc., you should use the hooks in World.py
 def after_load_item_file(item_table: list) -> list:
     # Store a reference to this
-    if PKMN:
-        from ..Data import load_data_file
-        item_table.extend(load_data_file('items_pkmn.json'))
+
+    for i, extra_file in enumerate(extra_item_files):
+        from ..Data import convert_to_list
+        from ..Helpers import load_data_file
+
+        new_table = convert_to_list(load_data_file(extra_file), "data")
+        for item in list(new_table):
+            item_o = Dict_item.model_validate(item)
+            for existing_item in item_table:
+                ex_item_o = Dict_item.model_validate(existing_item)
+                if item_o.name.strip().lower() == ex_item_o.name.strip().lower():
+                    if item_o.linklink is None or ex_item_o.linklink is None:
+                        raise Exception(f"Cannot fuse not linklink item to linklink item with name {item_o.name}")
+                    ex_item_o.linklink.update(item_o.linklink)
+                    ex_item_o.category = list(set(item_o.category + ex_item_o.category))
+
+                    existing_item["category"] = ex_item_o.category
+                    existing_item["linklink"] = ex_item_o.linklink
+                    existing_item["count"] = max(item_o.count, ex_item_o.count)
+                    existing_item["extra"] = max(item_o.extra, ex_item_o.extra)
+                    new_table.remove(item)
+                    break
+        new_table[0]["id"] = (i + 1) * 1000  # Plenty of room for expansion
+        item_table.extend(new_table)
 
     for item in item_table:
         if 'count' not in item:

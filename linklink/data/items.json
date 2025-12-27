@@ -599,7 +599,7 @@
         },
         {
             "count": 1,
-            "name": "Cape",
+            "name": "Glide",
             "_comment": "Jump/glide",
             "category": ["linklink"],
             "progression": true,
