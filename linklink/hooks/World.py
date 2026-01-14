@@ -393,15 +393,18 @@ def after_generate_basic(world: "ManualWorld", multiworld: MultiWorld, player: i
                 if filler_to_make_for_player.values():
                     available_spots = spot_filled - highest_placed_count
                     extra_to_remove = min(available_spots, extras)
-                    item_count = min(highest_placed_count, max(filler_to_make_for_player.values())) + extra_to_remove
+                    item_count = highest_placed_count + extra_to_remove
                     extras -= extra_to_remove
 
                     queue: Iterator = iter([]) # for type checking reason
                     player_id = None
-                    for _ in range(item_count):
+                    for i in range(item_count):
                         if player_id is None:
                             queue = iter([player_id for player_id in filler_to_make_for_player.keys()])
-                            player_id = next(queue)
+                            player_id = next(queue, None)
+                            if player_id is None:
+                                filler_to_make -= item_count - i
+                                break
 
                         filler_to_make_for_player[player_id] -= 1
                         if filler_to_make_for_player[player_id] == 0:
