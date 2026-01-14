@@ -179,6 +179,7 @@ def set_rules(world: "ManualWorld", multiworld: MultiWorld, player: int):
 
             if require_type == 'category':
                 category_items = [item for item in world.item_name_to_item.values() if "category" in item and item_name in item["category"]]
+                category_items += [event for event in world.event_name_to_event.values() if "category" in event and item_name in event["category"]]
                 category_items_counts = sum([items_counts.get(category_item["name"], 0) for category_item in category_items])
                 if item_count.lower() == 'all':
                     item_count = category_items_counts
@@ -218,8 +219,8 @@ def set_rules(world: "ManualWorld", multiworld: MultiWorld, player: int):
             if total <= item_count:
                 requires_list = requires_list.replace(item_base, "0")
 
-        requires_list = re.sub(r'\s?\bAND\b\s?', '&', requires_list, 0, re.IGNORECASE)
-        requires_list = re.sub(r'\s?\bOR\b\s?', '|', requires_list, 0, re.IGNORECASE)
+        requires_list = re.sub(r'\s?\bAND\b\s?', '&', requires_list, count=0, flags=re.IGNORECASE)
+        requires_list = re.sub(r'\s?\bOR\b\s?', '|', requires_list, count=0, flags=re.IGNORECASE)
 
         requires_string = infix_to_postfix("".join(requires_list), area)
         return (evaluate_postfix(requires_string, area))
@@ -304,11 +305,15 @@ def set_rules(world: "ManualWorld", multiworld: MultiWorld, player: int):
                 add_rule(exit, lambda state, rule={"requires": exit_rules[e]}: fullLocationOrRegionCheck(state, rule))
 
     # Location access rules
-    for location in world.location_table:
-        if location["name"] not in used_location_names:
+    for location in (world.location_table + world.event_table):
+        if "location_name" in location:
+            name = location["location_name"]
+        elif location["name"] not in used_location_names:
             continue
+        else:
+            name = location["name"]
 
-        locFromWorld = multiworld.get_location(location["name"], player)
+        locFromWorld = multiworld.get_location(name, player)
 
         locationRegion = regionMap[location["region"]] if "region" in location else None
 
@@ -468,8 +473,13 @@ def OptAll(world: "ManualWorld", requires: str):
         requires_list = requires_list.replace("{" + function + "(temp)}", "{" + func_name + "(" + functions[func_name] + ")}")
     return requires_list
 
-# Rule to expose the can_reach_location core function
+# going to be deprecated to name consistently to other req functions, in pascal case
 def canReachLocation(state: CollectionState, player: int, location: str):
+    logging.warning("The 'canReachLocation' requirement function is being renamed to 'CanReachLocation'. Use that instead, as the lowercase version will be deprecated.")
+    return CanReachLocation(state, player, location)
+
+# Rule to expose the can_reach_location core function
+def CanReachLocation(state: CollectionState, player: int, location: str):
     """Can the player reach the given location?"""
     if state.can_reach_location(location, player):
         return True
