@@ -1,12 +1,21 @@
 from typing import Any, cast
-from pydantic import BaseModel, ValidationError
 
-class Dict_item(BaseModel):
+class Dict_item():
     count: int = 0
     extra: int = 0
     name: str
     category: list[str] = []
     linklink: dict[str, list[str]] | None = None
+
+    def __init__(self, json: dict[str, Any]):
+        self.count = json.get("count", 0)
+        self.extra = json.get("extra", 0)
+        name = json.get("name")
+        if name is None:
+            raise ValueError("LinkLink Item should have a 'name'")
+        self.name = name
+        self.category = json.get("category", [])
+        self.linklink = json.get("linklink")
 
 ITEM_TABLE = []
 MAX_PLAYERS = 40
@@ -31,9 +40,9 @@ def after_load_item_file(item_table: list) -> list:
 
         new_table = convert_to_list(load_data_file(extra_file), "data")
         for item in list(new_table):
-            item_o = Dict_item.model_validate(item)
+            item_o = Dict_item(item)
             for existing_item in item_table:
-                ex_item_o = Dict_item.model_validate(existing_item)
+                ex_item_o = Dict_item(existing_item)
                 if item_o.name.strip().lower() == ex_item_o.name.strip().lower():
                     if item_o.linklink is None or ex_item_o.linklink is None:
                         raise Exception(f"Cannot fuse not linklink item to linklink item with name {item_o.name}")
