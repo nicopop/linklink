@@ -21,12 +21,9 @@ ITEM_TABLE = []
 MAX_PLAYERS = 40
 FREE_ITEMS = 12
 extra_item_files = ['items_pkmn.json', 'items_kh.json']
-FILLER_NAME = ""
 
 # called after the game.json file has been loaded
 def after_load_game_file(game_table: dict) -> dict:
-    global FILLER_NAME
-    FILLER_NAME = game_table.get("filler_item_name", "Nothing")
     return game_table
 
 # called after the items.json file has been loaded, before any item loading or processing has occurred

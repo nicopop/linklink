@@ -6,11 +6,13 @@ import re
 
 from BaseClasses import MultiWorld, Item, ItemClassification
 from enum import IntEnum
-from typing import Optional, List, Union, get_args, get_origin, Any
+from typing import Optional, List, Union, get_args, get_origin, Any, TYPE_CHECKING
 from types import GenericAlias
 from worlds.AutoWorld import World
 from .hooks.Helpers import before_is_category_enabled, before_is_item_enabled, before_is_location_enabled, before_is_event_enabled
 
+if TYPE_CHECKING:
+    from . import ManualWorld
 
 # blatantly copied from the minecraft ap world because why not
 def load_data_file(*args) -> dict:
@@ -135,17 +137,17 @@ def get_items_for_player(multiworld: MultiWorld, player: int, includePrecollecte
         items.extend(multiworld.precollected_items.get(player, []))
     return items
 
-def reset_specific_item_value_cache_for_player(world: World, value: str, player: Optional[int] = None) -> dict[str, int]:
+def reset_specific_item_value_cache_for_player(world: "ManualWorld", value: str, player: Optional[int] = None) -> dict[str, int]:
     if player is None:
         player = world.player
     return world.item_values[player].pop(value, {})
 
-def reset_item_value_cache_for_player(world: World, player: Optional[int] = None):
+def reset_item_value_cache_for_player(world: "ManualWorld", player: Optional[int] = None):
     if player is None:
         player = world.player
     world.item_values[player] = {}
 
-def get_items_with_value(world: World, multiworld: MultiWorld, value: str, player: Optional[int] = None, skipCache: bool = False) -> dict[str, int]:
+def get_items_with_value(world: "ManualWorld", multiworld: MultiWorld, value: str, player: Optional[int] = None, skipCache: bool = False) -> dict[str, int]:
     """Return a dict of every items with a specific value type present in their respective 'value' dict\n
     Output in the format 'Item Name': 'value count'\n
     Keep a cache of the result, it can be skipped with 'skipCache == True'\n

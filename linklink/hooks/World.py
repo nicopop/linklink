@@ -1,22 +1,21 @@
-from ..Helpers import is_option_enabled, get_option_value, format_state_prog_items_key, ProgItemsCat, remove_specific_item
+from ..Helpers import is_option_enabled, get_option_value, format_state_prog_items_key, ProgItemsCat, remove_specific_item, get_items_for_player
 # Object classes from AP core, to represent an entire MultiWorld and this individual World that's part of it
-import logging
 from typing import TYPE_CHECKING, Iterator, cast, Any
 from worlds.AutoWorld import World
 from BaseClasses import MultiWorld, CollectionState, Item, ItemClassification, Location
-
+import logging
 # Object classes from Manual -- extending AP core -- representing items and locations that are used in generation
 from ..Items import ManualItem
 from ..Locations import ManualLocation
-from ..Helpers import get_items_for_player
+
+if TYPE_CHECKING:
+    from .. import ManualWorld
+
 # Raw JSON data from the Manual apworld, respectively:
 #          data/game.json, data/items.json, data/locations.json, data/regions.json
 #
 from ..Data import game_table, item_table, location_table, region_table
-from .Data import MAX_PLAYERS, FILLER_NAME
-
-# These helper methods allow you to determine if an option has been set, or what its value is, for any player in the multiworld
-from ..Helpers import is_option_enabled, get_option_value, format_state_prog_items_key, ProgItemsCat, remove_specific_item
+from .Data import MAX_PLAYERS
 
 # calling logging.info("message") anywhere below in this file will output the message to both console and log file
 import logging, time
@@ -36,14 +35,49 @@ if TYPE_CHECKING:
 ## The fill_slot_data method will be used to send data to the Manual client for later use, like deathlink.
 ########################################################################################
 
+# region Custom Client
+from worlds.LauncherComponents import Component, SuffixIdentifier, components, Type, launch, icon_paths
+from typing import Callable
+def launch_client(*args):
+    import CommonClient
+    from ..ManualClient import launch as Main
 
+    if CommonClient.gui_enabled:
+        launch(Main, name="Manual client", args=args)
+    else:
+        Main(*args)
 
+class VersionedComponent(Component):
+    def __init__(self, display_name: str, script_name: str|None = None, func: Callable|None = None, version: int = 0, file_identifier: Callable[[str], bool]|None = None, icon: str = ""):
+        super().__init__(display_name=display_name, script_name=script_name, func=func, component_type=Type.CLIENT, file_identifier=file_identifier, icon=icon)
+        self.version = version
+
+def add_client_to_launcher() -> None:
+    import Utils
+    version = 2026_04_13 # YYYYMMDD
+    found = False
+
+    if "manual" not in icon_paths:
+        icon_paths["manual"] = Utils.user_path('data', 'manual.png')
+
+    for c in components:
+        if c.display_name == "Manual Client Nico's Experiment":
+            found = True
+            if getattr(c, "version", 0) < version:
+                c.version = version # pyright: ignore[reportAttributeAccessIssue]
+                c.func = launch_client
+                c.icon = "manual"
+
+    if not found:
+        components.append(VersionedComponent("Manual Client Nico's Experiment", "ManualClient", func=launch_client, version=version, file_identifier=SuffixIdentifier('.apmanual'), icon="manual"))
+add_client_to_launcher()
+# endregion
 # Use this function to change the valid filler items to be created to replace item links or starting items.
 # Default value is the `filler_item_name` from game.json
-def hook_get_filler_item_name(world: World, multiworld: MultiWorld, player: int) -> str | bool:
+def hook_get_filler_item_name(world: "ManualWorld", multiworld: MultiWorld, player: int) -> str | bool:
     return False
 
-def before_generate_early(world: World, multiworld: MultiWorld, player: int) -> None:
+def before_generate_early(world: "ManualWorld", multiworld: MultiWorld, player: int) -> None:
     """
     This is the earliest hook called during generation, before anything else is done.
     Use it to check or modify incompatible options, or to set up variables for later use.
@@ -51,7 +85,7 @@ def before_generate_early(world: World, multiworld: MultiWorld, player: int) -> 
     pass
 
 # Called before regions and locations are created. Not clear why you'd want this, but it's here. Victory location is included, but Victory event is not placed yet.
-def before_create_regions(world: World, multiworld: MultiWorld, player: int):
+def before_create_regions(world: "ManualWorld", multiworld: MultiWorld, player: int):
     world.is_ut = hasattr(multiworld, "generation_is_fake")
     if world.is_ut and hasattr(multiworld, "re_gen_passthrough"):
         if world.game in multiworld.re_gen_passthrough:
@@ -65,7 +99,7 @@ def before_create_regions(world: World, multiworld: MultiWorld, player: int):
     pass
 
 # Called after regions and locations are created, in case you want to see or modify that information. Victory location is included.
-def after_create_regions(world: World, multiworld: MultiWorld, player: int):
+def after_create_regions(world: "ManualWorld", multiworld: MultiWorld, player: int):
     if world.is_ut_regen:
         filter = world.linklink_locations
         if not world.linklink_locations_filtered_by_removed:
@@ -87,7 +121,7 @@ def after_create_regions(world: World, multiworld: MultiWorld, player: int):
 # {"Item Name": {0b0110: 5}} <- If you know the special flag for the item classes, you can also define non-standard options. This setup
 #       will create 5 items that are the "useful trap" class
 # {"Item Name": {ItemClassification.useful: 5}} <- You can also use the classification directly
-def before_create_items_all(item_config: dict[str, int|dict], world: World, multiworld: MultiWorld, player: int) -> dict[str, int|dict]:
+def before_create_items_all(item_config: dict[str, int|dict], world: "ManualWorld", multiworld: MultiWorld, player: int) -> dict[str, int|dict]:
     if not world.is_ut:
         for item_data in item_table:
             item_data = cast(dict[str, Any], item_data)
@@ -129,18 +163,22 @@ def before_create_items_all(item_config: dict[str, int|dict], world: World, mult
                     item_config[item_name] = 0
     return item_config
 
+# The item pool before place_item(_category) are processed, in case you want to see the raw item pool at that stage
+def before_create_items_place_items(item_pool: list, world: "ManualWorld", multiworld: MultiWorld, player: int) -> list:
+    return item_pool
+
 # The item pool before starting items are processed, in case you want to see the raw item pool at that stage
-def before_create_items_starting(item_pool: list, world: World, multiworld: MultiWorld, player: int) -> list:
+def before_create_items_starting(item_pool: list, world: "ManualWorld", multiworld: MultiWorld, player: int) -> list:
     return item_pool
 
 # The item pool after starting items are processed but before filler is added, in case you want to see the raw item pool at that stage
-def before_create_items_filler(item_pool: list, world: World, multiworld: MultiWorld, player: int) -> list:
+def before_create_items_filler(item_pool: list, world: "ManualWorld", multiworld: MultiWorld, player: int) -> list:
     return item_pool
 
 
 # The complete item pool prior to being set for generation is provided here, in case you want to make changes to it
 def after_create_items(item_pool: list[Item], world: "ManualWorld", multiworld: MultiWorld, player: int) -> list:
-    unplaced_nothing = [i for i in item_pool if i.name == FILLER_NAME]
+    unplaced_nothing = [i for i in item_pool if i.name == world.filler_item_name]
     ll_locations = [l for l in world.get_locations() if world.location_name_to_location.get(l.name, {}).get("linklink", None) is not None]
 
     # Doing the placing on locked items here since its faster than Manual's place_item
@@ -161,7 +199,7 @@ def try_remove_specific_item(items: list[Item], item: Item):
         # since the original list copy of the item will not be modified at all
         items.remove(item)
 
-def replace_nothings(world: World, multiworld: MultiWorld, player: int, unplaced_nothing: int | None = None):
+def replace_nothings(world: "ManualWorld", multiworld: MultiWorld, player: int, unplaced_nothing: int | None = None):
     # Remove "Nothing" items and replace them with filler items from other players
     if unplaced_nothing is not None:
         item_count = unplaced_nothing
@@ -196,11 +234,11 @@ def replace_nothings(world: World, multiworld: MultiWorld, player: int, unplaced
     return replacements
 
 # Called before rules for accessing regions and locations are created. Not clear why you'd want this, but it's here.
-def before_set_rules(world: World, multiworld: MultiWorld, player: int):
+def before_set_rules(world: "ManualWorld", multiworld: MultiWorld, player: int):
     pass
 
 # Called after rules for accessing regions and locations are created, in case you want to see or modify that information.
-def after_set_rules(world: World, multiworld: MultiWorld, player: int):
+def after_set_rules(world: "ManualWorld", multiworld: MultiWorld, player: int):
     # Use this hook to modify the access rules for a given location
 
     def Example_Rule(state: CollectionState) -> bool:
@@ -220,19 +258,15 @@ def after_set_rules(world: World, multiworld: MultiWorld, player: int):
     # location.access_rule = lambda state: old_rule(state) or Example_Rule(state)
 
 # The item name to create is provided before the item is created, in case you want to make changes to it
-def before_create_item(item_name: str, world: World, multiworld: MultiWorld, player: int) -> str:
+def before_create_item(item_name: str, world: "ManualWorld", multiworld: MultiWorld, player: int) -> str:
     return item_name
 
 # The item that was created is provided after creation, in case you want to modify the item
-def after_create_item(item: ManualItem, world: World, multiworld: MultiWorld, player: int) -> ManualItem:
+def after_create_item(item: ManualItem, world: "ManualWorld", multiworld: MultiWorld, player: int) -> ManualItem:
     return item
 
 # This method is run towards the end of pre-generation, before the place_item options have been handled and before AP generation occurs
-def before_generate_basic(world: World, multiworld: MultiWorld, player: int):
-    pass
-
-# This method is run at the very end of pre-generation, once the place_item options have been handled and before AP generation occurs
-def after_generate_basic(world: "ManualWorld", multiworld: MultiWorld, player: int):
+def before_generate_basic(world: "ManualWorld", multiworld: MultiWorld, player: int):
     world.linklink_removed_location = []
     def remove_location(location: Location):
         if location.parent_region is not None:
@@ -532,7 +566,7 @@ def get_filler_item_name(self: World) -> str:
         else:
             return "Nothing"
 
-def try_create_filter(world: World) -> Item|None:
+def try_create_filter(world: "ManualWorld") -> Item|None:
     player = world.player
     player_name = world.multiworld.player_name[player]
     def recursion(tries: int = 0) -> Item|None:
@@ -565,7 +599,7 @@ def try_create_filter(world: World) -> Item|None:
 
     return recursion()
 
-def get_linklink_games(world: World) -> set[str]:
+def get_linklink_games(world: "ManualWorld") -> set[str]:
     if hasattr(world, "LINKLINK_games"):
         return world.LINKLINK_games
     games = set()
@@ -577,7 +611,7 @@ def get_linklink_games(world: World) -> set[str]:
     world.LINKLINK_games = games
     return games
 
-def get_victims(world: World, filter: bool = False) -> set[int]:
+def get_victims(world: "ManualWorld", filter: bool = False) -> set[int]:
     victims: set = world.options.victims.value # type: ignore
     multiworld = world.multiworld
 
@@ -597,7 +631,7 @@ def get_victims(world: World, filter: bool = False) -> set[int]:
 
 # This method is run every time an item is added to the state, can be used to modify the value of an item.
 # IMPORTANT! Any changes made in this hook must be cancelled/undone in after_remove_item
-def after_collect_item(world: World, state: CollectionState, Changed: bool, item: Item):
+def after_collect_item(world: "ManualWorld", state: CollectionState, Changed: bool, item: Item):
     # the following let you add to the Potato Item Value count
     # if item.name == "Cooked Potato":
     #     state.prog_items[item.player][format_state_prog_items_key(ProgItemsCat.VALUE, "Potato")] += 1
@@ -605,7 +639,7 @@ def after_collect_item(world: World, state: CollectionState, Changed: bool, item
 
 # This method is run every time an item is removed from the state, can be used to modify the value of an item.
 # IMPORTANT! Any changes made in this hook must be first done in after_collect_item
-def after_remove_item(world: World, state: CollectionState, Changed: bool, item: Item):
+def after_remove_item(world: "ManualWorld", state: CollectionState, Changed: bool, item: Item):
     # the following let you undo the addition to the Potato Item Value count
     # if item.name == "Cooked Potato":
     #     state.prog_items[item.player][format_state_prog_items_key(ProgItemsCat.VALUE, "Potato")] -= 1
@@ -625,11 +659,11 @@ def before_fill_slot_data(slot_data: dict, world: "ManualWorld", multiworld: Mul
     return slot_data
 
 # This is called after slot data is set and provides the slot data at the time, in case you want to check and modify it after Manual is done with it
-def after_fill_slot_data(slot_data: dict, world: World, multiworld: MultiWorld, player: int) -> dict:
+def after_fill_slot_data(slot_data: dict, world: "ManualWorld", multiworld: MultiWorld, player: int) -> dict:
     return slot_data
 
 # This is called right at the end, in case you want to write stuff to the spoiler log
-def before_write_spoiler(world: World, multiworld: MultiWorld, spoiler_handle) -> None:
+def before_write_spoiler(world: "ManualWorld", multiworld: MultiWorld, spoiler_handle) -> None:
     pass
 
 # This is called when you want to add information to the hint text
@@ -683,10 +717,10 @@ def before_extend_hint_information(hint_data: dict[int, dict[int, str]], world: 
         next_item[p_num][item_name] = next(iterators[p_num][item_name], None)
     pass
 
-def after_extend_hint_information(hint_data: dict[int, dict[int, str]], world: World, multiworld: MultiWorld, player: int) -> None:
+def after_extend_hint_information(hint_data: dict[int, dict[int, str]], world: "ManualWorld", multiworld: MultiWorld, player: int) -> None:
     pass
 
-def hook_interpret_slot_data(world: World, player: int, slot_data: dict[str, Any]) -> dict[str, Any]:
+def hook_interpret_slot_data(world: "ManualWorld", player: int, slot_data: dict[str, Any]) -> dict[str, Any]:
     """
         Called when Universal Tracker wants to perform a fake generation
         Use this if you want to use or modify the slot_data for passed into re_gen_passthrough
