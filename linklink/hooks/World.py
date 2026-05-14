@@ -1,6 +1,6 @@
 from ..Helpers import is_option_enabled, get_option_value, format_state_prog_items_key, ProgItemsCat, remove_specific_item, get_items_for_player
 # Object classes from AP core, to represent an entire MultiWorld and this individual World that's part of it
-from typing import TYPE_CHECKING, Iterator, cast, Any
+from typing import TYPE_CHECKING, Iterator, cast, Any, Counter
 from worlds.AutoWorld import World
 from BaseClasses import MultiWorld, CollectionState, Item, ItemClassification, Location
 from Options import OptionError
@@ -347,8 +347,87 @@ def linklink_magic(world: "ManualWorld", in_pre_fill = False):
     start_time = time.time()
     victims = get_victims(world, True)
 
+# region handle usable Items
+    from Options import LocalItems, PlandoItems, ItemLinks, StartInventoryPool
+    usable_items_for_player: dict[int, list[Item]] = {}
+    unplaced_nothing: list[Item] = []
+    for victim in victims:
+        usable_items_for_player[victim] = []
+
+    for i in multiworld.itempool:
+        if i.player == player and i.name == world.filler_item_name:
+            unplaced_nothing.append(i)
+        elif i.player in victims and i.location is None:
+            usable_items_for_player[i.player].append(i)
+
+    if not in_pre_fill:
+        for i_player, items in dict(usable_items_for_player).items():
+            _world = multiworld.worlds[i_player]
+            options = _world.options
+            count_to_remove: Counter[str] = Counter()
+            remove_all: set[str] = set()
+
+            local_items = cast(LocalItems, getattr(options, "local_items", LocalItems([])))
+            remove_all |= local_items.value
+
+            # region plando handlin
+            plando = cast(PlandoItems, getattr(options, "plando_items", PlandoItems([])))
+            for plando_item in plando.value:
+                if not plando_item.from_pool or not plando_item.percentage or plando_item.force != True:
+                    continue
+                if type(plando_item.count) is bool:
+                    plando_max = 99999999
+                elif isinstance(plando_item.count, dict):
+                    plando_max = plando_item.count.get("max", 99999999)
+                else:
+                    plando_max = plando_item.count
+                if isinstance(plando_item.items, list):
+                    for item_name in plando_item.items:
+                        if item_name in remove_all:
+                            continue
+                        if plando_max < 99999999:
+                            count_to_remove[item_name] += plando_max
+                        else:
+                            remove_all.add(item_name)
+                else:
+                    for item_name, count in plando_item.items.items():
+                        if item_name in remove_all:
+                            continue
+                        if type(count) is int:
+                            count_to_remove[item_name] += min(count, plando_max)
+                        elif type(count) is bool and count:
+                            if plando_max < 99999999:
+                                count_to_remove[item_name] += plando_max
+                            else:
+                                remove_all.add(item_name)
+
+            # endregion
+            # region item_links hand
+            # TODO item_links handling
+            item_link = cast(ItemLinks, getattr(options, "item_links", ItemLinks([])))
+            # endregion
+            start_inv_pool = cast(StartInventoryPool, getattr(options, "start_inventory_from_pool", StartInventoryPool({})))
+            count_to_remove += Counter(start_inv_pool.value)
+
+            # count_to_remove: Counter[str] = plando_items + Counter(start_inv_pool.value)
+            # remove_all = local_items.value.union(plando_all)
+            if count_to_remove or remove_all:
+                print(f"player {i_player} :D")
+                processed_items: Counter[str] = Counter()
+                for i in items:
+                    if i.name in remove_all:
+                        remove_specific_item(usable_items_for_player[i_player], i)
+                    elif i.name in count_to_remove.keys() and processed_items[i.name] < count_to_remove[i.name]:
+                        remove_specific_item(usable_items_for_player[i_player], i)
+                    else:
+                        continue
+                    processed_items[i.name] += 1
+                # pass
+        pass
+        # TODO deal with player options here somehow (item_links, potential special trigger/option to manually exclude item on the victim side)
+# endregion
     unplaced_items = [i for i in multiworld.itempool if i.location is None]
-    unplaced_nothing = [i for i in unplaced_items if i.name == world.filler_item_name and i.player == player]
+    # unplaced_nothing = [i for i in unplaced_items if i.name == world.filler_item_name and i.player == player]
 
     ll_create_filler: set[int] = set()
     ll_is_filler: set[int] = set()
