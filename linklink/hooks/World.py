@@ -155,6 +155,16 @@ def get_victims(world: "ManualWorld", filter: bool = False) -> set[int]:
     linklink_victims_ids = cast(set[int], world.linklink_victims_ids) # type: ignore
     linklink_active_victims_ids = cast(set[int], world.linklink_active_victims_ids) # type: ignore
     return linklink_active_victims_ids if filter else linklink_victims_ids
+
+def place_locked_item(location: Location, item: Item) -> Item | None:
+    old_item = None
+    if location.item:
+        old_item = location.item
+        old_item.location = None
+    location.item = item
+    item.location = location
+    location.locked = True
+    return old_item
 # endregion
 # Called before regions and locations are created. Not clear why you'd want this, but it's here. Victory location is included, but Victory event is not placed yet.
 def before_create_regions(world: "ManualWorld", multiworld: MultiWorld, player: int):
@@ -216,7 +226,7 @@ def before_create_items_all(item_config: dict[str, int|dict[Any, int]], world: "
                         extra_classification |= ItemClassification.useful
                     extra_classification &= ~ItemClassification.progression_deprioritized_skip_balancing
 
-                    item_config[item_data['name']].update({extra_classification: item_data['extra']}) # pyright: ignore[reportAttributeAccessIssue]
+                    item_config[item_data['name']].update({extra_classification: item_data['extra']}) # type: ignore
                 # item_config[name] = {classification: config_count}
     elif world.is_ut_regen:
         if hasattr(world, "linklink_item_config"):
@@ -254,8 +264,9 @@ def after_create_items(item_pool: list[Item], world: "ManualWorld", multiworld: 
             item = world.create_filler()
         location.place_locked_item(item)
 # region magic time
-    if player > max(get_victims(world, True)):
-        print("we could do the magic here maybe :D")
+    # ? maybe add support for executing linklink_magic here, that would be the most "correct" time to do it
+    #  if player > max(get_victims(world, True)):
+    #     print("we could do the magic here maybe :D")
 # endregion
     return item_pool
 
@@ -265,6 +276,7 @@ def try_remove_specific_item(items: list[Item], item: Item):
     except ValueError:
         # At this point if the modified item is not in the original list we can just remove a unmodified version instead
         # since the original list copy of the item will not be modified at all
+        logging.warning(f"linklink failed to cleanly remove item '{item.name}'")
         items.remove(item)
 
 def remove_location(world: "ManualWorld", location: Location):
@@ -344,33 +356,49 @@ def linklink_magic(world: "ManualWorld", in_pre_fill = False):
     player = world.player
     from operator import indexOf
     world.linklink_removed_location = [] # type: ignore
-    start_time = time.time()
+    start_time = time.perf_counter()
     victims = get_victims(world, True)
 
-# region handle usable Items
+    logging.info(f"{multiworld.player_name[player]} is casting some {world.game}{' black' if in_pre_fill else ''} magic with {', '.join([multiworld.player_name[p] for p in victims]) if len(world.options.victims.value) > 0 else f'{len(victims)} players'}") # type: ignore
+
+    # region handle Items
     from Options import LocalItems, PlandoItems, ItemLinks, StartInventoryPool
     usable_items_for_player: dict[int, list[Item]] = {}
     unplaced_nothing: list[Item] = []
     for victim in victims:
         usable_items_for_player[victim] = []
+    usable_items_for_player[player] = []
 
-    for i in multiworld.itempool:
-        if i.player == player and i.name == world.filler_item_name:
-            unplaced_nothing.append(i)
-        elif i.player in victims and i.location is None:
-            usable_items_for_player[i.player].append(i)
+    for item in multiworld.itempool:
+        if item.player == player:
+            if item.name == world.filler_item_name:
+                unplaced_nothing.append(item)
+            else:
+                usable_items_for_player[player].append(item)
+        elif item.player in victims and item.location is None:
+            usable_items_for_player[item.player].append(item)
 
-    if not in_pre_fill:
-        for i_player, items in dict(usable_items_for_player).items():
-            _world = multiworld.worlds[i_player]
-            options = _world.options
-            count_to_remove: Counter[str] = Counter()
-            remove_all: set[str] = set()
 
-            local_items = cast(LocalItems, getattr(options, "local_items", LocalItems([])))
-            remove_all |= local_items.value
+    for _player, items in usable_items_for_player.copy().items():
+        _world: World = multiworld.worlds[_player]
+        options = _world.options
+        count_to_remove: Counter[str] = Counter()
+        remove_all: set[str] = set()
 
-            # region plando handlin
+        # Remove local_items and item_links always, even in pre_fill
+        local_items = cast(LocalItems, getattr(options, "local_items", LocalItems([])))
+        remove_all |= local_items.value
+        # region hdl item_links
+        item_links = cast(ItemLinks, getattr(options, "item_links", ItemLinks([])))
+        for item_link in item_links.value:
+            _pool: set[str] = set(item_link.get("item_pool", []))
+            _local: set[str] = set(item_link.get("local_items", []))
+            remove_all |= _pool | _local
+        # endregion
+
+        if not in_pre_fill:
+            # in pre_fill plando and StartInventoryPool should already be processed by AP
+            # region hdl plando
             plando = cast(PlandoItems, getattr(options, "plando_items", PlandoItems([])))
             for plando_item in plando.value:
                 if not plando_item.from_pool or not plando_item.percentage or plando_item.force != True:
@@ -400,101 +428,94 @@ def linklink_magic(world: "ManualWorld", in_pre_fill = False):
                                 count_to_remove[item_name] += plando_max
                             else:
                                 remove_all.add(item_name)
-
-            # endregion
-            # region item_links hand
-            # TODO item_links handling
-            item_link = cast(ItemLinks, getattr(options, "item_links", ItemLinks([])))
             # endregion
             start_inv_pool = cast(StartInventoryPool, getattr(options, "start_inventory_from_pool", StartInventoryPool({})))
             count_to_remove += Counter(start_inv_pool.value)
+        # ? potentially check for special trigger to exclude items from linklink
 
-            # count_to_remove: Counter[str] = plando_items + Counter(start_inv_pool.value)
-            # remove_all = local_items.value.union(plando_all)
-            if count_to_remove or remove_all:
-                print(f"player {i_player} :D")
-                processed_items: Counter[str] = Counter()
-                for i in items:
-                    if i.name in remove_all:
-                        remove_specific_item(usable_items_for_player[i_player], i)
-                    elif i.name in count_to_remove.keys() and processed_items[i.name] < count_to_remove[i.name]:
-                        remove_specific_item(usable_items_for_player[i_player], i)
-                    else:
-                        continue
-                    processed_items[i.name] += 1
-                # pass
-        pass
-        # TODO deal with player options here somehow (item_links, potential special trigger/option to manually exclude item on the victim side)
-# endregion
-    unplaced_items = [i for i in multiworld.itempool if i.location is None]
-    # unplaced_nothing = [i for i in unplaced_items if i.name == world.filler_item_name and i.player == player]
+        if count_to_remove or remove_all:
+            processed_items: Counter[str] = Counter()
+            for item in items.copy():
+                if item.name in remove_all:
+                    remove_specific_item(usable_items_for_player[_player], item)
+                elif item.name in count_to_remove.keys() and processed_items[item.name] < count_to_remove[item.name]:
+                    remove_specific_item(usable_items_for_player[_player], item)
+                else:
+                    continue
+                processed_items[item.name] += 1
 
-    ll_create_filler: set[int] = set()
-    ll_is_filler: set[int] = set()
+        if not usable_items_for_player[_player]:
+            victims.remove(_player)
+
+    for game_name in world.linklink_active_games.copy():
+        players = set(multiworld.get_game_players(game_name))
+        if victims.isdisjoint(players):
+            world.linklink_active_games.remove(game_name)
+    # endregion
+
+    item_create_filler: set[int] = set()
+    # * a set of item mem Addresses (id(Item)) of items that create fillers when placed in a linklink spot
 
     filler_to_make: int = 0
     filler_made: int = 0
+    filler_items: list[Item] = []
     extras: int = 0
 
     players_digits = len(str(MAX_PLAYERS))
-    def place_locked_item(location: Location, item: Item):
-        if location.item:
-            old_item = location.item
-            old_item.location = None
-            multiworld.itempool.append(old_item)
-            unplaced_items.append(old_item)
-            unplaced_nothing.append(old_item)
-        location.item = item
-        item.location = location
-        location.locked = True
-
-    logging.info(f"{multiworld.player_name[player]} is casting some {world.game}{' black' if in_pre_fill else ''} magic with {', '.join([multiworld.player_name[p] for p in victims]) if len(world.options.victims.value) > 0 else f'{len(victims)} players'}") # type: ignore
+    linklink_items = usable_items_for_player[player]
+    # ? maybe rewrite to loop thru existing items/location groups instead
     for item_data in item_table:
-        if 'linklink' in item_data:
-            # logging.debug(repr(linklink))
+        if item_data.get('linklink'):
             linklink: dict[str, list[str]] = item_data['linklink']
             item_count: int = item_data['count']
             extras += item_data['extra']
-            item_name: str = item_data['name']
-            filler_to_make_for_player: dict[int, int] = {}
+            item_name = cast(str, item_data['name'])
+            filler_to_make_for_player: Counter[int] = Counter()
             item_cache: dict[int, list[Item]] = {}
             digit = len(str(item_count + 1))
             highest_placed_count = 0
             spot_filled = 0
+
+            # region Item_groups
+            if not item_data.get("linklink_item_name_groups_done"):
+                for game_name, ll_data in linklink.items():
+                    if game_name not in world.linklink_active_games:
+                        continue
+                    _world = next(iter(multiworld.worlds[w] for w in victims if multiworld.worlds[w].game == game_name))
+                    item_name_groups: dict[str, set[str]] = getattr(_world, "item_name_groups", dict[str, set[str]]())
+                    if item_name_groups:
+                        for name in ll_data:
+                            if name in item_name_groups.keys():
+                                index = ll_data.index(name)
+                                ll_data.remove(name)
+                                for ll_element in reversed([lli for lli in _world.item_name_groups[name]]):
+                                    ll_data.insert(index, ll_element)
+                    pass
+                item_data["linklink_item_name_groups_done"] = True
+            # endregion
+
             for i in range(1, item_count + 1):
                 any_placed = False
                 n = 1
-                for j in range(1, multiworld.players + 1):
-                    if j == player or j not in victims:
-                        continue
-                    jworld: World = multiworld.worlds[j]
-                    game = jworld.game
-                    if game not in linklink:
-                        #logging.debug(f"Game {game} not in linklink for {item_name}")
-                        continue
+                for victim_id in victims: # victim_id was j
+                    victim_items: list[Item] = usable_items_for_player[victim_id]
+                    victim_world: World = multiworld.worlds[victim_id]
+                    game = victim_world.game
 
-                    if filler_to_make_for_player.get(j, None) is None:
-                        filler_to_make_for_player[j] = 0
+                    if game not in linklink:
+                        continue
 
                     location_name = f"{item_name} {str(i).zfill(digit)} Player {str(n).zfill(players_digits)}"
                     location = multiworld.get_location(location_name, player)
-                    if location is None:
-                        continue
-                    if hasattr(jworld, "item_name_groups") and "$item_name_groups" not in linklink[game]:
-                        for name in list(linklink[game]):
-                            if name in jworld.item_name_groups.keys():
-                                index = linklink[game].index(name)
-                                linklink[game].remove(name)
-                                for ll_element in reversed([lli for lli in jworld.item_name_groups[name]]):
-                                    linklink[game].insert(index, ll_element)
-                        linklink[game].append("$item_name_groups")
 
-                    if item_cache.get(j, None) is None:
+                    # region Item Cache
+                    if item_cache.get(victim_id, None) is None:
                         shuffle = "$Shuffle" in linklink[game]
-                        # TODO replace this list comprehension with some methode that filter items if they should be excluded (local, plando, potential special trigger/option to manually exclude item on the victim side)
-                        items = [item for item in unplaced_items if item.name in linklink[game] and item.player == j and item.name not in jworld.options.local_items.value]
+                        items = [item for item in victim_items if item.name in linklink[game]]
+
                         for item in items:
-                            ll_create_filler.add(id(item))
+                            item_create_filler.add(id(item))
+
                         items.sort(key=lambda x: linklink[game].index(x.name))
                         items_name = [item.name for item in items]
 
@@ -507,31 +528,29 @@ def linklink_magic(world: "ManualWorld", in_pre_fill = False):
                                 buffer_index = len(items) - indexOf(reversed(items_name), ll_item_name) - 1
                             # elif ll_item_name == "$Shuffle":
                             #     if last_index != -1:
-                            #         # TODO shuffle everything BEFORE the shuffle instead of just if shuffle is present
+                            #         # ? maybe shuffle everything BEFORE the shuffle instead of just if shuffle is present
                             #         pass
                             elif ll_item_name.startswith("$Buffer_"):
                                 buffer_to_make = min(int(ll_item_name.removeprefix("$Buffer_")), max(0, item_count - len(items)))
                                 if buffer_to_make:
-                                    if try_create_filter(jworld) is not None: # If current jworld can create filler use those
-                                        failed = False
-                                        buffers: list[Item] = []
-                                        buffer_count = buffer_to_make
-                                        while buffer_count > 0 and not failed:
-                                            filler = try_create_filter(jworld)
-                                            if filler is not None:
-                                                buffers.append(filler)
-                                                buffer_count -= 1
-                                            else:
-                                                failed = True
-                                        if failed:
-                                            buffers.extend(replace_nothings(world, multiworld, player, buffer_count))
-                                    else: # if not go ahead and use the default any victims randomly picked fillers
-                                        buffers = replace_nothings(world, multiworld, player, buffer_to_make)
+                                    failed = False
+                                    buffers: list[Item] = []
+                                    while buffer_to_make > 0 and not failed:
+                                        filler = try_create_filter(victim_world)
+                                        if filler is not None:
+                                            buffers.append(filler)
+                                            buffer_to_make -= 1
+                                        else:
+                                            failed = True
+                                    if failed:
+                                        buffers.extend(replace_nothings(world, multiworld, player, buffer_to_make))
+
                                     for item in buffers:
-                                        if id(item) in ll_create_filler:
-                                            ll_create_filler.discard(id(item))
+                                        if id(item) in item_create_filler:
+                                            item_create_filler.discard(id(item))
+
                                     multiworld.itempool.extend(buffers)
-                                    unplaced_items.extend(buffers)
+                                    victim_items.extend(buffers)
                                     for buffer_item in buffers:
                                         items.insert(buffer_index + 1, buffer_item)
 
@@ -540,20 +559,25 @@ def linklink_magic(world: "ManualWorld", in_pre_fill = False):
 
                             last_index += 1
 
-                        if shuffle and len(items) > 1: jworld.random.shuffle(items)
-                        item_cache[j] = items
+                        if shuffle and len(items) > 1: victim_world.random.shuffle(items)
+                        item_cache[victim_id] = items
                         if i == 1 and len(items) == 0:
-                            logging.debug(f"linklink: No options for {item_name} {str(i).zfill(digit)} for {multiworld.player_name[j]} ({game})")
+                            logging.debug(f"linklink: No options for {item_name} {str(i).zfill(digit)} for {multiworld.player_name[victim_id]} ({game})")
                             continue
+                    # endregion
 
-                    item: Item|None = next(iter(item_cache[j]), None)
-                    if item is not None:
-                        item_cache[j].remove(item)
-                        place_locked_item(location, item)
-                        unplaced_items.remove(item)
+                    nullable_item: Item|None = next(iter(item_cache[victim_id]), None)
+                    if nullable_item is not None:
+                        item = nullable_item # to make mypy happy
+                        item_cache[victim_id].remove(item)
+                        old_item = place_locked_item(location, item)
+                        if old_item is not None:
+                            multiworld.itempool.append(old_item)
+                            unplaced_nothing.append(old_item)
+                        victim_items.remove(item)
                         try_remove_specific_item(multiworld.itempool, item)
-                        if id(item) in ll_create_filler:
-                            filler_to_make_for_player[j] += 1
+                        if id(item) in item_create_filler:
+                            filler_to_make_for_player[victim_id] += 1
                         else:
                             try_remove_specific_item(multiworld.itempool, unplaced_nothing.pop())
                         n += 1
@@ -562,25 +586,28 @@ def linklink_magic(world: "ManualWorld", in_pre_fill = False):
                         highest_placed_count = max(highest_placed_count, i)
 
                 if not any_placed:
-                    item = next((item for item in unplaced_items if item.name == item_name and item.player == player and item.advancement), None)
-                    if item is None:
+                    # TODO replace from this line + 20ish with a highest_placed_count vs current count so extra items can be prog
+                    nullable_item = next((item for item in linklink_items if item.name == item_name and item.advancement), None)
+                    if nullable_item is None:
                         break
                         # We are out of items to remove anyway
+                    item = nullable_item
                     logging.debug(f'Removing surplus {item.name}')
                     try_remove_specific_item(multiworld.itempool, item)
-                    unplaced_items.remove(item)
+                    linklink_items.remove(item)
             if highest_placed_count == 0:
                 if item_data.get('extra'):
                     for _ in range(item_data['extra']):
-                        item = next((item for item in unplaced_items if item.name == item_name and item.player == player), None)
-                        if item is None:
+                        nullable_item = next((item for item in linklink_items if item.name == item_name), None)
+                        if nullable_item is None:
                             break
                             # We are out of items to remove anyway
+                        item = nullable_item
                         extras -= 1
                         logging.debug(f'Removing surplus {item.name}')
                         try_remove_specific_item(multiworld.itempool, item)
-                        unplaced_items.remove(item)
-            filler_to_make_for_player = {player_id: count for player_id, count in filler_to_make_for_player.items() if count > 0}
+                        linklink_items.remove(item)
+            filler_to_make_for_player = +filler_to_make_for_player
             if filler_to_make_for_player.values():
                 available_spots = spot_filled - highest_placed_count
                 extra_to_remove = min(available_spots, extras)
@@ -602,18 +629,15 @@ def linklink_magic(world: "ManualWorld", in_pre_fill = False):
                         filler_to_make_for_player.pop(player_id)
                     player_id = next(queue, None)
 
-                for player_id, count in {p: c for p, c in filler_to_make_for_player.items() if c > 0}.items():
-                    skip = False
+                filler_to_make_for_player = +filler_to_make_for_player
+                for player_id, count in filler_to_make_for_player.copy().items():
                     for _ in range(count):
-                        if skip:
-                            continue
-                        jworld = multiworld.worlds[player_id]
-                        filler = try_create_filter(jworld)
+                        player_world: World = multiworld.worlds[player_id]
+                        filler = try_create_filter(player_world)
                         if filler is not None:
-                            ll_is_filler.add(id(filler))
                             filler_made += 1
                             multiworld.itempool.append(filler)
-                            unplaced_items.append(filler)
+                            filler_items.append(filler)
                             if unplaced_nothing is not None and len(unplaced_nothing) > 0:
                                 try_remove_specific_item(multiworld.itempool, unplaced_nothing.pop())
                             filler_to_make_for_player[player_id] -= 1
@@ -621,8 +645,8 @@ def linklink_magic(world: "ManualWorld", in_pre_fill = False):
                                 filler_to_make_for_player.pop(player_id)
                         else:
                             # if creating filler fail skip the rest of this players attempt
-                            skip = True
-                filler_to_make += sum(filler_to_make_for_player.values())
+                            break
+                filler_to_make += filler_to_make_for_player.total()
 
             for location in [l for l in multiworld.get_filled_locations(player) if l.name.startswith(f"{item_name} ")]:
                 if location.item is not None and location.item.name == world.filler_item_name:
@@ -630,7 +654,6 @@ def linklink_magic(world: "ManualWorld", in_pre_fill = False):
 
     if extras > 0:
         logging.info(f"Failed to fit {extras} extra keys in the item pool, randomly picked items from the generated fillers will be removed to avoid creating too many items")
-        filler_items = [i for i in unplaced_items if id(i) in ll_is_filler]
         for _ in range(extras):
             if filler_to_make > 0:
                 filler_to_make -= 1
@@ -638,7 +661,6 @@ def linklink_magic(world: "ManualWorld", in_pre_fill = False):
             elif filler_items:
                 sacrifice = world.random.choice(filler_items)
                 try_remove_specific_item(multiworld.itempool, sacrifice)
-                unplaced_items.remove(sacrifice)
                 filler_items.remove(sacrifice)
                 extras -= 1
             else:
@@ -670,10 +692,8 @@ def linklink_magic(world: "ManualWorld", in_pre_fill = False):
             else:
                 failed_to_remove += 1
     elif nothing_to_make > 0:
-        for _ in range(nothing_to_make):
-            filler = world.create_filler()
-            unplaced_nothing.append(filler)
-            multiworld.itempool.append(filler)
+        replacements = replace_nothings(world, multiworld, player, nothing_to_make)
+        multiworld.itempool.extend(replacements)
     if failed_to_remove:
         logging.warning(f"{multiworld.player_name[player]} failed to remove {failed_to_remove} items you will see in the logs that there are more items than locations")
     if unplaced_nothing:
@@ -681,7 +701,6 @@ def linklink_magic(world: "ManualWorld", in_pre_fill = False):
         for nothing in unplaced_nothing:
             multiworld.itempool.remove(nothing)
         multiworld.itempool.extend(replacements)
-    elapsed_time = time.time() - start_time
 
     # Update item counts for potential rules usage
     # Filter Precollected items for those not in logic aka created by start_inventory(_from_pool)
@@ -689,6 +708,7 @@ def linklink_magic(world: "ManualWorld", in_pre_fill = False):
     real_pool = pool + precollected_items
     world.item_counts[player] = world.get_item_counts(pool=real_pool)
     world.item_counts_progression[player] = world.get_item_counts(pool=real_pool, only_progression=True)
+    elapsed_time = time.perf_counter() - start_time
     logging.info(f"{multiworld.player_name[player]} took {elapsed_time:.4f} seconds to do the linklink magic")
 
 
