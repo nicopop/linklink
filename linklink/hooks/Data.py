@@ -84,7 +84,8 @@ def after_load_location_file(location_table: list) -> list:
                         "region": f"{item['name']} {str(i).zfill(digit)}",
                         "category": [item['name']],
                         "requires": "",
-                        "linklink": item['name']
+                        "linklink": item['name'],
+                        "linklink_player": j
                     })
     digit = len(str(FREE_ITEMS + 1))
     for i in range(1, FREE_ITEMS + 1):
