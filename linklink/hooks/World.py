@@ -94,6 +94,7 @@ def before_generate_early(world: "ManualWorld", multiworld: MultiWorld, player: 
             world.linklink_locations_filtered_by_removed = slot_data["filtered_removed"] # type: ignore
             world.linklink_item_config = slot_data["key_counts"] # type: ignore
             world.linklink_active_victims_ids = slot_data["active_victims"] # type: ignore
+            world.linklink_active_games = slot_data["active_games"] # type: ignore
     else:
         world.is_ut_regen = False # type: ignore
 # endregion
@@ -104,8 +105,10 @@ def before_generate_early(world: "ManualWorld", multiworld: MultiWorld, player: 
     filtered_victims_ids: set[int]
     active_games: set[str] = set()
     if world.is_ut:
-        victims_ids = cast(set[int], world.linklink_active_victims_ids)
-        filtered_victims_ids = victims_ids
+        if world.is_ut_regen:
+            victims_ids = cast(set[int], world.linklink_active_victims_ids)
+            active_games = cast(set[str], world.linklink_active_games)
+            filtered_victims_ids = victims_ids
     else:
         if len(victims) == 0:
             victims_ids = set(range(1, multiworld.players + 1))
@@ -800,6 +803,8 @@ def before_fill_slot_data(slot_data: dict, world: "ManualWorld", multiworld: Mul
     slot_data["linklink"] = {}
     slot_data["linklink"]["key_counts"] = world.item_counts_progression[player]
     slot_data["linklink"]["active_victims"] = world.linklink_active_victims_ids
+    slot_data["linklink"]["active_games"] = world.linklink_active_games
+
 
     locations_ids = [l.address for l in world.get_locations() if l.address is not None]
     removed_smaller = len(world.linklink_removed_location) < len(locations_ids)
