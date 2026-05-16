@@ -5,7 +5,7 @@
             "name":"Victory Road",
             "region": "Free Items",
             "victory": true,
-            "category": [],
-            "requires": "|@linklink:25%|"
+            "category": ["Goal"],
+            "requires": "{OptionCountPercent(ll_collected, keys_required)}"
         }
 ]}

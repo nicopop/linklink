@@ -41,11 +41,23 @@ class MagicInPreFill(DefaultOnToggle):
     """
     display_name = "Magic done in pre_fill"
 
+class VictoryPercent(NamedRange):
+    """What percentage of keys do you need to get before you can 'goal'
+    For the total you can check your ll_collected count in the Goal category
+    """
+    display_name = "Percentage of keys required"
+    range_start = 0
+    range_end = 100
+    default = 25
+    special_range_names: dict[str, int] = {
+        "default": 25,
+    }
 
 # This is called before any manual options are defined, in case you want to define your own with a clean slate or let Manual define over them
 def before_options_defined(options: dict[str, Type[Option[Any]]]) -> dict[str, Type[Option[Any]]]:
     options["magic_in_pre_fill"] = MagicInPreFill
     options["victims"] = Victims
+    options["keys_required"] = VictoryPercent
     return options
 
 # This is called after any manual options are defined, in case you want to see what options are defined or want to modify the defined options

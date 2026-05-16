@@ -85,6 +85,7 @@ def after_load_location_file(location_table: list) -> list:
                         "category": [item['name']],
                         "requires": "",
                         "linklink": item['name'],
+                        "scoutable": True,
                         "linklink_player": j
                     })
     digit = len(str(FREE_ITEMS + 1))
@@ -100,6 +101,20 @@ def after_load_location_file(location_table: list) -> list:
 # called after the events.json file has been loaded, before any processing has occurred
 # If you need access to the events after processing, you should use the hooks in World.py
 def after_load_event_file(event_table: list) -> list:
+    for item in ITEM_TABLE:
+        if 'linklink' in item:
+            item_o = Dict_item(item)
+            digit = len(str(item_o.count + 1))
+            players_digits = len(str(MAX_PLAYERS))
+            for i in range(1, item_o.count + 1):
+                name = f"{item_o.name} {str(i).zfill(digit)}"
+                event_table.append({
+                    "name": "ll_collected",
+                    "category": ["Goal"],
+                    "location_name": name + " Event",
+                    "copy_location": name + f" Player {str(1).zfill(players_digits)}",
+                    "visible": True,
+                })
     return event_table
 
 # called after the regions.json file has been loaded, before any location loading or processing has occurred

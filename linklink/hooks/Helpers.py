@@ -44,4 +44,8 @@ def get_active_linklink_games(world: "ManualWorld") -> set[str]:
 # Use this if you want to override the default behavior of is_option_enabled
 # Return True to enable the event, False to disable it, or None to use the default behavior
 def before_is_event_enabled(multiworld: MultiWorld, player: int, event:  dict[str, Any]) -> Optional[bool]:
+    world: "ManualWorld" = multiworld.worlds[player] # type: ignore
+    if (location_name := event.get("copy_location", None)) is not None:
+        location = world.location_name_to_location[location_name]
+        return before_is_location_enabled(multiworld, player, location)
     return None
