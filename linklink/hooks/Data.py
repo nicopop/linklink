@@ -122,14 +122,19 @@ def after_load_event_file(event_table: list) -> list:
 def after_load_region_file(region_table: dict) -> dict:
     for item in ITEM_TABLE:
         if 'linklink' in item:
-            digit = len(str(item['count'] + 1))
-            for i in range(1, item['count'] + 1):
+            count = item['count'] + 1
+            digit = len(str(count))
+            for i in range(1, count):
                 name = f"{item['name']} {str(i).zfill(digit)}"
                 if name not in region_table:
-                    region_table[name] = {
+                    region: dict[str, str|list|bool] = {
                         "name": name,
                         "requires": f"|{item['name']}:{i}|",
                     }
+                    region["starting"] = True if i == 1 else False
+                    region["connects_to"] = [f"{item['name']} {str(i + 1).zfill(digit)}"] if i < count - 1 else []
+
+                    region_table[name] = region
     return region_table
 
 # called after the categories.json file has been loaded
