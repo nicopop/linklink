@@ -614,22 +614,21 @@ def linklink_magic(world: "ManualWorld", in_pre_fill = False):
                 item_count = highest_placed_count + extra_to_remove
                 extras -= extra_to_remove
 
-                queue: Iterator = iter([]) # for type checking reason
-                player_id = None
-                for i in range(item_count):
-                    if player_id is None:
-                        queue = iter([player_id for player_id in filler_to_make_for_player.keys()])
-                        player_id = next(queue, None)
-                        if player_id is None:
-                            filler_to_make -= item_count - i
-                            break
-
-                    filler_to_make_for_player[player_id] -= 1
-                    if filler_to_make_for_player[player_id] == 0:
-                        filler_to_make_for_player.pop(player_id)
-                    player_id = next(queue, None)
-
+                # if we have keys and extras keys (but less than total available spots) remove them randomly from the amount of filler we have to make later
                 filler_to_make_for_player = +filler_to_make_for_player
+                players_ids: list[int] = list(filler_to_make_for_player.keys())
+                for i in range(item_count):
+                    if not players_ids:
+                        filler_to_make -= (item_count - i)
+                        break
+                    player_id: int = world.random.choice(players_ids)
+                    filler_to_make_for_player[player_id] -= 1
+                    if not filler_to_make_for_player[player_id]:
+                        players_ids.remove(player_id)
+
+                # Generate filler for every player that needs it
+                filler_to_make_for_player = +filler_to_make_for_player
+                # ? maybe add option to skip this block and make filler all random
                 for player_id, count in filler_to_make_for_player.copy().items():
                     for _ in range(count):
                         player_world: World = multiworld.worlds[player_id]
@@ -671,7 +670,7 @@ def linklink_magic(world: "ManualWorld", in_pre_fill = False):
 
 
     if extras > 0:
-        logging.info(f"Failed to fit {extras} extra keys in the item pool, randomly picked items from the generated fillers will be removed to avoid creating too many items")
+        logging.debug(f"Failed to fit {extras} extra keys in the item pool, randomly picked items from the generated fillers will be removed to avoid creating too many items")
         for _ in range(extras):
             if filler_to_make > 0:
                 filler_to_make -= 1
@@ -684,7 +683,7 @@ def linklink_magic(world: "ManualWorld", in_pre_fill = False):
             else:
                 break
         if extras > 0:
-            logging.warning(f"Failed to remove {extras} extra keys, you might see a message later talking about too many items.")
+            logging.debug(f"Failed to remove {extras} extra keys, you might see a message later talking about too many items.")
 
     precollected_items = list(multiworld.precollected_items.get(player, []))
 
@@ -715,6 +714,7 @@ def linklink_magic(world: "ManualWorld", in_pre_fill = False):
 
     if failed_to_remove:
         logging.warning(f"{multiworld.player_name[player]} failed to remove {failed_to_remove} items you will see in the logs that there are more items than locations")
+    # ? maybe add emergency extra removal here or something
     if unplaced_nothing:
         replacements = replace_nothings(world, multiworld, player, len(unplaced_nothing))
         for nothing in unplaced_nothing:
