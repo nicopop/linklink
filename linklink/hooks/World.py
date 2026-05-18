@@ -181,13 +181,22 @@ def before_create_regions(world: "ManualWorld", multiworld: MultiWorld, player: 
 # Called after regions and locations are created, in case you want to see or modify that information. Victory location is included.
 def after_create_regions(world: "ManualWorld", multiworld: MultiWorld, player: int):
     if world.is_ut_regen:
+        # ? maybe move this to helper hooks
         filter = world.linklink_locations
-        if not world.linklink_locations_filtered_by_removed:
-            # if the filter contains all the existing location
-            locations_to_remove = [l for l in multiworld.get_locations(player) if l.address is not None and l.address not in filter]
-        else:
-            # if the filter contains all the removed location
-            locations_to_remove = [l for l in multiworld.get_locations(player) if l.address is not None and l.address in filter]
+        players_digits = len(str(MAX_PLAYERS))
+        events_name_to_remove: set[str] = set()
+        locations_to_remove: list[Location] = []
+        # world.linklink_locations_filtered_by_removed = if the filter contains all the removed location (true) vs contains all the enabled location (false)
+        for location in multiworld.get_locations(player):
+            if location.address is not None and (location.address in filter and world.linklink_locations_filtered_by_removed):
+                player1 = f" Player {str(1).zfill(players_digits)}"
+                if location.name.endswith(player1):
+                    event_name = location.name.removesuffix(player1)
+                    events_name_to_remove.add(event_name + " Event")
+                locations_to_remove.append(location)
+            elif location.address is None and location.name in events_name_to_remove:
+                locations_to_remove.append(location)
+
         for location in locations_to_remove:
             if location.parent_region is not None:
                 location.parent_region.locations.remove(location)
