@@ -30,7 +30,7 @@ def before_is_location_enabled(multiworld: MultiWorld, player: int, location:  d
         item = world.item_name_to_item[item_name]
         if not "linklink_status" in item.keys():
             item["linklink_status"] = {}
-        if not player in item["linklink_status"].keys():
+        if player not in item["linklink_status"].keys():
             item["linklink_status"][player] = not get_active_linklink_games(world).isdisjoint(set(item["linklink"].keys()))
         if not item["linklink_status"][player]:
             world.linklink_helpers_disabled_location += 1 # type: ignore

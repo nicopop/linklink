@@ -141,7 +141,7 @@ def before_generate_early(world: "ManualWorld", multiworld: MultiWorld, player: 
     world.linklink_active_games = active_games # type: ignore
 # endregion
     world.linklink_helpers_disabled_location = 0  # type: ignore
-    def create_filler() -> "Item":
+    def create_filler() -> Item:
         filler = replace_nothings(world, multiworld, player, 1)[0]
         logging.debug(f"create_filler() was called and it made an item for player {filler.player}")
         return filler
