@@ -392,20 +392,26 @@ def linklink_magic(world: "ManualWorld", in_pre_fill = False):
             for plando_item in plando.value:
                 if not plando_item.from_pool or not plando_item.percentage or plando_item.force != True:
                     continue
-                if type(plando_item.count) is bool:
-                    plando_max = 99999999
-                elif isinstance(plando_item.count, dict):
-                    plando_max = plando_item.count.get("max", 99999999)
+                plando_max: int | bool
+                if isinstance(plando_item.count, dict):
+                    plando_max = plando_item.count.get("max", False)
                 else:
                     plando_max = plando_item.count
+                if type(plando_max) is bool:
+                    plando_max = 99999999
+
+                # sadly locations groups are not converted to "real" locations for plando like items groups so we cant know how many there are
+                if plando_item.locations and set(plando_item.locations).isdisjoint(set(["early_locations", "non_early_locations", "Everywhere"])):
+                    plando_max = min(plando_max, len(plando_item.locations))
+
                 if isinstance(plando_item.items, list):
                     for item_name in plando_item.items:
                         if item_name in remove_all:
                             continue
-                        if plando_max < 99999999:
-                            count_to_remove[item_name] += plando_max
-                        else:
+                        if plando_max == 99999999:
                             remove_all.add(item_name)
+                        else:
+                            count_to_remove[item_name] += plando_max
                 else:
                     for item_name, count in plando_item.items.items():
                         if item_name in remove_all:
@@ -413,10 +419,10 @@ def linklink_magic(world: "ManualWorld", in_pre_fill = False):
                         if type(count) is int:
                             count_to_remove[item_name] += min(count, plando_max)
                         elif type(count) is bool and count:
-                            if plando_max < 99999999:
-                                count_to_remove[item_name] += plando_max
-                            else:
+                            if plando_max == 99999999:
                                 remove_all.add(item_name)
+                            else:
+                                count_to_remove[item_name] += plando_max
             # endregion
             start_inv_pool = cast(StartInventoryPool, getattr(options, "start_inventory_from_pool", StartInventoryPool({})))
             count_to_remove += Counter(start_inv_pool.value)
