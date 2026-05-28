@@ -587,11 +587,10 @@ def linklink_magic(world: "ManualWorld", in_pre_fill = False):
 
         # region extra keys rem
         extras += item_extras
-        from math import ceil
         ll_keys = [item for item in linklink_items if item.name == item_name]
         if ll_keys: # to protect from divided by 0
             extra_percent = (highest_placed_count / item_count)
-            extra_to_keep = ceil(item_extras * extra_percent)
+            extra_to_keep = int(item_extras * extra_percent)
             to_keep = highest_placed_count + (extra_to_keep)
             copies_to_remove = item_count + item_extras - to_keep
             if copies_to_remove:
