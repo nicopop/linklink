@@ -28,8 +28,14 @@ def after_load_game_file(game_table: dict) -> dict:
 
 # called after the items.json file has been loaded, before any item loading or processing has occurred
 # if you need access to the items after processing to add ids, etc., you should use the hooks in World.py
-def after_load_item_file(item_table: list) -> list:
-    # Store a reference to this
+def after_load_item_file(item_table: list[dict[str, Any]]) -> list:
+    # add the linklink category to all the existing items of the main items.json file
+    for item in item_table:
+        if item.get('linklink'):
+            if 'category' not in item:
+                item["category"] = ['linklink main']
+            elif 'linklink main' not in item['category']:
+                item["category"].append('linklink main')
 
     for i, extra_file in enumerate(extra_item_files):
         from ..Data import convert_to_list
@@ -44,7 +50,8 @@ def after_load_item_file(item_table: list) -> list:
                     if item_o.linklink is None or ex_item_o.linklink is None:
                         raise Exception(f"Cannot fuse not linklink item to linklink item with name {item_o.name}")
                     ex_item_o.linklink.update(item_o.linklink)
-                    ex_item_o.category = list(set(item_o.category + ex_item_o.category))
+                    ex_item_o.category = list(set(item_o.category + ex_item_o.category +
+                                                  ["linklink_" + extra_file.lower().removeprefix("items_").removesuffix(".json")]))
 
                     existing_item["category"] = ex_item_o.category
                     existing_item["linklink"] = ex_item_o.linklink
@@ -56,10 +63,13 @@ def after_load_item_file(item_table: list) -> list:
         item_table.extend(new_table)
 
     for item in item_table:
+        if extra_item_files and item.get("linklink"):
+            if 'linklink all files' not in item['category']:
+                item["category"].append('linklink all files')
         if 'count' not in item:
-            item['count'] = 1
+            item["count"] = 1
         if 'extra' not in item:
-            item['extra'] = 0
+            item["extra"] = 0
     ITEM_TABLE.extend(item_table)
     return item_table
 
