@@ -188,7 +188,9 @@ def after_create_regions(world: "ManualWorld", multiworld: MultiWorld, player: i
         locations_to_remove: list[Location] = []
         # world.linklink_locations_filtered_by_removed = if the filter contains all the removed location (true) vs contains all the enabled location (false)
         for location in multiworld.get_locations(player):
-            if location.address is not None and (location.address in filter and world.linklink_locations_filtered_by_removed):
+            if location.address is not None and ((location.address in filter) == world.linklink_locations_filtered_by_removed):
+                if location.name.startswith("Free item"):
+                    continue
                 player1 = f" Player {str(1).zfill(players_digits)}"
                 if location.name.endswith(player1):
                     event_name = location.name.removesuffix(player1)
@@ -267,7 +269,7 @@ def try_remove_specific_item(items: list[Item], item: Item):
 def remove_location(world: "ManualWorld", location: Location):
     if location.parent_region is not None:
         location.parent_region.locations.remove(location)
-        if location.address is not None: #Which it should never unless we have events
+        if location.address is not None:
             world.linklink_removed_location.append(location.address)
 
 def replace_nothings(world: "ManualWorld", multiworld: MultiWorld, player: int, unplaced_nothing: int | None = None):
