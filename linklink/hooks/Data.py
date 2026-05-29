@@ -17,6 +17,9 @@ class Dict_item():
         self.category = json.get("category", [])
         self.linklink = json.get("linklink")
 
+    def to_dict(self) -> dict[str, Any]:
+        return {"name": self.name, "count": self.count, "extra": self.extra, "category": self.category, "linklink": self.linklink}
+
 ITEM_TABLE = []
 MAX_PLAYERS = 40
 FREE_ITEMS = 12
@@ -42,7 +45,12 @@ def after_load_item_file(item_table: list[dict[str, Any]]) -> list:
         from ..Helpers import load_data_file
 
         new_table = convert_to_list(load_data_file(extra_file), "data")
+        category_name = "linklink_" + extra_file.lower().removeprefix("items_").removesuffix(".json")
         for item in list(new_table):
+            if 'category' not in item:
+                item["category"] = [category_name]
+            elif category_name not in item['category']:
+                item["category"].append(category_name)
             item_o = Dict_item(item)
             for existing_item in item_table:
                 ex_item_o = Dict_item(existing_item)
@@ -50,8 +58,7 @@ def after_load_item_file(item_table: list[dict[str, Any]]) -> list:
                     if item_o.linklink is None or ex_item_o.linklink is None:
                         raise Exception(f"Cannot fuse not linklink item to linklink item with name {item_o.name}")
                     ex_item_o.linklink.update(item_o.linklink)
-                    ex_item_o.category = list(set(item_o.category + ex_item_o.category +
-                                                  ["linklink_" + extra_file.lower().removeprefix("items_").removesuffix(".json")]))
+                    ex_item_o.category = list(set(item_o.category + ex_item_o.category))
 
                     existing_item["category"] = ex_item_o.category
                     existing_item["linklink"] = ex_item_o.linklink
