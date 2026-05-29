@@ -587,7 +587,6 @@ def linklink_magic(world: "ManualWorld", in_pre_fill = False):
                     spot_filled += 1
                     highest_placed_count = max(highest_placed_count, i)
 
-        # ? Maybe check if there is only 1 placement and if thats the case cancel it and return the item to the pool
         # region extra keys rem
         extras += item_extras
         ll_keys = [item for item in linklink_items if item.name == item_name]
@@ -600,7 +599,7 @@ def linklink_magic(world: "ManualWorld", in_pre_fill = False):
                 logging.debug(f'Removing surplus {item_name}')
             if copies_to_remove < 0:
                 logging.error(f"we got a problem for {item_name}")
-            iterable = iter(ll_keys)
+            iterable = iter(ll_keys.copy())
             for _ in range(copies_to_remove):
                 nullable_item = next(iterable, None)
                 if nullable_item is None:
@@ -609,6 +608,7 @@ def linklink_magic(world: "ManualWorld", in_pre_fill = False):
                 item = nullable_item
 
                 try_remove_specific_item(multiworld.itempool, item)
+                ll_keys.remove(item)
                 linklink_items.remove(item)
             if item_extras and extra_percent < 1:
                 extras -= (item_extras - extra_to_keep)
@@ -663,18 +663,31 @@ def linklink_magic(world: "ManualWorld", in_pre_fill = False):
         players_digits = len(str(MAX_PLAYERS))
         for location in filled_locations:
             if location.item is not None:
-                if location.item.name == world.filler_item_name:
+                item = location.item
+                if item.name == world.filler_item_name:
                     player1 = f" Player {str(1).zfill(players_digits)}"
                     if location.name.endswith(player1):
                         event_name = location.name.removesuffix(player1)
                         events_name_to_remove.add(event_name + " Event")
                     remove_location(world, location)
-                elif location.item.code is None:
+                # the spot_filled check make it so that if a category only exists for 1 spot then it get removed
+                elif item.code is not None and spot_filled <= 1:
+                    if id(item) in item_create_filler:
+                        # ? maybe make it check if its precollected in ll yaml then precoll it here too
+                        item.location = None
+                        multiworld.itempool.append(item)
+                        usable_items_for_player[item.player].append(item)
+                        if ll_keys:
+                            remove_specific_item(multiworld.itempool, ll_keys.pop())
+                        else:
+                            extras += 1
+                    remove_location(world, location)
+                elif item.code is None:
                     if location.name in events_name_to_remove:
                         events_name_to_remove.remove(location.name)
                         remove_location(world, location)
         # endregion
-        key_count += highest_placed_count
+        key_count += highest_placed_count if spot_filled > 1 else 0
 
 
     if extras > 0:
