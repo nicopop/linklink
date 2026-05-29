@@ -92,9 +92,9 @@ def before_generate_early(world: "ManualWorld", multiworld: MultiWorld, player: 
             slot_data = multiworld.re_gen_passthrough[world.game]["linklink"] # type: ignore
             world.linklink_locations = slot_data["filtered_locations"] # type: ignore
             world.linklink_locations_filtered_by_removed = slot_data["filtered_removed"] # type: ignore
-            world.linklink_item_config = slot_data["key_counts"] # type: ignore
-            world.linklink_active_victims_ids = slot_data["active_victims"] # type: ignore
-            world.linklink_active_games = slot_data["active_games"] # type: ignore
+            world.linklink_item_config = Counter(slot_data["key_counts"]) # type: ignore
+            world.linklink_active_victims_ids = set(slot_data["active_victims"]) # type: ignore
+            world.linklink_active_games = set(slot_data["active_games"]) # type: ignore
     else:
         world.is_ut_regen = False # type: ignore
 # endregion
@@ -585,6 +585,7 @@ def linklink_magic(world: "ManualWorld", in_pre_fill = False):
                     spot_filled += 1
                     highest_placed_count = max(highest_placed_count, i)
 
+        # ? Maybe check if there is only 1 placement and if thats the case cancel it and return the item to the pool
         # region extra keys rem
         extras += item_extras
         ll_keys = [item for item in linklink_items if item.name == item_name]
