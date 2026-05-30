@@ -368,8 +368,24 @@ def linklink_magic(world: "ManualWorld", in_pre_fill = False):
         elif item.player in victims and item.location is None:
             usable_items_for_player[item.player].append(item)
 
+    precollected_items = list(multiworld.precollected_items.get(player, []))
 
+    # Filter Precollected items for those not in logic aka created by start_inventory(_from_pool)
+    precollected_exceptions = world.options.start_inventory.value
+    if not in_pre_fill: # outside of pre_fill the items are still in the main item pool
+        precollected_exceptions += world.options.start_inventory_from_pool.value # type: ignore
+
+    for item_name, count in precollected_exceptions.items():
+        items_iter = iter([i for i in precollected_items if i.name == item_name])
+        for _ in range(count):
+            precollected_items.remove(next(items_iter))
+    precollected_items_ids: set[int] = set([id(item) for item in precollected_items])
+    usable_items_for_player[player].extend(precollected_items)
+    usable_items_for_player[player].sort(key=lambda i: i.code if i.code is not None else 0)
+    # ? maybe find how to find plando'd items and also add them to usable_items_for_player[player] if in pre_fill
     for _player, items in usable_items_for_player.copy().items():
+        if _player == player:
+            continue
         _world: World = multiworld.worlds[_player]
         options = _world.options
         count_to_remove: Counter[str] = Counter()
@@ -600,14 +616,16 @@ def linklink_magic(world: "ManualWorld", in_pre_fill = False):
             if copies_to_remove < 0:
                 logging.error(f"we got a problem for {item_name}")
             iterable = iter(ll_keys.copy())
-            for _ in range(copies_to_remove):
+            for i in range(copies_to_remove):
                 nullable_item = next(iterable, None)
                 if nullable_item is None:
+                    extras += copies_to_remove - i
                     break
-                    # We are out of items to remove anyway
                 item = nullable_item
-
-                try_remove_specific_item(multiworld.itempool, item)
+                if id(item) not in precollected_items_ids:
+                    try_remove_specific_item(multiworld.itempool, item)
+                else:
+                    extras += 1
                 ll_keys.remove(item)
                 linklink_items.remove(item)
             if item_extras and extra_percent < 1:
@@ -664,23 +682,30 @@ def linklink_magic(world: "ManualWorld", in_pre_fill = False):
         for location in filled_locations:
             if location.item is not None:
                 item = location.item
+                player1 = f" Player {str(1).zfill(players_digits)}"
+                event_name = location.name.removesuffix(player1) + " Event"
                 if item.name == world.filler_item_name:
-                    player1 = f" Player {str(1).zfill(players_digits)}"
                     if location.name.endswith(player1):
-                        event_name = location.name.removesuffix(player1)
-                        events_name_to_remove.add(event_name + " Event")
+                        events_name_to_remove.add(event_name)
                     remove_location(world, location)
                 # the spot_filled check make it so that if a category only exists for 1 spot then it get removed
                 elif item.code is not None and spot_filled <= 1:
                     if id(item) in item_create_filler:
-                        # ? maybe make it check if its precollected in ll yaml then precoll it here too
                         item.location = None
-                        multiworld.itempool.append(item)
-                        usable_items_for_player[item.player].append(item)
-                        if ll_keys:
-                            remove_specific_item(multiworld.itempool, ll_keys.pop())
+                        if item_name in world.options.start_inventory_from_pool.value.keys(): # type: ignore
+                            multiworld.push_precollected(item)
                         else:
-                            extras += 1
+                            multiworld.itempool.append(item)
+                            usable_items_for_player[item.player].append(item)
+                            if ll_keys:
+                                ll_key = ll_keys.pop()
+                                if id(ll_key) not in precollected_items_ids:
+                                    remove_specific_item(multiworld.itempool, ll_key)
+                                else:
+                                    extras += 1
+                            else:
+                                extras += 1
+                    events_name_to_remove.add(event_name)
                     remove_location(world, location)
                 elif item.code is None:
                     if location.name in events_name_to_remove:
@@ -705,18 +730,6 @@ def linklink_magic(world: "ManualWorld", in_pre_fill = False):
                 break
         if extras > 0:
             logging.debug(f"Failed to remove {extras} extra keys, you might see a message later talking about too many items.")
-
-    precollected_items = list(multiworld.precollected_items.get(player, []))
-
-    # Filter Precollected items for those not in logic aka created by start_inventory(_from_pool)
-    precollected_exceptions = world.options.start_inventory.value
-    if not in_pre_fill: # outside of pre_fill the items are still in the main item pool
-        precollected_exceptions += world.options.start_inventory_from_pool.value # type: ignore
-
-    for item_name, count in precollected_exceptions.items():
-        items_iter = iter([i for i in precollected_items if i.name == item_name])
-        for _ in range(count):
-            precollected_items.remove(next(items_iter))
 
     nothing_total = filler_to_make + len(multiworld.get_unfilled_locations(player))
     nothing_to_make = nothing_total - len(unplaced_nothing) - extras
