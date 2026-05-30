@@ -885,10 +885,13 @@ def before_write_spoiler(world: "ManualWorld", multiworld: MultiWorld, spoiler_h
 
 # This is called when you want to add information to the hint text
 def before_extend_hint_information(hint_data: dict[int, dict[int, str]], world: "ManualWorld", multiworld: MultiWorld, player: int) -> None:
+    # region Hints extention
+    # this region adds the location of 1 real key to the entrance hints of each linklink location,
+    # so if a player !hints an item its still worth the points.
     from itertools import groupby
     items = [loc.item for loc in multiworld.get_filled_locations() if loc.item is not None and loc.item.player == player]
     items.extend(multiworld.precollected_items.get(player, []))
-    items = [i for i in items if i.advancement]
+    items = [i for i in items if not i.is_event and world.item_name_to_item[i.name].get("linklink") is not None]
 
     groups: dict[str,list] = {}
     keyfunc = lambda i: i.name
@@ -900,23 +903,28 @@ def before_extend_hint_information(hint_data: dict[int, dict[int, str]], world: 
     if player not in hint_data:
         hint_data[player] = {}
 
-    iterators: dict[str, dict[str,Iterator]] = {}
-    next_item: dict[str, dict[str,Item|None]] = {}
-    # hintsdone: dict[str, list[str]] = {}
+    # each player and key type has their own iterator dict and next items
+    iterators: dict[int, dict[str,Iterator]] = {}
+    next_item: dict[int, dict[str,Item|None]] = {}
+    # both dicts are structured the following way:
+    # * dict_name[player_id][item_name] = iterator or item|None
+    # if you uncomment all the hintsdone line you can debug and see exactly what hints are created
+    # hintsdone: dict[int, list[str]] = {}
     for location in multiworld.get_locations(player):
+        manual_loc = world.location_name_to_location.get(location.name, {})
         if not location.address or location.item is None:
             continue
-        elif world.location_name_to_location.get(location.name, {}).get("linklink", None) is None:
+        elif manual_loc.get("linklink", None) is None:
             continue
 
-        item_name= cast(str, world.location_name_to_location[location.name]["linklink"])
-        p_num = str(location.item.player)
+        item_name= cast(str, manual_loc["linklink"])
+        p_num = int(location.item.player)
         if p_num not in iterators.keys():
             iterators[p_num] = {}
             next_item[p_num] = {}
             # hintsdone[p_num] = []
 
-        if next_item[p_num].get(item_name, None) is None or item_name not in iterators[p_num].keys():
+        if next_item[p_num].get(item_name) is None or item_name not in iterators[p_num].keys():
             ll_keys = list(groups.get(item_name, []))
             world.random.shuffle(ll_keys)
 
@@ -932,6 +940,7 @@ def before_extend_hint_information(hint_data: dict[int, dict[int, str]], world: 
             pass
         # hintsdone[p_num].append(f"{item_name}: {hint_data[player][location.address]}")
         next_item[p_num][item_name] = next(iterators[p_num][item_name], None)
+    # endregion
     pass
 
 def after_extend_hint_information(hint_data: dict[int, dict[int, str]], world: "ManualWorld", multiworld: MultiWorld, player: int) -> None:
