@@ -4,7 +4,6 @@
         {
             "count": 4,
             "name": "Main Weapon or Tool",
-            "progression": true,
             "linklink": {
                 "A Link Between Worlds": ["Progressive Sword"],
                 "A Link to the Past": ["Progressive Sword"],
@@ -32,7 +31,6 @@
         {
             "count": 2,
             "name": "Special Weapon or Tool",
-            "progression": true,
             "linklink": {
                 "A Link Between Worlds": ["Progressive Sword"],
                 "A Link to the Past": ["Progressive Sword"],
@@ -54,7 +52,6 @@
         {
             "count": 3,
             "name": "Shield",
-            "progression": true,
             "linklink": {
                 "A Link Between Worlds": ["Hylian Shield"],
                 "A Link to the Past": ["Progressive Shield", "Blue Shield", "Red Shield", "Mirror Shield", "$Shuffle"],
@@ -79,7 +76,6 @@
         {
             "count": 2,
             "name": "Fire Magic",
-            "progression": true,
             "linklink": {
                 "A Link Between Worlds": ["Fire Rod"],
                 "A Link to the Past": ["Fire Rod"],
@@ -102,7 +98,6 @@
         {
             "count": 2,
             "name": "Ice Magic",
-            "progression": true,
             "linklink": {
                 "A Link Between Worlds": ["Ice Rod"],
                 "A Link to the Past": ["Ice Rod"],
@@ -119,7 +114,6 @@
         {
             "count": 1,
             "name": "Special Arrows",
-            "progression": true,
             "linklink": {
                 "A Link Between Worlds": ["Bow of Light"],
                 "A Link to the Past": ["Silver Bow", "Progressive Bow (Alt)"],
@@ -138,7 +132,6 @@
         {
             "count": 3,
             "name": "Bow",
-            "progression": true,
             "linklink": {
                 "A Link Between Worlds": ["Bow"],
                 "A Link to the Past": ["Progressive Bow", "Bow", "Arrow Upgrade (70)", "Arrow Upgrade (+10)", "Arrow Upgrade (+5)", "Arrows (10)"],
@@ -160,7 +153,6 @@
         {
             "count": 2,
             "name": "Boomerang",
-            "progression": true,
             "linklink": {
                 "A Link Between Worlds": ["Boomerang"],
                 "A Link to the Past": ["Blue Boomerang", "Red Boomerang"],
@@ -183,7 +175,6 @@
         {
             "count": 6,
             "name": "Bombs",
-            "progression": true,
             "linklink": {
                 "A Link Between Worlds": ["Bombs"],
                 "A Link to the Past": ["Bomb Upgrade (50)", "Bomb Upgrade (+10)", "Bomb Upgrade (+5)", "Bombs (10)"],
@@ -211,7 +202,6 @@
         {
             "count": 3,
             "name": "Flute",
-            "progression": true,
             "linklink": {
                 "A Link Between Worlds": ["Bell"],
                 "A Link to the Past": ["Flute"],
@@ -232,7 +222,6 @@
         {
             "count": 1,
             "name": "Armor Special",
-            "progression": true,
             "linklink": {
                 "Majora's Mask Recompiled": ["Double Defense"],
                 "Ocarina of Time": ["Double Defense"],
@@ -249,7 +238,6 @@
         {
             "count": 1,
             "name": "Armor A",
-            "progression": true,
             "linklink": {
                 "A Link Between Worlds": ["Progressive Mail"],
                 "A Link to the Past": ["Progressive Mail", "Blue Mail"],
@@ -268,7 +256,6 @@
         {
             "count": 1,
             "name": "Armor B",
-            "progression": true,
             "linklink": {
                 "A Link Between Worlds": ["Progressive Mail"],
                 "A Link to the Past": ["Progressive Mail", "Red Mail"],
@@ -286,7 +273,6 @@
         {
             "count": 3,
             "name": "Strength",
-            "progression": true,
             "linklink": {
                 "A Link Between Worlds": ["Progressive Glove"],
                 "A Link to the Past": ["Progressive Glove"],
@@ -309,7 +295,6 @@
         {
             "count": 2,
             "name": "Hookshot",
-            "progression": true,
             "linklink": {
                 "A Link Between Worlds": ["Hookshot"],
                 "A Link to the Past": ["Hookshot"],
@@ -335,7 +320,6 @@
         {
             "count": 3,
             "name": "Swimming",
-            "progression": true,
             "linklink": {
                 "A Link Between Worlds": ["Flippers"],
                 "A Link to the Past": ["Flippers"],
@@ -358,7 +342,6 @@
         {
             "count": 2,
             "name": "Hammer",
-            "progression": true,
             "linklink": {
                 "A Link Between Worlds": ["Hammer"],
                 "A Link to the Past": ["Hammer"],
@@ -376,7 +359,6 @@
         {
             "count": 5,
             "name": "Bottle",
-            "progression": true,
             "linklink": {
                 "A Link Between Worlds": ["Premium Milk", "Bottle"],
                 "A Link to the Past": ["Bottle", "Bottle (Bee)", "Bottle (Blue Potion)", "Bottle (Fairy)", "Bottle (Good Bee)", "Bottle (Green Potion)",
@@ -400,7 +382,6 @@
         {
             "count": 2,
             "name": "Magical Rod",
-            "progression": true,
             "linklink": {
                 "A Link to the Past": ["Cane of Somaria"],
                 "Links Awakening DX": ["Magic Rod"],
@@ -421,7 +402,6 @@
         {
             "count": 2,
             "name": "Shovel",
-            "progression": true,
             "linklink": {
                 "A Link Between Worlds": ["Sand Rod"],
                 "A Link to the Past": ["Shovel"],
@@ -440,7 +420,6 @@
         {
             "count": 2,
             "name": "Speed boosts",
-            "progression": true,
             "linklink": {
                 "A Link Between Worlds": ["Pegasus Boots"],
                 "A Link to the Past": ["Pegasus Boots"],
@@ -459,7 +438,6 @@
         {
             "count": 2,
             "name": "Magic Meter",
-            "progression": true,
             "linklink": {
                 "A Link Between Worlds": ["Progressive Bracelet", "Stamina Scroll"],
                 "A Link to the Past": ["Magic Upgrade (1/2)", "Magic Upgrade (1/4)"],
@@ -475,7 +453,6 @@
         {
             "count": 2,
             "name": "Lamp",
-            "progression": true,
             "linklink": {
                 "A Link Between Worlds": ["Lamp"],
                 "A Link to the Past": ["Lamp"],
@@ -491,7 +468,6 @@
         {
             "count": 1,
             "name": "Magic Powder",
-            "progression": true,
             "linklink": {
                 "A Link to the Past": ["Magic Powder"],
                 "Links Awakening DX": ["Magic Powder"],
@@ -502,7 +478,6 @@
         {
             "count": 1,
             "name": "Mushroom",
-            "progression": true,
             "linklink": {
                 "A Link to the Past": ["Mushroom"],
                 "Links Awakening DX": ["Toadstool"],
@@ -518,7 +493,6 @@
         {
             "count": 4,
             "name": "Key Items",
-            "progression": true,
             "linklink": {
                 "A Link to the Past": ["Moon Pearl"],
                 "Majora's Mask Recompiled": ["Odolwa's Remains", "Goht's Remains", "Gyorg's Remains", "Twinmold's Remains", "$Buffer_1", "Fierce Deity's Mask",
@@ -542,7 +516,6 @@
         {
             "count": 7,
             "name": "Magic Spell",
-            "progression": true,
             "linklink": {
                 "A Link Between Worlds": ["Quake", "Great Spin", "$Shuffle"],
                 "A Link to the Past": ["Quake", "Ether", "Bombos"],
@@ -569,7 +542,6 @@
         {
             "count": 1,
             "name": "Iron Boots",
-            "progression": true,
             "linklink": {
                 "Ocarina of Time": ["Iron Boots"],
                 "Ship of Harkinian": ["Iron Boots"],
@@ -581,7 +553,6 @@
             "count": 1,
             "name": "Feather",
             "_comment": "A feather",
-            "progression": true,
             "linklink": {
                 "Links Awakening DX": ["Feather"],
                 "The Legend of Zelda - Oracle of Ages": ["Feather"],
@@ -596,7 +567,6 @@
             "count": 1,
             "name": "Glide",
             "_comment": "Jump/glide",
-            "progression": true,
             "linklink": {
                 "A Link to the Past": ["Cape"],
                 "Majora's Mask Recompiled": ["Deku Mask"],
@@ -610,7 +580,6 @@
         {
             "count": 3,
             "name": "Slingshot",
-            "progression": true,
             "linklink": {
                 "Ocarina of Time": ["Slingshot"],
                 "Ship of Harkinian": ["Slingshot"],
@@ -625,7 +594,6 @@
         {
             "count": 1,
             "name": "Membership Card",
-            "progression": true,
             "linklink": {
                 "Ocarina of Time": ["Gerudo Membership Card"],
                 "Ship of Harkinian": ["Gerudo Membership Card"],
@@ -637,7 +605,6 @@
         {
             "count": 3,
             "name": "Seed Bag",
-            "progression": true,
             "linklink": {
                 "Majora's Mask Recompiled": ["Magic Bean"],
                 "Ocarina of Time": ["Deku Nut Capacity", "Magic Bean", "Magic Bean Pack", "Buy Magic Bean", "$Shuffle"],
@@ -651,7 +618,6 @@
         {
             "count": 2,
             "name": "Looking Glass",
-            "progression": true,
             "linklink": {
                 "A Link to the Past": ["Magic Mirror"],
                 "Links Awakening DX": ["Magnifying Glass"],
@@ -669,7 +635,6 @@
         {
             "count": 2,
             "name": "Letter",
-            "progression": true,
             "linklink": {
                 "Majora's Mask Recompiled": ["Letter to Kafei", "Priority Mail", "$Shuffle"],
                 "Ocarina of Time": ["Rutos Letter"],
@@ -689,7 +654,6 @@
         {
             "count": 1,
             "name": "Book",
-            "progression": true,
             "linklink": {
                 "A Link to the Past": ["Book of Mudora"],
                 "Majora's Mask Recompiled": ["Bomber's Notebook"],
@@ -708,7 +672,6 @@
         {
             "count": 4,
             "name": "Wallet",
-            "progression": true,
             "linklink": {
                 "A Link Between Worlds": ["Pouch"],
                 "Majora's Mask Recompiled": ["Progressive Wallet"],
@@ -729,7 +692,6 @@
         {
             "count": 10,
             "name": "Heart Container",
-            "progression": true,
             "linklink": {
                 "A Link Between Worlds": ["Heart Container", "Piece of Heart", "Heart Piece"],
                 "A Link to the Past": ["Boss Heart Container", "Piece of Heart"],
@@ -758,7 +720,6 @@
             "count": 16,
             "_extra": 4,
             "name": "Energy Container",
-            "progression": true,
             "linklink": {
                 "The Legend of Zelda - Phantom Hourglass": ["Sand of Hours (Boss)", "Sand of Hours (Small)", "Sand of Hours"],
                 "Hollow Knight": ["VesselFragments", "$Shuffle"],
@@ -772,7 +733,6 @@
         {
             "count": 3,
             "name": "Jump upgrade",
-            "progression": true,
             "linklink": {
                 "A Hat in Time": ["Hover Badge", "Yarn"],
                 "Hollow Knight": ["Monarch_Wings"],
@@ -783,7 +743,6 @@
         {
             "count": 2,
             "name": "Climb",
-            "progression": true,
             "linklink": {
                 "Hollow Knight": ["Claw", "$Shuffle"],
                 "Ori and the Blind Forest": ["WallJump", "Climb"],
@@ -794,7 +753,6 @@
             "count": 1,
             "name": "Vehicle",
             "_comment": "Rename to mode of transportation or something",
-            "progression": true,
             "linklink": {
                 "Majora's Mask Recompiled": ["Epona's Song"],
                 "Ocarina of Time": ["Eponas Song"],
@@ -812,7 +770,6 @@
         {
             "count": 10,
             "name": "Upgrades Slots",
-            "progression": true,
             "linklink": {
                 "Skyward Sword": ["Progressive Pouch", "Extra Wallet", "$Shuffle"],
                 "The Legend of Zelda - Phantom Hourglass": ["Sand of Hours", "Sand of Hours (Boss)", "Sand of Hours (Small)"],
@@ -826,7 +783,6 @@
         {
             "count": 2,
             "name": "Dive",
-            "progression": true,
             "linklink": {
                 "Hollow Knight": ["Dive", "$Shuffle"],
                 "Ori and the Blind Forest": ["Stomp"],
@@ -837,7 +793,6 @@
         {
             "count": 2,
             "name": "Charged dash or jump",
-            "progression": true,
             "linklink": {
                 "Hollow Knight": ["CDash", "$Shuffle"],
                 "Ori and the Blind Forest": ["ChargeJump"],
@@ -847,7 +802,6 @@
         {
             "count": 1,
             "name": "Magnet",
-            "progression": true,
             "linklink": {
                 "A Hat in Time": ["Item Magnet Badge"],
                 "Hollow Knight": ["Gathering_Swarm"],
@@ -858,7 +812,6 @@
             "name": "Net",
             "_comment": "AKA catch something with it... yea I added fishing rod to it to include more games",
             "count": 2,
-            "progression": true,
             "linklink": {
                 "A Link Between Worlds": ["Bug Net"],
                 "A Link to the Past": ["Bug Catching Net"],
@@ -873,7 +826,6 @@
             "count": 40,
             "name": "Keys",
             "extra": 10,
-            "progression": true,
             "progression_skip_balancing": true,
             "progression_deprioritized": true,
             "linklink": {
@@ -905,7 +857,6 @@
             "count": 15,
             "name": "Teleporters",
             "_comment": "Teleporter style items and items that let you go to other areas, get to important locations",
-            "progression": true,
             "progression_skip_balancing": true,
             "progression_deprioritized": true,
             "extra": 5,

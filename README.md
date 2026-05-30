@@ -27,10 +27,9 @@ This is an extension of the standard Manual item definition.
 
 ```json
     {
+        "name": "Shield", // Name of the item as it appears in the client and other players.
         "count": 6,  // Maximum in pool.  Any above this number won't be plando'd
         "extra": 1, // Optional counts of extra copies of keys that will not create new levels of locations
-        "name": "Shield", // Name of the item as it appears in the client and other players.
-        "progression": true,
         "linklink": {  // This is the important part:
             "Links Awakening DX": ["Progressive Shield"],  
             // Progressive items are pulled multiple times.  We'll pull all three Progressive Shields.

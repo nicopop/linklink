@@ -70,9 +70,12 @@ def after_load_item_file(item_table: list[dict[str, Any]]) -> list:
         item_table.extend(new_table)
 
     for item in item_table:
-        if extra_item_files and item.get("linklink"):
-            if 'linklink all files' not in item['category']:
-                item["category"].append('linklink all files')
+        if item.get("linklink"):
+            if extra_item_files:
+                if 'linklink all files' not in item['category']:
+                    item["category"].append('linklink all files')
+            if not item.get("progression"):
+                item["progression"] = True
         if 'count' not in item:
             item["count"] = 1
         if 'extra' not in item:
