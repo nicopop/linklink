@@ -142,7 +142,7 @@ def before_generate_early(world: "ManualWorld", multiworld: MultiWorld, player: 
 # endregion
     world.linklink_helpers_disabled_location = 0  # type: ignore
     def create_filler() -> Item:
-        filler = replace_nothings(world, multiworld, player, 1)[0]
+        filler = generate_rdm_filler(world)[0]
         logging.debug(f"create_filler() was called and it made an item for player {filler.player}")
         return filler
     setattr(world, "create_filler", create_filler)
@@ -272,13 +272,12 @@ def remove_location(world: "ManualWorld", location: Location):
         if location.address is not None:
             world.linklink_removed_location.append(location.address)
 
-def replace_nothings(world: "ManualWorld", multiworld: MultiWorld, player: int, unplaced_nothing: int | None = None):
-    # Remove "Nothing" items and replace them with filler items from other players
-    if unplaced_nothing is not None:
-        item_count = unplaced_nothing
-    else:
-        item_pool = [i for i in multiworld.itempool if i.player == player and i.name == world.filler_item_name]
-        item_count = len(item_pool)
+def generate_rdm_filler(world: "ManualWorld", count: int = 1):
+    """Will attempt to generate "count" random filler in the victims world.
+    Will generate the count if provided otherwise will check the item_pool for world.filler_item_name"""
+    multiworld = world.multiworld
+    player = world.player
+    item_count = count
 
     filler_blacklist: list[str] = [] # ["SMZ3", "Links Awakening DX"]  # These games don't have filler items or don't implement them correctly
     victims = list(get_victims(world))
@@ -300,6 +299,9 @@ def replace_nothings(world: "ManualWorld", multiworld: MultiWorld, player: int, 
         else:
             victims.remove(other_player)
             if not victims:
+                # if all else fail make some nothing items
+                for _ in range(item_count):
+                    replacements.append(world.create_item(world.filler_item_name))
                 break
             world.random.shuffle(victims)
             queue = iter(v for v in victims)
@@ -356,6 +358,7 @@ def linklink_magic(world: "ManualWorld", in_pre_fill = False):
         usable_items_for_player[victim] = []
     usable_items_for_player[player] = []
     nothing_source: Counter[str] = Counter()
+    not_linklink_items_count = 0
 
     for item in multiworld.itempool:
         if item.player == player:
@@ -364,7 +367,11 @@ def linklink_magic(world: "ManualWorld", in_pre_fill = False):
                 unplaced_nothing.append(item)
                 nothing_source["free"] += 1
             else:
-                usable_items_for_player[player].append(item)
+                manual_item = world.item_name_to_item[item.name]
+                if manual_item.get("linklink") is None:
+                    not_linklink_items_count += 1
+                else:
+                    usable_items_for_player[player].append(item)
         elif item.player in victims and item.location is None:
             usable_items_for_player[item.player].append(item)
 
@@ -560,7 +567,7 @@ def linklink_magic(world: "ManualWorld", in_pre_fill = False):
                                     else:
                                         failed = True
                                 if failed:
-                                    buffers.extend(replace_nothings(world, multiworld, player, buffer_to_make))
+                                    buffers.extend(generate_rdm_filler(world, buffer_to_make))
 
                                 for item in buffers:
                                     if id(item) in item_create_filler:
@@ -731,26 +738,27 @@ def linklink_magic(world: "ManualWorld", in_pre_fill = False):
         if extras > 0:
             logging.debug(f"Failed to remove {extras} extra keys, you might see a message later talking about too many items.")
 
-    nothing_total = filler_to_make + len(multiworld.get_unfilled_locations(player))
-    nothing_to_make = nothing_total - len(unplaced_nothing) - extras
+    unfilled_locations = multiworld.get_unfilled_locations(player) # Free spots + any not linklink locations
+    adjust_filler_count = filler_to_make + len(unfilled_locations) - len(unplaced_nothing) - extras - not_linklink_items_count
 
-    failed_to_remove = 0
-    if nothing_to_make < 0:
-        for _ in range(abs(nothing_to_make)):
+    # After everything if the filler count need to be adjusted then we need to do stuff so here wont be more/less item than locations
+    if adjust_filler_count < 0:
+    # if there are too many filler (most of the time)
+        for i in range(abs(adjust_filler_count)):
             if len(unplaced_nothing) > 0:
                 try_remove_specific_item(multiworld.itempool, unplaced_nothing.pop())
             else:
-                failed_to_remove += 1
+                logging.error(f"{multiworld.player_name[player]} failed to remove {abs(adjust_filler_count) - i} items you will see in the logs that there are more items than locations")
+                break
 
-    elif nothing_to_make > 0:
-        replacements = replace_nothings(world, multiworld, player, nothing_to_make)
+    elif adjust_filler_count > 0:
+    # if there need to be more filler
+        replacements = generate_rdm_filler(world, adjust_filler_count)
         multiworld.itempool.extend(replacements)
 
-    if failed_to_remove:
-        logging.warning(f"{multiworld.player_name[player]} failed to remove {failed_to_remove} items you will see in the logs that there are more items than locations")
-    # ? maybe add emergency extra removal here or something
+    # ? maybe add emergency extra key removal here or something
     if unplaced_nothing:
-        replacements = replace_nothings(world, multiworld, player, len(unplaced_nothing))
+        replacements = generate_rdm_filler(world, len(unplaced_nothing))
         for nothing in unplaced_nothing:
             multiworld.itempool.remove(nothing)
         multiworld.itempool.extend(replacements)
