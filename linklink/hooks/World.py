@@ -595,10 +595,9 @@ def linklink_magic(world: "ManualWorld", in_pre_fill = False):
                 nullable_item: Item|None = next(iter(item_cache[victim_id]), None)
                 if nullable_item is not None:
                     item = nullable_item # to make mypy happy
-                    item_cache[victim_id].remove(item)
-                    old_item = place_locked_item(location, item)
-                    victim_items.remove(item)
-
+                    place_locked_item(location, item)
+                    try_remove_specific_item(item_cache[victim_id], item)
+                    try_remove_specific_item(victim_items, item)
                     try_remove_specific_item(multiworld.itempool, item)
                     if id(item) in item_create_filler:
                         filler_to_make_for_player[victim_id] += 1
@@ -631,8 +630,8 @@ def linklink_magic(world: "ManualWorld", in_pre_fill = False):
                     try_remove_specific_item(multiworld.itempool, item)
                 else:
                     extras += 1
-                ll_keys.remove(item)
-                linklink_items.remove(item)
+                try_remove_specific_item(ll_keys, item)
+                try_remove_specific_item(linklink_items, item)
             if item_extras and extra_percent < 1:
                 extras -= (item_extras - extra_to_keep)
         # endregion
@@ -734,8 +733,8 @@ def linklink_magic(world: "ManualWorld", in_pre_fill = False):
         for i in range(abs(adjust_filler_count)):
             if filler_items:
                 sacrifice = world.random.choice(filler_items.copy())
-                multiworld.itempool.remove(sacrifice)
-                filler_items.remove(sacrifice)
+                try_remove_specific_item(multiworld.itempool, sacrifice)
+                try_remove_specific_item(filler_items, sacrifice)
             else:
                 logging.error(f"{multiworld.player_name[player]} failed to remove {abs(adjust_filler_count) - i} items you will see in the logs that there are more items than locations")
                 break
