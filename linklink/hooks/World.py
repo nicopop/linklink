@@ -56,7 +56,7 @@ class VersionedComponent(Component):
 
 def add_client_to_launcher() -> None:
     import Utils
-    version = 2026_05_28 # YYYYMMDD
+    version = 2026_05_31 # YYYYMMDD
     found = False
 
     if "manual" not in icon_paths:
@@ -864,9 +864,9 @@ def after_fill_slot_data(slot_data: dict, world: "ManualWorld", multiworld: Mult
 
     victory_name: str = world.victory_names[0]
     Manual_victory = world.location_name_to_location[victory_name]
-    if "location_id_to_alias" not in slot_data.keys():
-        slot_data["location_id_to_alias"] = {}
-    slot_data["location_id_to_alias"][Manual_victory["id"]] = f"{keys_count} keys required"
+    if "location_id_to_description" not in slot_data.keys():
+        slot_data["location_id_to_description"] = {}
+    slot_data["location_id_to_description"][Manual_victory["id"]] = f"{keys_count} keys required"
     # endregion
     return slot_data
 
