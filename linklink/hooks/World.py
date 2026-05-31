@@ -146,34 +146,7 @@ def before_generate_early(world: "ManualWorld", multiworld: MultiWorld, player: 
         logging.debug(f"create_filler() was called and it made an item for player {filler.player}")
         return filler
     setattr(world, "create_filler", create_filler)
-# region Custom funcs
-def get_linklink_games(world: "ManualWorld") -> set[str]:
-    if hasattr(world, "linklink_games"):
-        return world.linklink_games
-    games: set[str] = set()
-    for item_data in item_table:
-        if 'linklink' not in item_data:
-            continue
-        for game in item_data['linklink'].keys():
-            games.add(game)
-    world.linklink_games = games # type: ignore
-    return games
 
-def get_victims(world: "ManualWorld", filter: bool = False) -> set[int]:
-    linklink_victims_ids = cast(set[int], world.linklink_victims_ids) # type: ignore
-    linklink_active_victims_ids = cast(set[int], world.linklink_active_victims_ids) # type: ignore
-    return linklink_active_victims_ids if filter else linklink_victims_ids
-
-def place_locked_item(location: Location, item: Item) -> Item | None:
-    old_item = None
-    if location.item:
-        old_item = location.item
-        old_item.location = None
-    location.item = item
-    item.location = location
-    location.locked = True
-    return old_item
-# endregion
 # Called before regions and locations are created. Not clear why you'd want this, but it's here. Victory location is included, but Victory event is not placed yet.
 def before_create_regions(world: "ManualWorld", multiworld: MultiWorld, player: int):
     pass
@@ -258,6 +231,33 @@ def after_create_items(item_pool: list[Item], world: "ManualWorld", multiworld: 
 # endregion
     return item_pool
 # region tool funcs
+def get_linklink_games(world: "ManualWorld") -> set[str]:
+    if hasattr(world, "linklink_games"):
+        return world.linklink_games
+    games: set[str] = set()
+    for item_data in item_table:
+        if 'linklink' not in item_data:
+            continue
+        for game in item_data['linklink'].keys():
+            games.add(game)
+    world.linklink_games = games # type: ignore
+    return games
+
+def get_victims(world: "ManualWorld", filter: bool = False) -> set[int]:
+    linklink_victims_ids = cast(set[int], world.linklink_victims_ids) # type: ignore
+    linklink_active_victims_ids = cast(set[int], world.linklink_active_victims_ids) # type: ignore
+    return linklink_active_victims_ids if filter else linklink_victims_ids
+
+def place_locked_item(location: Location, item: Item) -> Item | None:
+    old_item = None
+    if location.item:
+        old_item = location.item
+        old_item.location = None
+    location.item = item
+    item.location = location
+    location.locked = True
+    return old_item
+
 def try_remove_specific_item(items: list[Item], item: Item):
     try:
         remove_specific_item(items, item)
