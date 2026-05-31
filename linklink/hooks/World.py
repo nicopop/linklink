@@ -283,8 +283,7 @@ def generate_rdm_filler(world: "ManualWorld", count: int = 1):
 
     filler_blacklist: list[str] = [] # ["SMZ3", "Links Awakening DX"]  # These games don't have filler items or don't implement them correctly
     victims = list(get_victims(world))
-    victims = [v for v in victims if v != player and multiworld.worlds[v].game not in filler_blacklist \
-                and "linklink" not in multiworld.worlds[v].game.lower()]  # Only include players with filler items
+    victims = [v for v in victims if v != player and multiworld.worlds[v].game not in filler_blacklist]
     replacements: list[Item] = []
     queue: Iterator = iter([])  # for type checking reason
     other_player = None
@@ -357,20 +356,19 @@ def linklink_magic(world: "ManualWorld", in_pre_fill = False):
     # region handle Items
     from Options import LocalItems, PlandoItems, ItemLinks, StartInventoryPool
     usable_items_for_player: dict[int, list[Item]] = {}
-    for victim in victims:
+    for victim in victims.union([player]):
         usable_items_for_player[victim] = []
-    usable_items_for_player[player] = []
     not_linklink_items_count = 0
 
     for item in multiworld.itempool:
+        if item.player not in victims.union([player]):
+            continue
         if item.player == player:
             manual_item = world.item_name_to_item[item.name]
             if manual_item.get("linklink") is None:
                 not_linklink_items_count += 1
-            else:
-                usable_items_for_player[player].append(item)
-        elif item.player in victims and item.location is None:
-            usable_items_for_player[item.player].append(item)
+                continue
+        usable_items_for_player[item.player].append(item)
 
     precollected_items = list(multiworld.precollected_items.get(player, []))
 
@@ -386,7 +384,7 @@ def linklink_magic(world: "ManualWorld", in_pre_fill = False):
     precollected_items_ids: set[int] = set([id(item) for item in precollected_items])
     usable_items_for_player[player].extend(precollected_items)
     usable_items_for_player[player].sort(key=lambda i: i.code if i.code is not None else 0)
-    # ? maybe find how to find plando'd items and also add them to usable_items_for_player[player] if in pre_fill
+
     for _player, items in usable_items_for_player.copy().items():
         if _player == player:
             continue
@@ -397,6 +395,12 @@ def linklink_magic(world: "ManualWorld", in_pre_fill = False):
 
         # Remove local_items and item_links always, even in pre_fill
         local_items = cast(LocalItems, getattr(options, "local_items", LocalItems([])))
+        local_early_items = multiworld.local_early_items[_player]
+        early_items = multiworld.early_items[_player]
+        for item_name, count in local_early_items.items():
+            count_to_remove[item_name] += count
+        for item_name, count in early_items.items():
+            count_to_remove[item_name] += count
         remove_all |= local_items.value
         # region hdl item_links
         item_links = cast(ItemLinks, getattr(options, "item_links", ItemLinks([])))
