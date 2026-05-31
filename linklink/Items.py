@@ -1,5 +1,5 @@
 from BaseClasses import Item
-from .Data import item_table, category_table
+from .Data import item_table
 from .Game import filler_item_name, starting_index, game_name
 
 
@@ -47,10 +47,9 @@ for item in item_table:
         lastItemId = max(lastItemId, item["id"])
 
     for c in item.get("category", []):
-        if category_table.get(c,{}).get("create_item_group", True):
-            if c not in item_name_groups:
-                item_name_groups[c] = set()
-            item_name_groups[c].add(item_name)
+        if c not in item_name_groups:
+            item_name_groups[c] = set()
+        item_name_groups[c].add(item_name)
     #Just lowercase the values here to remove all the .lower.strip down the line
     item['value'] = {k.lower().strip(): v
                      for k, v in item.get('value', {}).items()}
