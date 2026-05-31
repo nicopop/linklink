@@ -240,16 +240,16 @@ def before_create_items_filler(item_pool: list, world: "ManualWorld", multiworld
 # The complete item pool prior to being set for generation is provided here, in case you want to make changes to it
 def after_create_items(item_pool: list[Item], world: "ManualWorld", multiworld: MultiWorld, player: int) -> list:
     unplaced_nothing = [i for i in item_pool if i.name == world.filler_item_name]
-    ll_locations = [l for l in world.get_locations() if world.location_name_to_location.get(l.name, {}).get("linklink", None) is not None]
+    ll_locations = [l for l in world.get_locations() if world.location_name_to_location.get(l.name, {}).get("linklink") is not None]
 
     # Doing the placing on locked items here since its faster than Manual's place_item
     for location in ll_locations:
         if len(unplaced_nothing) > 0:
-            item = unplaced_nothing.pop()
-            try_remove_specific_item(item_pool, item)
+            nothing = unplaced_nothing.pop()
+            try_remove_specific_item(item_pool, nothing)
         else:
-            item = world.create_item(world.filler_item_name)
-        location.place_locked_item(item)
+            nothing = world.create_item(world.filler_item_name)
+        location.place_locked_item(nothing)
 # region
     # ? maybe add support for executing linklink_magic here, that would be the most "correct" time to do it
     #  if player > max(get_victims(world, True)):
@@ -356,25 +356,18 @@ def linklink_magic(world: "ManualWorld", in_pre_fill = False):
     # region handle Items
     from Options import LocalItems, PlandoItems, ItemLinks, StartInventoryPool
     usable_items_for_player: dict[int, list[Item]] = {}
-    unplaced_nothing: list[Item] = []
     for victim in victims:
         usable_items_for_player[victim] = []
     usable_items_for_player[player] = []
-    nothing_source: Counter[str] = Counter()
     not_linklink_items_count = 0
 
     for item in multiworld.itempool:
         if item.player == player:
-            if item.name == world.filler_item_name:
-                # * should never find any logically since we preplace all the nothing in create_items
-                unplaced_nothing.append(item)
-                nothing_source["free"] += 1
+            manual_item = world.item_name_to_item[item.name]
+            if manual_item.get("linklink") is None:
+                not_linklink_items_count += 1
             else:
-                manual_item = world.item_name_to_item[item.name]
-                if manual_item.get("linklink") is None:
-                    not_linklink_items_count += 1
-                else:
-                    usable_items_for_player[player].append(item)
+                usable_items_for_player[player].append(item)
         elif item.player in victims and item.location is None:
             usable_items_for_player[item.player].append(item)
 
@@ -599,17 +592,11 @@ def linklink_magic(world: "ManualWorld", in_pre_fill = False):
                     item = nullable_item # to make mypy happy
                     item_cache[victim_id].remove(item)
                     old_item = place_locked_item(location, item)
-                    if old_item is not None:
-                        multiworld.itempool.append(old_item)
-                        unplaced_nothing.append(old_item)
-                        nothing_source[item_name] += 1
                     victim_items.remove(item)
+
                     try_remove_specific_item(multiworld.itempool, item)
                     if id(item) in item_create_filler:
                         filler_to_make_for_player[victim_id] += 1
-                    else:
-                        try_remove_specific_item(multiworld.itempool, unplaced_nothing.pop())
-                        nothing_source[item_name] -= 1
                     n += 1
                     spot_filled += 1
                     highest_placed_count = max(highest_placed_count, i)
@@ -678,9 +665,6 @@ def linklink_magic(world: "ManualWorld", in_pre_fill = False):
                         filler_made += 1
                         multiworld.itempool.append(filler)
                         filler_items.append(filler)
-                        if unplaced_nothing is not None and len(unplaced_nothing) > 0:
-                            try_remove_specific_item(multiworld.itempool, unplaced_nothing.pop())
-                            nothing_source[item_name] -= 1
                         filler_to_make_for_player[player_id] -= 1
                         if filler_to_make_for_player[player_id] == 0:
                             filler_to_make_for_player.pop(player_id)
@@ -736,32 +720,17 @@ def linklink_magic(world: "ManualWorld", in_pre_fill = False):
         key_count += highest_placed_count if spot_filled > 1 else 0
 
     # region filler adjusting
-
-    if extras > 0:
-        logging.debug(f"Failed to fit {extras} extra keys in the item pool, randomly picked items from the generated fillers will be removed to avoid creating too many items")
-        for _ in range(extras):
-            if filler_to_make > 0:
-                filler_to_make -= 1
-                extras -= 1
-            elif filler_items:
-                sacrifice = world.random.choice(filler_items)
-                try_remove_specific_item(multiworld.itempool, sacrifice)
-                filler_items.remove(sacrifice)
-                extras -= 1
-            else:
-                break
-        if extras > 0:
-            logging.debug(f"Failed to remove {extras} extra keys, you might see a message later talking about too many items.")
-
     unfilled_locations = multiworld.get_unfilled_locations(player) # Free spots + any not linklink locations
-    adjust_filler_count = filler_to_make + len(unfilled_locations) - len(unplaced_nothing) - extras - not_linklink_items_count
+    adjust_filler_count = filler_to_make + len(unfilled_locations) - extras - not_linklink_items_count
 
     # After everything if the filler count need to be adjusted then we need to do stuff so here wont be more/less item than locations
     if adjust_filler_count < 0:
     # if there are too many filler (most of the time)
         for i in range(abs(adjust_filler_count)):
-            if len(unplaced_nothing) > 0:
-                try_remove_specific_item(multiworld.itempool, unplaced_nothing.pop())
+            if filler_items:
+                sacrifice = world.random.choice(filler_items.copy())
+                multiworld.itempool.remove(sacrifice)
+                filler_items.remove(sacrifice)
             else:
                 logging.error(f"{multiworld.player_name[player]} failed to remove {abs(adjust_filler_count) - i} items you will see in the logs that there are more items than locations")
                 break
@@ -772,12 +741,7 @@ def linklink_magic(world: "ManualWorld", in_pre_fill = False):
         multiworld.itempool.extend(replacements)
 
     # ? maybe add emergency extra key removal here or something
-    if unplaced_nothing:
-        replacements = generate_rdm_filler(world, len(unplaced_nothing))
-        for nothing in unplaced_nothing:
-            multiworld.itempool.remove(nothing)
-        multiworld.itempool.extend(replacements)
-
+    # endregion
     # Update item counts for potential rules usage
     pool = [item for item in get_items_for_player(multiworld, player, False)]
     real_pool = pool + precollected_items
