@@ -23,7 +23,7 @@ class Dict_item():
 ITEM_TABLE = []
 MAX_PLAYERS = 40
 FREE_ITEMS = 12
-extra_item_files = ['items_pkmn.json', 'items_kh.json']
+extra_item_files = ['items_pkmn.json', 'items_kh.json', 'items_manual.json']
 
 # called after the game.json file has been loaded
 def after_load_game_file(game_table: dict) -> dict:

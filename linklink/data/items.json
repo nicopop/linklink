@@ -2,6 +2,12 @@
     "$schema": "items.schema.json",
     "data": [
         {
+            "name": "Free hint",
+            "_comment": ["Make sure you have enough non linklink location for any non-linklink items",
+                        "In this case I have more FREE_ITEMS so even if no ll location are left this should still gen fine"],
+            "count": 10
+        },
+        {
             "count": 4,
             "name": "Main Weapon or Tool",
             "linklink": {
@@ -827,7 +833,6 @@
             "name": "Keys",
             "extra": 10,
             "progression_skip_balancing": true,
-            "progression_deprioritized": true,
             "linklink": {
                 "Majora's Mask Recompiled": ["Room Key", "Small Key (Woodfall)", "Boss Key (Woodfall)", "Small Key (Snowhead)", "Boss Key (Snowhead)",
                     "Small Key (Great Bay)", "Boss Key (Great Bay)", "Small Key (Stone Tower)", "Boss Key (Stone Tower)", "$Shuffle"],
@@ -858,7 +863,6 @@
             "name": "Teleporters",
             "_comment": "Teleporter style items and items that let you go to other areas, get to important locations",
             "progression_skip_balancing": true,
-            "progression_deprioritized": true,
             "extra": 5,
             "linklink": {
                 "Majora's Mask Recompiled": ["Song of Soaring"],
