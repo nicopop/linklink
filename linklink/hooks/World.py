@@ -657,21 +657,21 @@ def linklink_magic(world: "ManualWorld", in_pre_fill = False):
 
             # Generate filler for every player that needs it
             filler_to_make_for_player = +filler_to_make_for_player
-            # ? maybe add option to skip this block and make filler all random
-            for player_id, count in filler_to_make_for_player.copy().items():
-                for _ in range(count):
-                    player_world: World = multiworld.worlds[player_id]
-                    filler = try_create_filter(player_world)
-                    if filler is not None:
-                        filler_made += 1
-                        multiworld.itempool.append(filler)
-                        filler_items.append(filler)
-                        filler_to_make_for_player[player_id] -= 1
-                        if filler_to_make_for_player[player_id] == 0:
-                            filler_to_make_for_player.pop(player_id)
-                    else:
-                        # if creating filler fail skip the rest of this players attempt
-                        break
+            if not world.options.filler_all_random.value: #type: ignore
+                for player_id, count in filler_to_make_for_player.copy().items():
+                    for _ in range(count):
+                        player_world: World = multiworld.worlds[player_id]
+                        filler = try_create_filter(player_world)
+                        if filler is not None:
+                            filler_made += 1
+                            multiworld.itempool.append(filler)
+                            filler_items.append(filler)
+                            filler_to_make_for_player[player_id] -= 1
+                            if filler_to_make_for_player[player_id] == 0:
+                                filler_to_make_for_player.pop(player_id)
+                        else:
+                            # if creating filler fail skip the rest of this players attempt
+                            break
             filler_to_make += filler_to_make_for_player.total()
         # endregion
         # region location rem

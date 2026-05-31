@@ -53,11 +53,16 @@ class VictoryPercent(NamedRange):
         "default": 25,
     }
 
+class FillerAllRandom(Toggle):
+    """Should generated filler be from any victim at random (true) or mostly linked to those that have items stolen by linklink"""
+    display_name = "Should linklink generated filler be all random"
+
 # This is called before any manual options are defined, in case you want to define your own with a clean slate or let Manual define over them
 def before_options_defined(options: dict[str, Type[Option[Any]]]) -> dict[str, Type[Option[Any]]]:
     options["magic_in_pre_fill"] = MagicInPreFill
     options["victims"] = Victims
     options["keys_required"] = VictoryPercent
+    options["filler_all_random"] = FillerAllRandom
     return options
 
 # This is called after any manual options are defined, in case you want to see what options are defined or want to modify the defined options
