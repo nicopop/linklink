@@ -217,7 +217,8 @@ def before_create_items_all(item_config: dict[str, int|dict[Any, int]], world: "
         for name, config in item_config.copy().items():
             if config:
                 item_data = world.item_name_to_item[name]
-                item_config[name] = item_data['count'] + item_data["extra"]
+                if item_data.get("linklink"):
+                    item_config[name] = item_data['count'] + item_data["extra"]
     elif world.is_ut_regen:
         if linklink_item_config := cast(Counter[str], getattr(world, "linklink_item_config", {})):
             for item_name in dict(item_config).keys():
