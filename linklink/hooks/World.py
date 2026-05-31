@@ -250,13 +250,13 @@ def after_create_items(item_pool: list[Item], world: "ManualWorld", multiworld: 
         else:
             item = world.create_item(world.filler_item_name)
         location.place_locked_item(item)
-# region magic time
+# region
     # ? maybe add support for executing linklink_magic here, that would be the most "correct" time to do it
     #  if player > max(get_victims(world, True)):
     #     print("we could do the magic here maybe :D")
 # endregion
     return item_pool
-
+# region tool funcs
 def try_remove_specific_item(items: list[Item], item: Item):
     try:
         remove_specific_item(items, item)
@@ -272,6 +272,7 @@ def remove_location(world: "ManualWorld", location: Location):
         if location.address is not None:
             world.linklink_removed_location.append(location.address)
 
+# region gen_rdm_filler
 def generate_rdm_filler(world: "ManualWorld", count: int = 1):
     """Will attempt to generate "count" random filler in the victims world.
     Will generate the count if provided otherwise will check the item_pool for world.filler_item_name"""
@@ -307,6 +308,8 @@ def generate_rdm_filler(world: "ManualWorld", count: int = 1):
             queue = iter(v for v in victims)
         other_player = next(queue, None)
     return replacements
+# endregion
+# endregion
 
 # Called before rules for accessing regions and locations are created. Not clear why you'd want this, but it's here.
 def before_set_rules(world: "ManualWorld", multiworld: MultiWorld, player: int):
@@ -533,6 +536,7 @@ def linklink_magic(world: "ManualWorld", in_pre_fill = False):
                 location = multiworld.get_location(location_name, player)
 
                 # region Item Cache
+                # We prepare each victim's items to be used with current linklink key
                 if item_cache.get(victim_id, None) is None:
                     shuffle = "$Shuffle" in linklink[game]
                     items = [item for item in victim_items if item.name in linklink[game]]
@@ -589,7 +593,7 @@ def linklink_magic(world: "ManualWorld", in_pre_fill = False):
                         logging.debug(f"linklink: No options for {item_name} {str(i).zfill(digit)} for {multiworld.player_name[victim_id]} ({game})")
                         continue
                 # endregion
-
+                # region steal item
                 nullable_item: Item|None = next(iter(item_cache[victim_id]), None)
                 if nullable_item is not None:
                     item = nullable_item # to make mypy happy
@@ -609,8 +613,10 @@ def linklink_magic(world: "ManualWorld", in_pre_fill = False):
                     n += 1
                     spot_filled += 1
                     highest_placed_count = max(highest_placed_count, i)
+                # endregion
 
-        # region extra keys rem
+        # region keys removal
+        # aka if there are too many keys left we remove them here
         extras += item_extras
         ll_keys = [item for item in linklink_items if item.name == item_name]
         if ll_keys: # to protect from divided by 0
@@ -642,12 +648,14 @@ def linklink_magic(world: "ManualWorld", in_pre_fill = False):
         # region main filler gen
         filler_to_make_for_player = +filler_to_make_for_player
         if filler_to_make_for_player.values():
+            # here we make sure do not create filler for each existing keys
             available_spots = spot_filled - highest_placed_count
             extra_to_remove = min(available_spots, extras)
             item_count = highest_placed_count + extra_to_remove
             extras -= extra_to_remove
 
-            # if we have keys and extras keys (but less than total available spots) remove them randomly from the amount of filler we have to make later
+            # if we have keys and extras keys (but less than total available spots)
+            # remove them randomly from the amount of filler we have to make later
             filler_to_make_for_player = +filler_to_make_for_player
             players_ids: list[int] = list(filler_to_make_for_player.keys())
             for i in range(item_count):
@@ -682,20 +690,24 @@ def linklink_magic(world: "ManualWorld", in_pre_fill = False):
             filler_to_make += filler_to_make_for_player.total()
         # endregion
         # region location rem
-
+        # In this region unneeded location are removed from generation
         events_name_to_remove: set[str] = set()
         filled_locations = [l for l in multiworld.get_filled_locations(player) if l.name.startswith(f"{item_name} ") ]
         players_digits = len(str(MAX_PLAYERS))
         for location in filled_locations:
+            # this if is only here to make type checkers happy
             if location.item is not None:
                 item = location.item
                 player1 = f" Player {str(1).zfill(players_digits)}"
                 event_name = location.name.removesuffix(player1) + " Event"
+
+                # if the location is unused
                 if item.name == world.filler_item_name:
                     if location.name.endswith(player1):
                         events_name_to_remove.add(event_name)
                     remove_location(world, location)
-                # the spot_filled check make it so that if a category only exists for 1 spot then it get removed
+
+                # the spot_filled check make it so that if a key only exists for 1 spot then it get removed
                 elif item.code is not None and spot_filled <= 1:
                     if id(item) in item_create_filler:
                         item.location = None
@@ -714,6 +726,8 @@ def linklink_magic(world: "ManualWorld", in_pre_fill = False):
                                 extras += 1
                     events_name_to_remove.add(event_name)
                     remove_location(world, location)
+
+                # if this is an event
                 elif item.code is None:
                     if location.name in events_name_to_remove:
                         events_name_to_remove.remove(location.name)
@@ -721,6 +735,7 @@ def linklink_magic(world: "ManualWorld", in_pre_fill = False):
         # endregion
         key_count += highest_placed_count if spot_filled > 1 else 0
 
+    # region filler adjusting
 
     if extras > 0:
         logging.debug(f"Failed to fit {extras} extra keys in the item pool, randomly picked items from the generated fillers will be removed to avoid creating too many items")
@@ -776,7 +791,7 @@ def linklink_magic(world: "ManualWorld", in_pre_fill = False):
 
 # This method is run towards the end of pre-generation, before the place_item options have been handled and before AP generation occurs
 def before_generate_basic(world: "ManualWorld", multiworld: MultiWorld, player: int):
-
+    # either run magic here or make pre_fill do it later
     if not world.is_ut:
         if world.options.magic_in_pre_fill.value: # type: ignore
             def pre_fill():
@@ -786,6 +801,7 @@ def before_generate_basic(world: "ManualWorld", multiworld: MultiWorld, player: 
             linklink_magic(world)
 
 def get_filler_item_name(self: World) -> str:
+    # Custom replacement get_filler_item_name that try to get used for game with fully default create_filler
         multiworld = self.multiworld
         player = self.player
         if hasattr(self, "linklink_filler_names"):
@@ -798,7 +814,7 @@ def get_filler_item_name(self: World) -> str:
             return self.random.choice(list(items))
         else:
             return "Nothing"
-
+# region try_create_filter
 def try_create_filter(world: World) -> Item|None:
     player = world.player
     player_name = world.multiworld.player_name[player]
@@ -831,7 +847,7 @@ def try_create_filter(world: World) -> Item|None:
             return None
 
     return recursion()
-
+# endregion
 # This method is run every time an item is added to the state, can be used to modify the value of an item.
 # IMPORTANT! Any changes made in this hook must be cancelled/undone in after_remove_item
 def after_collect_item(world: "ManualWorld", state: CollectionState, Changed: bool, item: Item):
@@ -851,6 +867,14 @@ def after_remove_item(world: "ManualWorld", state: CollectionState, Changed: boo
 
 # This is called before slot data is set and provides an empty dict ({}), in case you want to modify it before Manual does
 def before_fill_slot_data(slot_data: dict, world: "ManualWorld", multiworld: MultiWorld, player: int) -> dict:
+    return slot_data
+
+# This is called after slot data is set and provides the slot data at the time, in case you want to check and modify it after Manual is done with it
+def after_fill_slot_data(slot_data: dict, world: "ManualWorld", multiworld: MultiWorld, player: int) -> dict:
+    from .Options import VictoryPercent
+    from math import ceil
+    # region UT Yamless
+    # In this region is where every data required for UT to work yamless is added to slot data
     slot_data["linklink"] = {}
     slot_data["linklink"]["key_counts"] = world.item_counts_progression[player]
     slot_data["linklink"]["active_victims"] = world.linklink_active_victims_ids
@@ -862,12 +886,10 @@ def before_fill_slot_data(slot_data: dict, world: "ManualWorld", multiworld: Mul
     # To send as little ids as possible pick the one with less locs in the list
     slot_data["linklink"]["filtered_removed"] = removed_smaller
     slot_data["linklink"]["filtered_locations"] = world.linklink_removed_location if removed_smaller else locations_ids
-    return slot_data
 
-# This is called after slot data is set and provides the slot data at the time, in case you want to check and modify it after Manual is done with it
-def after_fill_slot_data(slot_data: dict, world: "ManualWorld", multiworld: MultiWorld, player: int) -> dict:
-    from .Options import VictoryPercent
-    from math import ceil
+    # endregion
+    # region Goal alias
+    # In this region the amount of keys required to goal is added to the goal alias (requires custom client/PR#219)
     keys_required = cast(VictoryPercent, getattr(world.options, "keys_required", VictoryPercent(VictoryPercent.default)))
     percent = keys_required.value / 100
     keys_count = ceil(world.item_counts_progression[player]["ll_collected"] * percent)
@@ -877,6 +899,7 @@ def after_fill_slot_data(slot_data: dict, world: "ManualWorld", multiworld: Mult
     if "location_id_to_alias" not in slot_data.keys():
         slot_data["location_id_to_alias"] = {}
     slot_data["location_id_to_alias"][Manual_victory["id"]] = f"{keys_count} keys required"
+    # endregion
     return slot_data
 
 # This is called right at the end, in case you want to write stuff to the spoiler log
