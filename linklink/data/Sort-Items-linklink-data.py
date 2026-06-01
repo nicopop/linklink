@@ -1,27 +1,29 @@
 import json
 import re
 from os import path
+from pathlib import Path
 from typing import cast, Any
 
 def repl_func(match: re.Match):
-    result = " ".join(match.group().split())
+    groups = match.groups()
+    prop_key = groups[0]
+    indent_level = int((len(prop_key) - len(prop_key.lstrip(' ')))/4) + 1
+    result: str = " ".join(groups[1].split())
     parts = result.split('",')
-    current_length = 0
+    current_length = len(prop_key) + 1 # for the [
     result_parts: list[str] = []
-    indent = "                   "
+    indent = "    "
     for i, part in enumerate(parts):
-        if i > 0:
-            if current_length > 100 and i < len(parts) - 1:
-                current_length = len(part) + 2
-                part = f'",\n{indent}' + part
+        if current_length + len(part) + 1 > 120:
+            part = f'",\n{indent * indent_level}{part.lstrip(" ")}'
+            current_length = len(part) - 3
 
-            else:
-                current_length += len(part) + 2
-                part = '",' + part
         else:
-            current_length = len(part) + 1
+            if i > 0:
+                part = '",' + part
+            current_length += len(part)
         result_parts.append(part)
-    return "".join(result_parts)
+    return f"{prop_key}[{''.join(result_parts)}]"
 
 def load_data_file(fname: str) -> dict[str, Any]:
     fpath = path.dirname(__file__)
@@ -40,12 +42,15 @@ def write_data_file(fname: str, data: dict):
     fpath = path.join(fpath, fname)
     # regex based on answer in https://www.reddit.com/r/learnpython/comments/ymukyr/removing_new_line_inside_square_brackets_in_json/
     json_str = json.dumps(data, indent=4)
-    json_str = re.sub(r"(?<=\[)[^\[\]]+(?=])", repl_func, json_str)
+    json_str = re.sub(r"(.*?)\[([^\[\]]+)]", repl_func, json_str)
 
     with open(file=fpath, mode="w", encoding="utf-8") as f:
         f.write(json_str)
 
 if __name__ == '__main__':
+    files = [f.name for f in Path(path.dirname(__file__)).iterdir() if f.is_file()\
+        and f.name.startswith("items") and "schema" not in f.name]
+    print(files)
     # First get the key groups from schema:
     schema = load_data_file('items.schema.json')
     schema_linklink = schema.get('definitions', {}).get('linklink', {}).get("properties", None)
@@ -70,7 +75,7 @@ if __name__ == '__main__':
         return len(known_groups.keys())
 
     # Second: sort all the items's linklink properties by grouping them together first
-    for filename in ['items.json', 'items_pkmn.json', 'items_kh.json']:
+    for filename in files:
         itemsjson: dict[str, Any] = load_data_file(filename)
         if isinstance(itemsjson, list):
             itemsjson = {"$schema": "items.schema.json","data": itemsjson}

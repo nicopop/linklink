@@ -428,7 +428,8 @@
             "linklink": {
                 "Kingdom Hearts": ["Torn Page"],
                 "Kingdom Hearts 2": ["Torn Page"],
-                "Kingdom Hearts RE Chain of Memories": ["Key to Rewards Traverse Town", "Key to Rewards Castle Oblivion", "World Card 100 Acre Wood"]
+                "Kingdom Hearts RE Chain of Memories": ["Key to Rewards Traverse Town", "Key to Rewards Castle Oblivion",
+                    "World Card 100 Acre Wood"]
             }
         }
     ]

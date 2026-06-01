@@ -5,7 +5,7 @@
             "count": 0,
             "name": "_Main Weapon or Tool",
             "_comment": ["I'm using 0 count, _ prefix to more easily add other manual later",
-                         "if you want to turn this item ON make sure to change the count and remove the _ prefix in the name"],
+                "if you want to turn this item ON make sure to change the count and remove the _ prefix in the name"],
             "linklink": {
                 "Manual_OuterWilds_Nicopopxd": []
             }
@@ -21,7 +21,7 @@
             "count": 2,
             "name": "Shield",
             "linklink": {
-                "Manual_OuterWilds_Nicopopxd": ["Jellyfishes", "Anglerfish Biology" , "$Shuffle"]
+                "Manual_OuterWilds_Nicopopxd": ["Jellyfishes", "Anglerfish Biology", "$Shuffle"]
             }
         },
         {
@@ -182,7 +182,8 @@
             "count": 4,
             "name": "Key Items",
             "linklink": {
-                "Manual_OuterWilds_Nicopopxd": ["Warp Core Manual", "Coordinates", "Stranger Access", "DreamWorld Access", "$Shuffle"]
+                "Manual_OuterWilds_Nicopopxd": ["Warp Core Manual", "Coordinates", "Stranger Access", "DreamWorld Access",
+                    "$Shuffle"]
             }
         },
         {
@@ -342,7 +343,8 @@
             "name": "Keys",
             "progression_skip_balancing": true,
             "linklink": {
-                "Manual_OuterWilds_Nicopopxd": ["2b Signals", "3a Entrances", "3e codes", "Datamined Code", "$Buffer_10", "$Shuffle"]
+                "Manual_OuterWilds_Nicopopxd": ["2b Signals", "3a Entrances", "3e codes", "Datamined Code", "$Buffer_10",
+                    "$Shuffle"]
             }
         },
         {
@@ -352,7 +354,8 @@
             "progression_skip_balancing": true,
             "extra": 5,
             "linklink": {
-                "Manual_OuterWilds_Nicopopxd": ["Nomai Warp Codes", "$Buffer_3", "Quantum Rule > B", "$Buffer_3", "Quantum Rule > C", "$Shuffle"]
+                "Manual_OuterWilds_Nicopopxd": ["Nomai Warp Codes", "$Buffer_3", "Quantum Rule > B", "$Buffer_3",
+                    "Quantum Rule > C", "$Shuffle"]
             }
         },
         {
