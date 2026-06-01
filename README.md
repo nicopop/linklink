@@ -15,11 +15,13 @@ Note:  This is the maximum number of players in a link, not the total number of 
 Third, is a yaml setting `victims`.  You can leave this empty, and it will plando every valid player in the multiworld.  But if you only want to affect a subset of players, put their names in here.
 
 Note: linklink will attempt to respect some of the players options
-like plando (if plando item enabled), local items and/or itemlinks
+like plando (if plando item enabled), local items and/or itemlinks  
 EG. if a player mark their sword to be local then all of their swords will be excluded from linklink  
 Another thing to note is that unlike normal itemlinks, which are conservative with the pool, linklink is greedy.  If one player has 3 swords and another player has five, LinkLink will take as many as possible from each player.  You DO NOT need to worry about yaml settings affecting the numbers of items in the pool.
 
 You DO NOT need to hand-define plando, or even have plando enabled in host.yaml.  The LinkLink world will force placement of the items it wants to steal automatically.
+
+Once you are done adding items you can run the [sorting script](#sorting-script-what-is-it-used-for) and all your items files will be prettified
 
 ## Item Definitions
 
@@ -58,8 +60,41 @@ This is an extension of the standard Manual item definition.
     }
 ```
 
+(in the real file you can't have `//comments` but here its to explain features)
+
 ## How does this work?
 
-Locations are automatically created by [after_load_location_file](hooks/Data.py), and item placement and culling is done in [after_generate_basic](hooks/World.py).  
+Locations are automatically created by [after_load_location_file](hooks/Data.py), and item placement and culling is done first roughly in [Helpers.py hook](linklink/hooks/Helpers.py), and more precisely in [linklink_magic in after_generate_basic](linklink/hooks/World.py).  
 
 Distribution can done by hand using the Manual Client, but it is recommended that you use the [Slow Release Client](https://github.com/gjgfuj/AP-SlowRelease/releases) to automatically send items out as they come into Logic.
+
+## items.schema.json what is that?
+
+To help with editing linklink items.json files we use a custom schema file.  
+You can find at `linklink/data/items.schema.json`
+If your text editor supports it you can get suggested games that get added to the schema.
+
+you can add games by editing the schema file in the linklink definition like below
+
+```json
+// 20 ish lines of other stuff
+    "definitions": {
+        "linklink": {
+            "type": "object",
+            "description": "Name of this options Presets",
+            "properties": {
+                "A Link Between Worlds": {"description": "A Link Between Worlds", "$ref": "#/definitions/linklink_list", "group": "loz"},
+                "A Link to the Past": {"description": "A Link to the Past", "$ref": "#/definitions/linklink_list", "group": "loz"},
+                //... add a game here somewhere by duplicating an existing line, 
+                // editing the game name and optionally adding a group
+                // to keep things clean sort your game alphabetically by groups
+```
+
+Groups are only used by the [sorting script](#sorting-script-what-is-it-used-for) so do with that what you want.
+
+## Sorting script what is it used for?
+you can find the sorting script at `linklink/data/Sort-Items-linklink-data.py`
+
+- In all of your items.json/items_*.json files
+  - linklink game will be sorted by groups (declared in the [items.schema.json](#itemsschemajson-what-is-that)) and alphabetically
+  - Any list's object that would go over a line limit of 120 character will be wrapped around to a new line

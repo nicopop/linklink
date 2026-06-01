@@ -87,7 +87,7 @@ if __name__ == '__main__':
                     continue
                 else:
                     item["linklink"] = dict(sorted(item["linklink"].items(), key=lambda item: \
-                        (get_group_offset(item[0]), item[0])))
+                        (get_group_offset(item[0]), item[0].removeprefix("Manual_").removeprefix("manual_"))))
                 # Clean up any empty categories
                 if "category" in item and not item["category"]:
                     del item["category"]
