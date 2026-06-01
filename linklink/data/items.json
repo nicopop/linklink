@@ -3,8 +3,7 @@
     "data": [
         {
             "name": "Free hint",
-            "_comment": ["Make sure you have enough non linklink location for any non-linklink items",
-                        "In this case I have more FREE_ITEMS so even if no ll location are left this should still gen fine"],
+            "_comment": ["Make sure you have enough non linklink location for any non-linklink items", "In this case I have more FREE_ITEMS so even if no ll location are left this should still gen fine"],
             "count": 10
         },
         {
@@ -76,11 +75,12 @@
                 "Twilight Princess": ["Shields"],
                 "Hollow Knight": ["Baldur_Shell"],
                 "Minecraft": ["Shield"],
+                "Outer Wilds": ["Silent Running Mode"],
                 "TUNIC": ["Shield"]
             }
         },
         {
-            "count": 2,
+            "count": 3,
             "name": "Fire Magic",
             "linklink": {
                 "A Link Between Worlds": ["Fire Rod"],
@@ -98,6 +98,7 @@
                 "Minecraft": ["Flint and Steel", "Campfire", "$Shuffle"],
                 "Ori and the Blind Forest": ["ChargeFlame"],
                 "Ori and the Will of the Wisps": ["Blaze", "Melting Blaze"],
+                "Outer Wilds": ["River Lowlands Painting Code", "Cinder Isles Painting Code", "Hidden Gorge Painting Code", "$Shuffle"],
                 "TUNIC": ["Glass Cannon"]
             }
         },
@@ -138,6 +139,7 @@
         {
             "count": 3,
             "name": "Bow",
+            "_comment": "aka range weapon",
             "linklink": {
                 "A Link Between Worlds": ["Bow"],
                 "A Link to the Past": ["Progressive Bow", "Bow", "Arrow Upgrade (70)", "Arrow Upgrade (+10)", "Arrow Upgrade (+5)", "Arrows (10)"],
@@ -153,7 +155,8 @@
                 "The Wind Waker": ["Progressive Bow", "Progressive Quiver"],
                 "Twilight Princess": ["Progressive Hero's Bow"],
                 "Minecraft": ["Archery"],
-                "Ori and the Will of the Wisps": ["Bow", "Bow Efficiency"]
+                "Ori and the Will of the Wisps": ["Bow", "Bow Efficiency"],
+                "TUNIC": ["Gun"]
             }
         },
         {
@@ -468,6 +471,7 @@
                 "ANIMAL WELL": ["UV Lantern", "Lantern"],
                 "Hollow Knight": ["Lumafly_Lantern"],
                 "Ori and the Will of the Wisps": ["Flash", "Flash Efficiency"],
+                "Outer Wilds": ["Stranger Light Modulator"],
                 "TUNIC": ["Lantern"]
             }
         },
@@ -593,8 +597,7 @@
                 "The Legend of Zelda - Oracle of Ages": ["Seed Shooter"],
                 "The Legend of Zelda - Oracle of Seasons": ["Seed Shooter", "Progressive Slingshot"],
                 "Twilight Princess": ["Slingshot"],
-                "ANIMAL WELL": ["B. Ball"],
-                "TUNIC": ["Gun"]
+                "ANIMAL WELL": ["B. Ball"]
             }
         },
         {
@@ -672,6 +675,7 @@
                 "Twilight Princess": ["Progressive Sky Book"],
                 "Hollow Knight": ["Hunter's_Journal"],
                 "Minecraft": ["Enchanting"],
+                "Outer Wilds": ["Breach Override Codes"],
                 "TUNIC": ["Pages", "$Shuffle"]
             }
         },
