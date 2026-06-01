@@ -4,6 +4,18 @@ from os import path
 from pathlib import Path
 from typing import cast, Any
 
+def load_data_file(fname: str) -> dict[str, Any]:
+    fpath = path.dirname(__file__)
+    fpath = path.join(fpath, fname)
+    try:
+        with open(fpath, 'r', encoding="utf-8-sig") as f:
+            filedata = json.load(f)
+    except Exception:
+        import yaml
+        filedata = yaml.safe_load(open(fpath, 'r', encoding="utf-8-sig"))
+
+    return filedata
+
 def repl_func(match: re.Match):
     groups = match.groups()
     prop_key = groups[0]
@@ -24,18 +36,6 @@ def repl_func(match: re.Match):
             current_length += len(part)
         result_parts.append(part)
     return f"{prop_key}[{''.join(result_parts)}]"
-
-def load_data_file(fname: str) -> dict[str, Any]:
-    fpath = path.dirname(__file__)
-    fpath = path.join(fpath, fname)
-    try:
-        with open(fpath, 'r', encoding="utf-8-sig") as f:
-            filedata = json.load(f)
-    except Exception:
-        import yaml
-        filedata = yaml.safe_load(open(fpath, 'r', encoding="utf-8-sig"))
-
-    return filedata
 
 def write_data_file(fname: str, data: dict):
     fpath = path.dirname(__file__)
