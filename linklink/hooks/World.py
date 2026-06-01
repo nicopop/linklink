@@ -121,7 +121,7 @@ def before_generate_early(world: "ManualWorld", multiworld: MultiWorld, player: 
                     continue
                 victims_ids.add(id_for_names[name])
             if missing:
-                raise OptionError(f"The following victims could not be found in the multiworld, there could be some typos or their yaml failed to load.\
+                raise OptionError(f"The following victim(s) could not be found in the multiworld, there could be some typos or their yaml failed to load.\
                     \n - missing: {', '.join(missing)}")
 
         if player in victims_ids:
@@ -153,28 +153,6 @@ def before_create_regions(world: "ManualWorld", multiworld: MultiWorld, player: 
 
 # Called after regions and locations are created, in case you want to see or modify that information. Victory location is included.
 def after_create_regions(world: "ManualWorld", multiworld: MultiWorld, player: int):
-    if world.is_ut_regen:
-        # ? maybe move this to helper hooks
-        filter = world.linklink_locations
-        players_digits = len(str(MAX_PLAYERS))
-        events_name_to_remove: set[str] = set()
-        locations_to_remove: list[Location] = []
-        # world.linklink_locations_filtered_by_removed = if the filter contains all the removed location (true) vs contains all the enabled location (false)
-        for location in multiworld.get_locations(player):
-            if location.address is not None and ((location.address in filter) == world.linklink_locations_filtered_by_removed):
-                if location.name.startswith("Free item"):
-                    continue
-                player1 = f" Player {str(1).zfill(players_digits)}"
-                if location.name.endswith(player1):
-                    event_name = location.name.removesuffix(player1)
-                    events_name_to_remove.add(event_name + " Event")
-                locations_to_remove.append(location)
-            elif location.address is None and location.name in events_name_to_remove:
-                locations_to_remove.append(location)
-
-        for location in locations_to_remove:
-            if location.parent_region is not None:
-                location.parent_region.locations.remove(location)
     pass
 
 # This hook allows you to access the item names & counts before the items are created. Use this to increase/decrease the amount of a specific item in the pool
@@ -186,6 +164,7 @@ def after_create_regions(world: "ManualWorld", multiworld: MultiWorld, player: i
 #       will create 5 items that are the "useful trap" class
 # {"Item Name": {ItemClassification.useful: 5}} <- You can also use the classification directly
 def before_create_items_all(item_config: dict[str, int|dict[Any, int]], world: "ManualWorld", multiworld: MultiWorld, player: int) -> dict[str, int|dict]:
+    # region item_config
     if not world.is_ut:
         for name, config in item_config.copy().items():
             if config:
@@ -197,6 +176,7 @@ def before_create_items_all(item_config: dict[str, int|dict[Any, int]], world: "
             for item_name in dict(item_config).keys():
                 item_config[item_name] = linklink_item_config[item_name]
     return item_config
+    # endregion
 
 # The item pool before place_item(_category) are processed, in case you want to see the raw item pool at that stage
 def before_create_items_place_items(item_pool: list, world: "ManualWorld", multiworld: MultiWorld, player: int) -> list:
@@ -230,7 +210,7 @@ def after_create_items(item_pool: list[Item], world: "ManualWorld", multiworld: 
     #     print("we could do the magic here maybe :D")
 # endregion
     return item_pool
-# region tool funcs
+# region tool functions
 def get_linklink_games(world: "ManualWorld") -> set[str]:
     if hasattr(world, "linklink_games"):
         return world.linklink_games

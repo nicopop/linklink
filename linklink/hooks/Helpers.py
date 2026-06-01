@@ -34,7 +34,16 @@ def before_is_location_enabled(multiworld: MultiWorld, player: int, location:  d
             item["linklink_status"][player] = not get_active_linklink_games(world).isdisjoint(set(item["linklink"].keys()))
         if not item["linklink_status"][player]:
             world.linklink_helpers_disabled_location += 1 # type: ignore
-        return item["linklink_status"][player]
+
+        is_from_valid_game = item["linklink_status"][player]
+        ut_check = True
+        if is_from_valid_game and world.is_ut_regen:
+            filter: list[int] = world.linklink_locations
+            # world.linklink_locations_filtered_by_removed =
+            # if the filter contains all the removed location (true)
+            # vs contains all the enabled location (false)
+            ut_check = not ((int(location["id"]) in filter) == world.linklink_locations_filtered_by_removed)
+        return is_from_valid_game and ut_check
     return None
 
 def is_game_enabled(game: str, world: "ManualWorld") -> bool:
