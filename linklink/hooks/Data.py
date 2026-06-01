@@ -33,8 +33,12 @@ def after_load_game_file(game_table: dict) -> dict:
 # if you need access to the items after processing to add ids, etc., you should use the hooks in World.py
 def after_load_item_file(item_table: list[dict[str, Any]]) -> list:
     # add the linklink category to all the existing items of the main items.json file
+    first_ll = True
     for item in item_table:
         if item.get('linklink'):
+            if first_ll:
+                item["id"] = 1000 # give plenty of space for non-ll locations
+                first_ll = False
             if 'category' not in item:
                 item["category"] = ['linklink main']
             elif 'linklink main' not in item['category']:
@@ -66,7 +70,7 @@ def after_load_item_file(item_table: list[dict[str, Any]]) -> list:
                     existing_item["extra"] = max(item_o.extra, ex_item_o.extra)
                     new_table.remove(item)
                     break
-        new_table[0]["id"] = (i + 1) * 1000  # Plenty of room for expansion
+        new_table[0]["id"] = (i + 2) * 1000  # Plenty of room for expansion
         item_table.extend(new_table)
 
     for item in item_table:
@@ -91,6 +95,17 @@ def after_load_progressive_item_file(progressive_item_table: list) -> list:
 # called after the locations.json file has been loaded, before any location loading or processing has occurred
 # if you need access to the locations after processing to add ids, etc., you should use the hooks in World.py
 def after_load_location_file(location_table: list) -> list:
+    digit = len(str(FREE_ITEMS + 1))
+    for i in range(1, FREE_ITEMS + 1):
+        location: dict[str, Any] = {
+            "name": f"Free Item {str(i).zfill(digit)}",
+            "region": "Free Items",
+            "category": ["Free Items"],
+            "requires": "",
+        }
+        if i == 1:
+            location["id"] = 1000 # give plenty of space for non-ll locations
+        location_table.append(location)
     for item in ITEM_TABLE:
         if 'linklink' in item:
             count = item['count']
@@ -108,14 +123,6 @@ def after_load_location_file(location_table: list) -> list:
                         "scoutable": True,
                         "linklink_player": j
                     })
-    digit = len(str(FREE_ITEMS + 1))
-    for i in range(1, FREE_ITEMS + 1):
-        location_table.append({
-            "name": f"Free Item {str(i).zfill(digit)}",
-            "region": "Free Items",
-            "category": ["Free Items"],
-            "requires": "",
-        })
     return location_table
 
 # called after the events.json file has been loaded, before any processing has occurred

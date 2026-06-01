@@ -732,7 +732,7 @@ def linklink_magic(world: "ManualWorld", in_pre_fill = False):
     world.item_counts[player] = world.get_item_counts(pool=real_pool)
     world.item_counts_progression[player] = world.get_item_counts(pool=real_pool, only_progression=True)
 
-    link_count = len([location for location in multiworld.get_filled_locations(player) if not location.is_event and world.location_name_to_location[location.name].get("linklink") is not None]) - 1 # victory removed
+    link_count = len([location for location in multiworld.get_filled_locations(player) if not location.is_event and world.location_name_to_location[location.name].get("linklink") is not None])
     elapsed_time = time.perf_counter() - start_time
     logging.info(f"{multiworld.player_name[player]} took {elapsed_time:.4f} seconds to do the linklink magic")
     logging.info(f"{multiworld.player_name[player]} Has {key_count} keys and {link_count} links")
