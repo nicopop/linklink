@@ -1,0 +1,173 @@
+{
+    "$schema": "items.schema.json",
+    "_comment": ["Originally from LUGAWI on discord",
+    "But modified a bit to interact more with the main items.json file"],
+    "data": [
+        {
+            "count": 1,
+            "name": "Morph Ball",
+            "linklink": {
+                "SMZ3": ["Morph"],
+                "Metroid Fusion": ["Morph Ball"],
+                "Metroid Prime": ["Morph Ball"],
+                "Metroid: Samus Returns": ["Morph Ball"],
+                "Metroid: Zero Mission": ["Morph Ball"],
+                "Super Metroid": ["Morph Ball"],
+                "Super Metroid Map Rando": ["Morph"]
+            }
+        },
+        {
+            "count": 2,
+            "name": "Bombs",
+            "linklink": {
+                "SMZ3": ["Bombs", "PowerBomb"],
+                "Metroid Fusion": ["Bomb Data", "Power Bomb Data"],
+                "Metroid Prime": ["Morph Ball Bomb", "Power Bomb (Main)"],
+                "Metroid: Samus Returns": ["Bomb", "Power Bomb"],
+                "Metroid: Zero Mission": ["Bomb"],
+                "Super Metroid": ["Bomb", "Power Bomb"],
+                "Super Metroid Map Rando": ["Bombs", "PowerBomb"]
+            }
+        },
+        {
+            "count": 5,
+            "name": "Charge Beam",
+            "linklink": {
+                "SMZ3": ["Charge"],
+                "Metroid Fusion": ["Charge Beam"],
+                "Metroid Prime": ["Charge Beam", "Charge Beam (Power)", "Charge Beam (Ice)", "Charge Beam (Wave)",
+                    "Charge Beam (Plasma)"],
+                "Metroid: Samus Returns": ["Charge Beam"],
+                "Metroid: Zero Mission": ["Charge Beam"],
+                "Super Metroid": ["Charge Beam"],
+                "Super Metroid Map Rando": ["Charge"]
+            }
+        },
+        {
+            "count": 1,
+            "name": "Spazer/Wide Beam",
+            "linklink": {
+                "SMZ3": ["Spazer"],
+                "Metroid Fusion": ["Wide Beam"],
+                "Metroid: Samus Returns": ["Spazer Beam"],
+                "Super Metroid": ["Spazer"],
+                "Super Metroid Map Rando": ["Spazer"]
+            }
+        },
+        {
+            "count": 3,
+            "name": "Ice Magic",
+            "Lugawi_name": "Ice Beam",
+            "linklink": {
+                "SMZ3": ["Ice"],
+                "Metroid Fusion": ["Ice Beam", "Ice Missile", "Diffusion Missile"],
+                "Metroid Prime": ["Ice Beam", "Ice Spreader", "Progressive Ice Beam"],
+                "Metroid: Samus Returns": ["Ice Beam"],
+                "Metroid: Zero Mission": ["Ice Beam"],
+                "Super Metroid": ["Ice Beam"],
+                "Super Metroid Map Rando": ["Ice"]
+            }
+        },
+        {
+            "count": 3,
+            "name": "Wave Beam",
+            "linklink": {
+                "SMZ3": ["Wave"],
+                "Metroid Fusion": ["Wave Beam"],
+                "Metroid Prime": ["Wave Beam", "Wavebuster", "Progressive Wave Beam"],
+                "Metroid: Samus Returns": ["Wave Beam"],
+                "Metroid: Zero Mission": ["Wave Beam"],
+                "Super Metroid": ["Wave Beam"],
+                "Super Metroid Map Rando": ["Wave"]
+            }
+        },
+        {
+            "count": 3,
+            "name": "Fire Magic",
+            "Lugawi_name": "Plasma Beam",
+            "linklink": {
+                "SMZ3": ["Plasma"],
+                "Metroid Fusion": ["Plasma Beam"],
+                "Metroid Prime": ["Plasma Beam", "Flamethrower", "Progressive Plasma Beam"],
+                "Metroid: Samus Returns": ["Plasma Beam"],
+                "Metroid: Zero Mission": ["Plasma Beam"],
+                "Super Metroid": ["Plasma Beam"],
+                "Super Metroid Map Rando": ["Plasma"]
+            }
+        },
+        {
+            "count": 3,
+            "name": "Suits",
+            "linklink": {
+                "SMZ3": ["Varia", "Gravity"],
+                "Metroid Fusion": ["Varia Suit", "Gravity Suit"],
+                "Metroid Prime": ["Varia Suit", "Gravity Suit", "Phazon Suit"],
+                "Metroid: Samus Returns": ["Varia Suit", "Gravity Suit"],
+                "Metroid: Zero Mission": ["Varia Suit", "Gravity Suit", "Fully Powered Suit"],
+                "Super Metroid": ["Varia Suit", "Gravity Suit"],
+                "Super Metroid Map Rando": ["Varia", "Gravity"]
+            }
+        },
+        {
+            "count": 1,
+            "name": "Hookshot",
+            "Lugawi_name": "Grapple Beam",
+            "linklink": {
+                "SMZ3": ["Grapple"],
+                "Metroid Prime": ["Grapple Beam"],
+                "Metroid: Samus Returns": ["Grapple Beam"],
+                "Super Metroid": ["Grapple Beam"],
+                "Super Metroid Map Rando": ["Grapple"]
+            }
+        },
+        {
+            "count": 2,
+            "name": "Speed boosts",
+            "Lugawi_name": "Speed Booster",
+            "linklink": {
+                "SMZ3": ["SpeedBooster"],
+                "Metroid Fusion": ["Speed Booster"],
+                "Metroid Prime": ["Boost Ball"],
+                "Metroid: Zero Mission": ["Speed Booster"],
+                "Super Metroid": ["Speed Booster"],
+                "Super Metroid Map Rando": ["SpeedBooster"]
+            }
+        },
+        {
+            "count": 4,
+            "name": "Visors",
+            "linklink": {
+                "SMZ3": ["XRay"],
+                "Metroid Prime": ["Scan Visor", "Thermal Visor", "X-Ray Visor", "Combat Visor", "$Shuffle"],
+                "Metroid: Samus Returns": ["Scan Pulse"],
+                "Super Metroid": ["X-Ray Scope"],
+                "Super Metroid Map Rando": ["XRayScope"]
+            }
+        },
+        {
+            "count": 1,
+            "name": "Screw Attack",
+            "linklink": {
+                "SMZ3": ["ScrewAttack"],
+                "Metroid Fusion": ["Screw Attack"],
+                "Metroid: Samus Returns": ["Screw Attack"],
+                "Metroid: Zero Mission": ["Screw Attack"],
+                "Super Metroid": ["Screw Attack"],
+                "Super Metroid Map Rando": ["ScrewAttack"]
+            }
+        },
+        {
+            "count": 2,
+            "name": "Jump upgrade",
+            "Lugawi_name": "Spin Boost/Hi-Jump/Space Jump",
+            "linklink": {
+                "SMZ3": ["HiJump", "SpaceJump"],
+                "Metroid Fusion": ["Space Jump"],
+                "Metroid: Samus Returns": ["Space Jump"],
+                "Metroid: Zero Mission": ["Space Jump"],
+                "Super Metroid": ["Hi-Jump Boots", "Space Jump"],
+                "Super Metroid Map Rando": ["HiJump", "SpaceJump"]
+            }
+        }
+    ]
+}
