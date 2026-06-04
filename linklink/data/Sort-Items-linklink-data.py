@@ -3,6 +3,7 @@ import re
 from os import path
 from pathlib import Path
 from typing import cast, Any
+from functools import cache
 
 def load_data_file(fname: str) -> dict[str, Any]:
     fpath = path.dirname(__file__)
@@ -59,20 +60,38 @@ if __name__ == '__main__':
     schema_linklink = cast(dict[str, dict[str, str]], schema_linklink)
 
     known_groups: dict[str, set[str]] = {}
-    known_keys: set[str] = set()
+    key_to_group: dict[str, str] = {}
+
     for key, value in schema_linklink.items():
         if value.get("group", None):
             group = value["group"]
             if group not in known_groups.keys():
                 known_groups[group] = set()
             known_groups[group].add(key)
-            known_keys.add(key)
+            key_to_group[key] = group
+
+    @cache
     def get_group_offset(key: str) -> int:
-        if key in known_keys:
-            for group, values in known_groups.items():
-                if key in values:
-                    return list(known_groups.keys()).index(group)
+        if key in key_to_group.keys():
+            group= key_to_group[key]
+            return list(known_groups.keys()).index(group)
         return len(known_groups.keys())
+
+    @cache
+    def strip_articles(title: str) -> str:
+        lower = title.lower()
+        if lower.startswith("manual_"):
+            title = title[7:]
+            lower = lower[7:]
+        if lower.startswith("the legend of zelda - "):
+            title = title[22:]
+        elif lower.startswith("the "):
+            title = title[4:]
+        elif lower.startswith("a "):
+            title = title[2:]
+        elif lower.startswith("an "):
+            title = title[3:]
+        return title
 
     # Second: sort all the items's linklink properties by grouping them together first
     for filename in files:
@@ -87,7 +106,7 @@ if __name__ == '__main__':
                     continue
                 else:
                     item["linklink"] = dict(sorted(item["linklink"].items(), key=lambda item: \
-                        (get_group_offset(item[0]), item[0].removeprefix("Manual_").removeprefix("manual_"))))
+                        (get_group_offset(item[0]), strip_articles(item[0]))))
                 # Clean up any empty categories
                 if "category" in item and not item["category"]:
                     del item["category"]
