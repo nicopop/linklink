@@ -79,8 +79,9 @@ if __name__ == '__main__':
 
     @cache
     def strip_articles(title: str) -> str:
+        title = title.replace("_", " ")
         lower = title.lower()
-        if lower.startswith("manual_"):
+        if lower.startswith("manual "):
             title = title[7:]
             lower = lower[7:]
         if lower.startswith("the legend of zelda - "):
