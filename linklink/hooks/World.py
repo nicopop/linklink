@@ -829,7 +829,7 @@ def after_fill_slot_data(slot_data: dict, world: "ManualWorld", multiworld: Mult
     slot_data["linklink"]["active_games"] = world.linklink_active_games
 
 
-    locations_ids = [l.address for l in world.get_locations() if l.address is not None]
+    locations_ids = [l.address for l in world.get_locations() if l.address is not None and world.location_name_to_location[l.name].get("linklink")]
     removed_smaller = len(world.linklink_removed_location) < len(locations_ids)
     # To send as little ids as possible pick the one with less locs in the list
     slot_data["linklink"]["filtered_removed"] = removed_smaller
@@ -843,10 +843,9 @@ def after_fill_slot_data(slot_data: dict, world: "ManualWorld", multiworld: Mult
     keys_count = ceil(world.item_counts_progression[player]["ll_collected"] * percent)
 
     victory_name: str = world.victory_names[0]
-    Manual_victory = world.location_name_to_location[victory_name]
-    if "location_id_to_description" not in slot_data.keys():
-        slot_data["location_id_to_description"] = {}
-    slot_data["location_id_to_description"][Manual_victory["id"]] = f"{keys_count} keys required"
+    if "location_name_to_description" not in slot_data.keys():
+        slot_data["location_name_to_description"] = {}
+    slot_data["location_name_to_description"][victory_name] = f"{keys_count} keys required"
     # endregion
     return slot_data
 
