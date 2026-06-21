@@ -1,7 +1,6 @@
 {
     "$schema": "items.schema.json",
-    "_comment": ["Originally from LUGAWI on discord",
-    "But modified a bit to interact more with the main items.json file"],
+    "_comment": ["Originally from LUGAWI on discord", "But modified a bit to interact more with the main items.json file"],
     "data": [
         {
             "count": 1,

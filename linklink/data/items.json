@@ -85,7 +85,7 @@
             "count": 3,
             "name": "Fire Magic",
             "linklink": {
-                "A Link Between Worlds": ["Fire Rod"],
+                "A Link Between Worlds": ["Fire Rod", "Fire Rod Upgrade"],
                 "A Link to the Past": ["Fire Rod"],
                 "Majora's Mask Recompiled": ["Fire Arrow"],
                 "Ocarina of Time": ["Fire Arrows"],
@@ -109,7 +109,7 @@
             "count": 2,
             "name": "Ice Magic",
             "linklink": {
-                "A Link Between Worlds": ["Ice Rod"],
+                "A Link Between Worlds": ["Ice Rod", "Ice Rod Upgrade"],
                 "A Link to the Past": ["Ice Rod"],
                 "Majora's Mask Recompiled": ["Ice Arrow"],
                 "Ocarina of Time": ["Ice Arrows"],
@@ -145,7 +145,7 @@
             "_comment": "aka range weapon",
             "linklink": {
                 "The Legend of Zelda": ["Bow"],
-                "A Link Between Worlds": ["Bow"],
+                "A Link Between Worlds": ["Bow", "Bow Upgrade"],
                 "A Link to the Past": ["Progressive Bow", "Bow", "Arrow Upgrade (70)", "Arrow Upgrade (+10)",
                     "Arrow Upgrade (+5)", "Arrows (10)"],
                 "Links Awakening DX": ["Bow", "Max Arrows Upgrade", "10 Arrows"],
@@ -168,7 +168,7 @@
             "name": "Boomerang",
             "linklink": {
                 "The Legend of Zelda": ["Boomerang", "Magical Boomerang"],
-                "A Link Between Worlds": ["Boomerang"],
+                "A Link Between Worlds": ["Boomerang", "Boomerang Upgrade"],
                 "A Link to the Past": ["Blue Boomerang", "Red Boomerang"],
                 "Links Awakening DX": ["Boomerang"],
                 "Ocarina of Time": ["Boomerang"],
@@ -190,7 +190,7 @@
             "name": "Bombs",
             "linklink": {
                 "The Legend of Zelda": ["Bombs"],
-                "A Link Between Worlds": ["Bombs"],
+                "A Link Between Worlds": ["Bombs", "Bomb Upgrade"],
                 "A Link to the Past": ["Bomb Upgrade (50)", "Bomb Upgrade (+10)", "Bomb Upgrade (+5)", "Bombs (10)"],
                 "Links Awakening DX": ["Max Bombs Upgrade", "Bombs"],
                 "Majora's Mask Recompiled": ["Progressive Bomb Bag", "Powder Keg", "Blast Mask", "$Shuffle"],
@@ -312,7 +312,7 @@
             "name": "Hookshot",
             "linklink": {
                 "The Legend of Zelda": ["Stepladder"],
-                "A Link Between Worlds": ["Hookshot"],
+                "A Link Between Worlds": ["Hookshot", "Hookshot Upgrade"],
                 "A Link to the Past": ["Hookshot"],
                 "Links Awakening DX": ["Hookshot"],
                 "Majora's Mask Recompiled": ["Hookshot"],
@@ -358,7 +358,7 @@
             "count": 2,
             "name": "Hammer",
             "linklink": {
-                "A Link Between Worlds": ["Hammer"],
+                "A Link Between Worlds": ["Hammer", "Hammer Upgrade"],
                 "A Link to the Past": ["Hammer"],
                 "Ocarina of Time": ["Megaton Hammer"],
                 "The Legend of Zelda - Phantom Hourglass": ["Hammer"],
@@ -420,7 +420,7 @@
             "count": 2,
             "name": "Shovel",
             "linklink": {
-                "A Link Between Worlds": ["Sand Rod"],
+                "A Link Between Worlds": ["Sand Rod", "Sand Rod Upgrade"],
                 "A Link to the Past": ["Shovel"],
                 "Links Awakening DX": ["Shovel"],
                 "The Legend of Zelda - Oracle of Ages": ["Shovel"],
@@ -456,7 +456,7 @@
             "count": 2,
             "name": "Magic Meter",
             "linklink": {
-                "A Link Between Worlds": ["Progressive Bracelet", "Stamina Scroll"],
+                "A Link Between Worlds": ["Progressive Bracelet", "Progressive Merge", "Stamina Scroll"],
                 "A Link to the Past": ["Magic Upgrade (1/2)", "Magic Upgrade (1/4)"],
                 "Majora's Mask Recompiled": ["Progressive Magic Upgrade", "Progressive Magic"],
                 "Ocarina of Time": ["Magic Meter"],
@@ -472,7 +472,7 @@
             "name": "Lamp",
             "linklink": {
                 "The Legend of Zelda": ["Candle", "Red Candle"],
-                "A Link Between Worlds": ["Lamp"],
+                "A Link Between Worlds": ["Lamp", "Lamp Upgrade"],
                 "A Link to the Past": ["Lamp"],
                 "SMZ3": ["Lamp"],
                 "Twilight Princess": ["Lantern"],
@@ -595,6 +595,7 @@
             "_comment": "Jump/glide",
             "linklink": {
                 "The Legend of Zelda": ["Magical Shield"],
+                "A Link Between Worlds": ["Tornado Rod", "Tornado Rod Upgrade"],
                 "A Link to the Past": ["Cape"],
                 "Majora's Mask Recompiled": ["Deku Mask"],
                 "The Legend of Zelda - Oracle of Seasons": ["Progressive Feather"],
@@ -844,7 +845,7 @@
             "_comment": "AKA catch something with it... yea I added fishing rod to it to include more games",
             "count": 2,
             "linklink": {
-                "A Link Between Worlds": ["Bug Net"],
+                "A Link Between Worlds": ["Bug Net", "Bug Net Upgrade"],
                 "A Link to the Past": ["Bug Catching Net"],
                 "The Legend of Zelda - Phantom Hourglass": ["Fishing Rod"],
                 "SMZ3": ["Bugnet"],
@@ -859,6 +860,14 @@
             "extra": 10,
             "progression_skip_balancing": true,
             "linklink": {
+                "A Link Between Worlds": ["Small Key (Hyrule Sanctuary)", "Small Key (Lorule Sanctuary)",
+                    "Big Key (Eastern Palace)", "Small Key (Eastern Palace)", "Big Key (House of Gales)",
+                    "Small Key (House of Gales)", "Big Key (Tower of Hera)", "Small Key (Tower of Hera)",
+                    "Big Key (Dark Palace)", "Small Key (Dark Palace)", "Big Key (Swamp Palace)",
+                    "Small Key (Swamp Palace)", "Big Key (Skull Woods)", "Small Key (Skull Woods)",
+                    "Big Key (Thieves' Hideout)", "Small Key (Thieves' Hideout)", "Big Key (Ice Ruins)",
+                    "Small Key (Ice Ruins)", "Big Key (Desert Palace)", "Small Key (Desert Palace)",
+                    "Big Key (Turtle Rock)", "Small Key (Turtle Rock)", "Small Key (Lorule Castle)", "$Shuffle"],
                 "Majora's Mask Recompiled": ["Room Key", "Small Key (Woodfall)", "Boss Key (Woodfall)",
                     "Small Key (Snowhead)", "Boss Key (Snowhead)", "Small Key (Great Bay)", "Boss Key (Great Bay)",
                     "Small Key (Stone Tower)", "Boss Key (Stone Tower)", "$Shuffle"],
@@ -894,6 +903,7 @@
             "progression_skip_balancing": true,
             "extra": 5,
             "linklink": {
+                "A Link Between Worlds": ["Bell"],
                 "Majora's Mask Recompiled": ["Song of Soaring"],
                 "Ocarina of Time": ["WarpSong", "$Shuffle"],
                 "The Legend of Zelda - Oracle of Ages": ["Progressive Harp"],
