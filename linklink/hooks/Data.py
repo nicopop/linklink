@@ -121,7 +121,8 @@ def after_load_location_file(location_table: list) -> list:
                         "requires": "",
                         "linklink": item['name'],
                         "scoutable": True,
-                        "linklink_player": j
+                        "linklink_player": j,
+                        "linklink_level": i
                     })
     return location_table
 

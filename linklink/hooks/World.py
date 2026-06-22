@@ -1,6 +1,6 @@
 from ..Helpers import is_option_enabled, get_option_value, format_state_prog_items_key, ProgItemsCat, remove_specific_item, get_items_for_player
 # Object classes from AP core, to represent an entire MultiWorld and this individual World that's part of it
-from typing import TYPE_CHECKING, Iterator, cast, Any, Counter
+from typing import TYPE_CHECKING, Iterator, cast, Any, Counter, Callable
 from worlds.AutoWorld import World
 from BaseClasses import MultiWorld, CollectionState, Item, ItemClassification, Location
 from Options import OptionError
@@ -22,8 +22,6 @@ from .Options import Victims
 # calling logging.info("message") anywhere below in this file will output the message to both console and log file
 import logging, time
 
-if TYPE_CHECKING:
-    from .. import ManualWorld
 
 ########################################################################################
 ## Order of method calls when the world generates:
@@ -39,7 +37,6 @@ if TYPE_CHECKING:
 
 # region Custom Client
 from worlds.LauncherComponents import Component, SuffixIdentifier, components, Type, launch, icon_paths
-from typing import Callable
 def launch_client(*args):
     import CommonClient
     from ..ManualClient import launch as Main
@@ -334,7 +331,7 @@ def linklink_magic(world: "ManualWorld", in_pre_fill = False):
     logging.info(f"{multiworld.player_name[player]} is casting some {world.game}{' black' if in_pre_fill else ''} magic with {', '.join([multiworld.player_name[p] for p in victims]) if len(world.options.victims.value) > 0 else f'{len(victims)} players'}") # type: ignore
 
     # region handle Items
-    from Options import LocalItems, PlandoItems, ItemLinks, StartInventoryPool
+    from Options import LocalItems, PlandoItems, ItemLinks, StartInventoryPool, StartInventory
     usable_items_for_player: dict[int, list[Item]] = {}
     for victim in victims.union([player]):
         usable_items_for_player[victim] = []
@@ -354,8 +351,10 @@ def linklink_magic(world: "ManualWorld", in_pre_fill = False):
 
     # Filter Precollected items for those not in logic aka created by start_inventory(_from_pool)
     precollected_exceptions = world.options.start_inventory.value
+    start_inv_pool = cast(StartInventoryPool, getattr(world.options, "start_inventory_from_pool", StartInventoryPool({})))
+    start_inv = cast(StartInventory, getattr(world.options, "start_inventory", StartInventory({})))
     if not in_pre_fill: # outside of pre_fill the items are still in the main item pool
-        precollected_exceptions += world.options.start_inventory_from_pool.value # type: ignore
+        precollected_exceptions += start_inv_pool.value # type: ignore
 
     for item_name, count in precollected_exceptions.items():
         items_iter = iter([i for i in precollected_items if i.name == item_name])
@@ -430,8 +429,7 @@ def linklink_magic(world: "ManualWorld", in_pre_fill = False):
                             else:
                                 count_to_remove[item_name] += plando_max
             # endregion
-            start_inv_pool = cast(StartInventoryPool, getattr(options, "start_inventory_from_pool", StartInventoryPool({})))
-            count_to_remove += Counter(start_inv_pool.value)
+            count_to_remove += Counter(getattr(options, "start_inventory_from_pool", StartInventoryPool({})).value)
         # ? potentially check for special trigger to exclude items from linklink
 
         if count_to_remove or remove_all:
@@ -590,7 +588,7 @@ def linklink_magic(world: "ManualWorld", in_pre_fill = False):
         # aka if there are too many keys left we remove them here
         extras += item_extras
         ll_keys = [item for item in linklink_items if item.name == item_name]
-        if ll_keys: # to protect from divided by 0
+        if ll_keys:
             extra_percent = (highest_placed_count / item_count)
             extra_to_keep = int(item_extras * extra_percent)
             to_keep = highest_placed_count + (extra_to_keep)
@@ -659,47 +657,49 @@ def linklink_magic(world: "ManualWorld", in_pre_fill = False):
         # endregion
         # region location rem
         # In this region unneeded location are removed from generation
-        events_name_to_remove: set[str] = set()
-        filled_locations = [l for l in multiworld.get_filled_locations(player) if l.name.startswith(f"{item_name} ") ]
+        filled_locations = [l for l in multiworld.get_filled_locations(player) if l.name.startswith(f"{item_name} ")]
         players_digits = len(str(MAX_PLAYERS))
         for location in filled_locations:
-            # this if is only here to make type checkers happy
-            if location.item is not None:
-                item = location.item
-                player1 = f" Player {str(1).zfill(players_digits)}"
-                event_name = location.name.removesuffix(player1) + " Event"
+            manual_obj = world.event_name_to_event[location.name] if location.is_event else world.location_name_to_location[location.name]
 
-                # if the location is unused
-                if item.name == world.filler_item_name:
-                    if location.name.endswith(player1):
-                        events_name_to_remove.add(event_name)
-                    remove_location(world, location)
+            if not manual_obj.get("linklink") or location.item is None:
+                continue
 
-                # the spot_filled check make it so that if a key only exists for 1 spot then it get removed
-                elif item.code is not None and spot_filled <= 1:
-                    if id(item) in item_create_filler:
-                        item.location = None
-                        if item_name in world.options.start_inventory_from_pool.value.keys(): # type: ignore
-                            multiworld.push_precollected(item)
+            item = location.item
+            level = int(manual_obj.get("linklink_level", 0))
+            remove = False
+
+            # if the location is unused or event that should be disabled
+            if item.player == player and item.name == world.filler_item_name or level > highest_placed_count:
+                remove = True
+
+            # if we already have some keys in start_inventory don't keep location for them just precol them
+            elif level <= (start_inv_pool.value.get(item_name, 0) + start_inv.value.get(item_name, 0)):
+                if id(item) in item_create_filler:
+                    item.location = None
+                    multiworld.push_precollected(item)
+                remove = True
+
+            # the spot_filled check make it so that if a key only exists for 1 spot then that spot get removed
+            elif spot_filled <= 1:
+                if id(item) in item_create_filler:
+                    item.location = None
+                    multiworld.itempool.append(item)
+                    usable_items_for_player[item.player].append(item)
+                    if ll_keys:
+                        ll_key = ll_keys.pop()
+                        if id(ll_key) not in precollected_items_ids:
+                            remove_specific_item(multiworld.itempool, ll_key)
                         else:
-                            multiworld.itempool.append(item)
-                            usable_items_for_player[item.player].append(item)
-                            if ll_keys:
-                                ll_key = ll_keys.pop()
-                                if id(ll_key) not in precollected_items_ids:
-                                    remove_specific_item(multiworld.itempool, ll_key)
-                                else:
-                                    extras += 1
-                            else:
-                                extras += 1
-                    events_name_to_remove.add(event_name)
-                    remove_location(world, location)
+                            extras += 1
+                    else:
+                        extras += 1
+                remove = True
 
-                # if this is an event
-                elif item.code is None:
-                    if location.name in events_name_to_remove:
-                        events_name_to_remove.remove(location.name)
-                        remove_location(world, location)
+            if remove:
+                remove_location(world, location)
+                continue
+
         # endregion
         key_count += highest_placed_count if spot_filled > 1 else 0
 
