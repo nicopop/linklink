@@ -82,16 +82,15 @@ def before_generate_early(world: "ManualWorld", multiworld: MultiWorld, player: 
     Use it to check or modify incompatible options, or to set up variables for later use.
     """
 # region UT stuff
-    world.is_ut = hasattr(multiworld, "generation_is_fake") # type: ignore
-    if world.is_ut and hasattr(multiworld, "re_gen_passthrough"):
-        if world.game in multiworld.re_gen_passthrough: # type: ignore
-            world.is_ut_regen = True # type: ignore
-            slot_data = multiworld.re_gen_passthrough[world.game]["linklink"] # type: ignore
-            world.linklink_locations = slot_data["filtered_locations"] # type: ignore
-            world.linklink_locations_filtered_by_removed = slot_data["filtered_removed"] # type: ignore
-            world.linklink_item_config = Counter(slot_data["key_counts"]) # type: ignore
-            world.linklink_active_victims_ids = set(slot_data["active_victims"]) # type: ignore
-            world.linklink_active_games = set(slot_data["active_games"]) # type: ignore
+    world.is_ut = getattr(multiworld, "generation_is_fake", False) # type: ignore
+    if world.is_ut and (passthrough := dict(getattr(multiworld, "re_gen_passthrough", {})).get(world.game, {})):
+        world.is_ut_regen = True # type: ignore
+        slot_data = passthrough["linklink"]
+        world.linklink_locations = slot_data["filtered_locations"] # type: ignore
+        world.linklink_locations_filtered_by_removed = slot_data["filtered_removed"] # type: ignore
+        world.linklink_item_config = Counter(slot_data["key_counts"]) # type: ignore
+        world.linklink_active_victims_ids = set(slot_data["active_victims"]) # type: ignore
+        world.linklink_active_games = set(slot_data["active_games"]) # type: ignore
     else:
         world.is_ut_regen = False # type: ignore
 # endregion

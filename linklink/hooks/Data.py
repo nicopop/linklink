@@ -47,7 +47,10 @@ def after_load_item_file(item_table: list[dict[str, Any]]) -> list:
     for i, extra_file in enumerate(extra_item_files):
         from ..Data import convert_to_list
         from ..Helpers import load_data_file
-
+        # ? maybe find a way to alias the keys so you can have "Fire Magic" in items.json ->
+        # ? and "Plasma" in metroid and both work together?
+        # ? might be possible by making it add an "or" requirement for each "alias" declared
+        # ? that or somehow combine the keys (category maybe)
         new_table = convert_to_list(load_data_file(extra_file), "data")
         category_name = "linklink_" + extra_file.lower().removeprefix("items_").removesuffix(".json")
         for item in list(new_table):
