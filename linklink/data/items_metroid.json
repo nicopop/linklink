@@ -4,7 +4,8 @@
     "data": [
         {
             "count": 1,
-            "name": "Morph Ball",
+            "name": "Vehicle",
+            "Lugawi_name": "Morph Ball",
             "linklink": {
                 "SMZ3": ["Morph"],
                 "Metroid Fusion": ["Morph Ball"],
@@ -31,6 +32,8 @@
         {
             "count": 5,
             "name": "Charge Beam",
+            "_comment": ["might rename to Charged attack or weapon to make it more generic",
+                "and compatible with other games"],
             "linklink": {
                 "SMZ3": ["Charge"],
                 "Metroid Fusion": ["Charge Beam"],
@@ -95,8 +98,11 @@
             }
         },
         {
-            "count": 3,
+            "count": 0,
             "name": "Suits",
+            "_comment": ["Split below into the other armors to fit with base items.json",
+                "If you prefer this way just change the count here to 3",
+                "and add a _ before the names for the Armor (_Armor A)"],
             "linklink": {
                 "SMZ3": ["Varia", "Gravity"],
                 "Metroid Fusion": ["Varia Suit", "Gravity Suit"],
@@ -105,6 +111,41 @@
                 "Metroid: Zero Mission": ["Varia Suit", "Gravity Suit", "Fully Powered Suit"],
                 "Super Metroid": ["Varia Suit", "Gravity Suit"],
                 "Super Metroid Map Rando": ["Varia", "Gravity"]
+            }
+        },
+        {
+            "count": 1,
+            "name": "Armor A",
+            "Lugawi_name": "Suits",
+            "linklink": {
+                "SMZ3": ["Varia"],
+                "Metroid Fusion": ["Varia Suit"],
+                "Metroid Prime": ["Varia Suit"],
+                "Metroid: Samus Returns": ["Varia Suit"],
+                "Metroid: Zero Mission": ["Varia Suit"],
+                "Super Metroid": ["Varia Suit"],
+                "Super Metroid Map Rando": ["Varia"]
+            }
+        },
+        {
+            "count": 1,
+            "name": "Armor B",
+            "linklink": {
+                "SMZ3": ["Gravity"],
+                "Metroid Fusion": ["Gravity Suit"],
+                "Metroid Prime": ["Gravity Suit", "Phazon Suit"],
+                "Metroid: Samus Returns": ["Gravity Suit"],
+                "Metroid: Zero Mission": ["Gravity Suit", "Fully Powered Suit"],
+                "Super Metroid": ["Gravity Suit"],
+                "Super Metroid Map Rando": ["Gravity"]
+            }
+        },
+        {
+            "count": 1,
+            "name": "Armor Special",
+            "linklink": {
+                "Metroid Prime": ["Phazon Suit"],
+                "Metroid: Zero Mission": ["Fully Powered Suit"]
             }
         },
         {
