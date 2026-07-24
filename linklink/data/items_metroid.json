@@ -121,7 +121,7 @@
         },
         {
             "count": 2,
-            "name": "Speed boosts",
+            "name": "Speed Boosts",
             "Lugawi_name": "Speed Booster",
             "linklink": {
                 "SMZ3": ["SpeedBooster"],
@@ -157,7 +157,7 @@
         },
         {
             "count": 2,
-            "name": "Jump upgrade",
+            "name": "Jump Upgrade",
             "Lugawi_name": "Spin Boost/Hi-Jump/Space Jump",
             "linklink": {
                 "SMZ3": ["HiJump", "SpaceJump"],

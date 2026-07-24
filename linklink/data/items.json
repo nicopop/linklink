@@ -49,7 +49,9 @@
                 "SMZ3": ["ProgressiveSword"],
                 "Ship of Harkinian": ["Biggoron's Sword"],
                 "Skyward Sword": ["Progressive Sword"],
-                "The Wind Waker": ["Progressive Sword"],
+                "The Legend of Zelda - Spirit Tracks": ["Sword (Progressive)", "Sword Beam Swordsman's Scroll",
+                    "Great Spin Swordsman's Scroll"],
+                "The Wind Waker": ["Progressive Sword", "Hurricane Spin"],
                 "Minecraft": ["Sharpness III Book"],
                 "Ori and the Will of the Wisps": ["Melting Sword"],
                 "Outer Wilds": ["Translators", "$Shuffle"],
@@ -157,7 +159,7 @@
                 "Skyward Sword": ["Progressive Bow"],
                 "The Legend of Zelda - Spirit Tracks": ["Bow (Progressive)"],
                 "Twilight Princess": ["Progressive Hero's Bow"],
-                "The Wind Waker": ["Progressive Bow", "Progressive Quiver"],
+                "The Wind Waker": ["Progressive Bow", "Quiver Capacity Upgrade"],
                 "Minecraft": ["Archery"],
                 "Ori and the Will of the Wisps": ["Bow", "Bow Efficiency"],
                 "TUNIC": ["Gun"]
@@ -204,12 +206,12 @@
                 "Skyward Sword": ["Bomb Bag"],
                 "The Legend of Zelda - Spirit Tracks": ["Bombs (Progressive)"],
                 "Twilight Princess": ["Bomb Bag", "Giant Bomb Bag"],
-                "The Wind Waker": ["Bombs", "Progressive Bomb Bag"],
+                "The Wind Waker": ["Bombs", "Bomb Bag Capacity Upgrade"],
                 "ANIMAL WELL": ["Remote", "F. Pack", "Firecrackers", "Firecracker Refill"],
                 "A Hat in Time": ["Brewing Hat", "Yarn"],
                 "Ori and the Blind Forest": ["Grenade", "Grenade Efficiency"],
                 "Ori and the Will of the Wisps": ["Grenade"],
-                "Outer Wilds": ["Eject Button"],
+                "Outer Wilds": ["Eject Button", "Breach Override Codes", "$Shuffle"],
                 "TUNIC": ["Bombs", "$Shuffle"]
             }
         },
@@ -238,11 +240,14 @@
             "count": 1,
             "name": "Armor Special",
             "linklink": {
+                "A Link to the Past": ["Cape"],
                 "Majora's Mask Recompiled": ["Double Defense"],
                 "Ocarina of Time": ["Double Defense"],
                 "The Legend of Zelda - Phantom Hourglass": ["Hero's New Clothes"],
+                "SMZ3": ["Cape"],
                 "Ship of Harkinian": ["Double Defense"],
                 "The Wind Waker": ["Magic Armor"],
+                "A Hat in Time": ["Hover Badge", "Yarn"],
                 "Minecraft": ["Progressive Armor"],
                 "Ori and the Blind Forest": ["Bash"],
                 "Ori and the Will of the Wisps": ["Bash"],
@@ -401,6 +406,7 @@
             "name": "Magical Rod",
             "linklink": {
                 "The Legend of Zelda": ["Magical Rod"],
+                "A Link Between Worlds": ["Tornado Rod", "Tornado Rod Upgrade"],
                 "A Link to the Past": ["Cane of Somaria"],
                 "Links Awakening DX": ["Magic Rod"],
                 "The Legend of Zelda - Oracle of Ages": ["Cane of Somaria"],
@@ -409,9 +415,11 @@
                 "Skyward Sword": ["Gust Bellows", "Progressive Beetle"],
                 "The Legend of Zelda - Spirit Tracks": ["Whirlwind"],
                 "Twilight Princess": ["Progressive Dominion Rod"],
+                "The Wind Waker": ["Progressive Picto Box"],
                 "ANIMAL WELL": ["B. Wand", "B.B. Wand"],
                 "A Hat in Time": ["Projectile Badge"],
                 "Hollow Knight": ["DreamNails"],
+                "Ori and the Will of the Wisps": ["Flap"],
                 "Outer Wilds": ["Signalscope"],
                 "TUNIC": ["Magic Wand"]
             }
@@ -436,7 +444,7 @@
         },
         {
             "count": 2,
-            "name": "Speed boosts",
+            "name": "Speed Boosts",
             "linklink": {
                 "A Link Between Worlds": ["Pegasus Boots"],
                 "A Link to the Past": ["Pegasus Boots"],
@@ -555,6 +563,8 @@
                 "The Legend of Zelda - Spirit Tracks": ["Song of Awakening", "Song of Healing", "Song of Birds",
                     "Song of Light", "Song of Discovery", "$Shuffle"],
                 "Twilight Princess": ["Shadow Crystal", "Progressive Hidden Skill"],
+                "The Wind Waker": ["Wind's Requiem", "Command Melody", "Earth God's Lyric", "Wind God's Aria",
+                    "Song of Passing", "$Shuffle"],
                 "ANIMAL WELL": ["Yoyo", "$Buffer_2", "$Shuffle"],
                 "A Hat in Time": ["Dweller Mask", "Time Stop Hat", "$Shuffle"],
                 "Hollow Knight": ["Great_Slash", "Dash_Slash", "Cyclone_Slash", "$Shuffle"],
@@ -576,30 +586,23 @@
             }
         },
         {
-            "count": 1,
-            "name": "Feather",
-            "_comment": "A feather",
+            "count": 3,
+            "name": "Jump Upgrade",
             "linklink": {
                 "Links Awakening DX": ["Feather"],
                 "The Legend of Zelda - Oracle of Ages": ["Feather"],
                 "The Legend of Zelda - Oracle of Seasons": ["Progressive Feather"],
-                "The Wind Waker": ["Golden Feather"],
-                "Hollow Knight": ["Quill"],
-                "Minecraft": ["32 Arrows"],
-                "Ori and the Will of the Wisps": ["Flap"]
+                "Hollow Knight": ["Monarch_Wings"],
+                "Ori and the Blind Forest": ["DoubleJump"],
+                "Ori and the Will of the Wisps": ["Double Jump", "Triple Jump", "Extra Double Jump"]
             }
         },
         {
             "count": 1,
             "name": "Glide",
-            "_comment": "Jump/glide",
             "linklink": {
-                "The Legend of Zelda": ["Magical Shield"],
-                "A Link Between Worlds": ["Tornado Rod", "Tornado Rod Upgrade"],
-                "A Link to the Past": ["Cape"],
-                "Majora's Mask Recompiled": ["Deku Mask"],
                 "The Legend of Zelda - Oracle of Seasons": ["Progressive Feather"],
-                "SMZ3": ["Cape"],
+                "The Wind Waker": ["Deku Leaf"],
                 "Ori and the Blind Forest": ["Glide"],
                 "Ori and the Will of the Wisps": ["Glide"]
             }
@@ -630,15 +633,18 @@
         },
         {
             "count": 3,
-            "name": "Seed Bag",
+            "name": "Bag",
+            "oldname": "Seed Bag",
+            "_comment": "aka misc bags and inventory upgrade",
             "linklink": {
+                "A Link Between Worlds": ["Pouch"],
                 "Majora's Mask Recompiled": ["Magic Bean"],
                 "Ocarina of Time": ["Deku Nut Capacity", "Magic Bean", "Magic Bean Pack", "Buy Magic Bean", "$Shuffle"],
                 "The Legend of Zelda - Oracle of Ages": ["Seed Satchel"],
                 "The Legend of Zelda - Oracle of Seasons": ["Seed Satchel"],
                 "Ship of Harkinian": ["Deku Nut Bag", "Beans", "$Shuffle"],
-                "Skyward Sword": ["Small Seed Satchel", "Life Tree Seedling"],
-                "The Wind Waker": ["Bait Bag"]
+                "Skyward Sword": ["Small Seed Satchel", "Life Tree Seedling", "Progressive Pouch"],
+                "The Wind Waker": ["Delivery Bag", "Bait Bag", "Spoils Bag", "$Shuffle"]
             }
         },
         {
@@ -652,7 +658,7 @@
                 "The Legend of Zelda - Phantom Hourglass": ["Kaleidoscope"],
                 "SMZ3": ["Mirror"],
                 "Ship of Harkinian": ["Lens of Truth"],
-                "The Wind Waker": ["Spyglass"],
+                "The Wind Waker": ["Telescope", "Hero's Charm"],
                 "Hollow Knight": ["World_Sense"],
                 "Minecraft": ["Spyglass"],
                 "Outer Wilds": ["Scout", "Imaging Rule", "$Shuffle"]
@@ -671,7 +677,7 @@
                 "Skyward Sword": ["Cawlin's Letter"],
                 "The Legend of Zelda - Spirit Tracks": ["Royal Engineer's Certificate"],
                 "Twilight Princess": ["Auru's Memo", "Ashei's Sketch"],
-                "The Wind Waker": ["Delivery Bag", "Fill-Up Coupon"],
+                "The Wind Waker": ["Mail", "$Shuffle"],
                 "Hollow Knight": ["Collector's_Map"],
                 "Minecraft": ["Infinity Book", "Silk Touch Book", "Channeling Book", "Piercing IV Book",
                     "Looting III Book", "$Shuffle"],
@@ -693,7 +699,6 @@
                 "Twilight Princess": ["Progressive Sky Book"],
                 "Hollow Knight": ["Hunter's_Journal"],
                 "Minecraft": ["Enchanting"],
-                "Outer Wilds": ["Breach Override Codes"],
                 "TUNIC": ["Pages", "$Shuffle"]
             }
         },
@@ -701,7 +706,6 @@
             "count": 4,
             "name": "Wallet",
             "linklink": {
-                "A Link Between Worlds": ["Pouch"],
                 "Majora's Mask Recompiled": ["Progressive Wallet"],
                 "Ocarina of Time": ["Progressive Wallet"],
                 "The Legend of Zelda - Phantom Hourglass": ["Big Green Rupee (100)", "Big Red Rupee (200)",
@@ -711,7 +715,7 @@
                 "The Legend of Zelda - Spirit Tracks": ["Big Green Rupee (100)", "Big Red Rupee (200)", "Gold Rupee (300)",
                     "Pre-Alpha Rupee (5000)", "$Shuffle"],
                 "Twilight Princess": ["Wallet"],
-                "The Wind Waker": ["Progressive Wallet"],
+                "The Wind Waker": ["Wallet Capacity Upgrade"],
                 "Hollow Knight": ["BossGeo", "GeoChests", "$Shuffle"],
                 "Minecraft": ["8 Emeralds", "4 Emeralds", "8 Gold Ore", "4 Diamond Ore", "$Shuffle"],
                 "Ori and the Blind Forest": ["EX200", "EX100"],
@@ -748,7 +752,6 @@
         },
         {
             "count": 16,
-            "_extra": 4,
             "name": "Energy Container",
             "linklink": {
                 "The Legend of Zelda - Phantom Hourglass": ["Sand of Hours (Boss)", "Sand of Hours (Small)",
@@ -759,16 +762,6 @@
                 "Ori and the Will of the Wisps": ["Energy Fragment"],
                 "Outer Wilds": ["Fuel Capacity Upgrade", "Boost Duration Upgrade", "$Shuffle"],
                 "TUNIC": ["MP Offering", "MP Berry x2", "MP Berry x3"]
-            }
-        },
-        {
-            "count": 3,
-            "name": "Jump upgrade",
-            "linklink": {
-                "A Hat in Time": ["Hover Badge", "Yarn"],
-                "Hollow Knight": ["Monarch_Wings"],
-                "Ori and the Blind Forest": ["DoubleJump"],
-                "Ori and the Will of the Wisps": ["Double Jump", "Triple Jump", "Extra Double Jump"]
             }
         },
         {
@@ -824,8 +817,9 @@
         },
         {
             "count": 2,
-            "name": "Charged dash or jump",
+            "name": "Charged Dash or Jump",
             "linklink": {
+                "Majora's Mask Recompiled": ["Deku Mask"],
                 "Hollow Knight": ["CDash", "$Shuffle"],
                 "Ori and the Blind Forest": ["ChargeJump"],
                 "Ori and the Will of the Wisps": ["Launch"]
@@ -885,6 +879,7 @@
                 "The Legend of Zelda - Spirit Tracks": ["Small Keys", "Boss Keys", "$Shuffle"],
                 "Twilight Princess": ["Small Keys", "Big Keys", "Progressive Fused Shadow", "Progressive Mirror Shard",
                     "$Shuffle"],
+                "The Wind Waker": ["Small Keys", "Big Keys", "$Shuffle"],
                 "ANIMAL WELL": ["Key", "Key Ring", "House Key", "Office Key", "$Shuffle"],
                 "A Hat in Time": ["Time Piece", "Yarn", "$Shuffle"],
                 "Hollow Knight": ["Keys", "$Shuffle"],
@@ -918,6 +913,7 @@
                     "W Forest Realm Tracks", "Forest Realm SW Cave Tracks", "W Wooded Temple Tracks",
                     "N Castle Town Tracks", "Snow Realm Bridge Tracks", "N Icy Spring Tracks", "Forest Source",
                     "Snow Source", "Ocean Source", "Fire Source", "$Shuffle"],
+                "The Wind Waker": ["Ballad of Gales", "Special Charts"],
                 "A Hat in Time": ["Time Piece", "Yarn", "$Shuffle"],
                 "Hollow Knight": ["Stags", "$Shuffle"],
                 "Minecraft": ["Structure Compass (Village)", "Structure Compass (Pillager Outpost)",

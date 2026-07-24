@@ -83,7 +83,7 @@ def before_generate_early(world: "ManualWorld", multiworld: MultiWorld, player: 
     """
 # region UT stuff
     world.is_ut = getattr(multiworld, "generation_is_fake", False) # type: ignore
-    if world.is_ut and (passthrough := dict(getattr(multiworld, "re_gen_passthrough", {})).get(world.game, {})):
+    if world.is_ut and (passthrough := dict[str, Any](getattr(multiworld, "re_gen_passthrough", {}).get(world.game, {}))):
         world.is_ut_regen = True # type: ignore
         slot_data = passthrough["linklink"]
         world.linklink_locations = slot_data["filtered_locations"] # type: ignore

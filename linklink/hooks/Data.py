@@ -20,7 +20,7 @@ class Dict_item():
     def to_dict(self) -> dict[str, Any]:
         return {"name": self.name, "count": self.count, "extra": self.extra, "category": self.category, "linklink": self.linklink}
 
-ITEM_TABLE = []
+ITEM_TABLE: list[dict[str, Any]] = []
 MAX_PLAYERS = 40
 FREE_ITEMS = 12
 extra_item_files = ['items_pkmn.json', 'items_kh.json', 'items_manual.json', 'items_metroid.json']

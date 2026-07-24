@@ -60,10 +60,10 @@
             }
         },
         {
-            "count": 0,
-            "name": "_Bombs",
+            "count": 1,
+            "name": "Bombs",
             "linklink": {
-                "Manual_OuterWilds_Nicopopxd": []
+                "Manual_OuterWilds_Nicopopxd": ["Breach Override Codes"]
             }
         },
         {
@@ -109,10 +109,10 @@
             }
         },
         {
-            "count": 1,
+            "count": 2,
             "name": "Swimming",
             "linklink": {
-                "Manual_OuterWilds_Nicopopxd": ["Counter-Clockwise Tornadoes"]
+                "Manual_OuterWilds_Nicopopxd": ["Counter-Clockwise Tornadoes", "Clockwise Tornadoes", "$Shuffle"]
             }
         },
         {
@@ -145,7 +145,7 @@
         },
         {
             "count": 0,
-            "name": "_Speed boosts",
+            "name": "_Speed Boosts",
             "linklink": {
                 "Manual_OuterWilds_Nicopopxd": []
             }
@@ -201,17 +201,8 @@
             }
         },
         {
-            "count": 1,
-            "name": "Feather",
-            "_comment": "A feather",
-            "linklink": {
-                "Manual_OuterWilds_Nicopopxd": ["Clockwise Tornadoes"]
-            }
-        },
-        {
             "count": 0,
             "name": "_Glide",
-            "_comment": "Jump/glide",
             "linklink": {
                 "Manual_OuterWilds_Nicopopxd": []
             }
@@ -231,10 +222,10 @@
             }
         },
         {
-            "count": 0,
-            "name": "_Seed Bag",
+            "count": 1,
+            "name": "Bag",
             "linklink": {
-                "Manual_OuterWilds_Nicopopxd": []
+                "Manual_OuterWilds_Nicopopxd": ["Backpack"]
             }
         },
         {
@@ -245,24 +236,24 @@
             }
         },
         {
-            "count": 2,
-            "name": "Letter",
+            "count": 0,
+            "name": "_Letter",
             "linklink": {
-                "Manual_OuterWilds_Nicopopxd": ["Breach Override Codes", "3e codes", "$Shuffle"]
+                "Manual_OuterWilds_Nicopopxd": []
             }
         },
         {
-            "count": 1,
-            "name": "Book",
+            "count": 0,
+            "name": "_Book",
             "linklink": {
-                "Manual_OuterWilds_Nicopopxd": ["Breach Override Codes", "3e codes"]
+                "Manual_OuterWilds_Nicopopxd": []
             }
         },
         {
-            "count": 1,
-            "name": "Wallet",
+            "count": 0,
+            "name": "_Wallet",
             "linklink": {
-                "Manual_OuterWilds_Nicopopxd": ["Backpack"]
+                "Manual_OuterWilds_Nicopopxd": []
             }
         },
         {
@@ -282,7 +273,7 @@
         },
         {
             "count": 0,
-            "name": "_Jump upgrade",
+            "name": "_Jump Upgrade",
             "linklink": {
                 "Manual_OuterWilds_Nicopopxd": []
             }
@@ -318,7 +309,7 @@
         },
         {
             "count": 0,
-            "name": "_Charged dash or jump",
+            "name": "_Charged Dash or Jump",
             "linklink": {
                 "Manual_OuterWilds_Nicopopxd": []
             }
