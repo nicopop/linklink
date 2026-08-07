@@ -72,7 +72,7 @@ def after_options_defined(options: Type[PerGameCommonOptions]):
     # For example if you want to change DLC_enabled's display name you would do:
     # options.type_hints["DLC_enabled"].display_name = "New Display Name"
 
-    options.type_hints['death_link'].__doc__ = DeathLink.__doc__
+    # options.type_hints['death_link'].__doc__ = DeathLink.__doc__
 
     #  Here's an example on how to add your aliases to the generated goal
     # options.type_hints['goal'].aliases.update({"example": 0, "second_alias": 1})
