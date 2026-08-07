@@ -100,10 +100,12 @@ jobs:
           echo "${json}" > archipelago.json
       - name: Create AP World Archive
         run: |
+          source venv/bin/activate
           python Launcher.py "Build APWorlds" -- "${{ env.AP_WORLD_NAME }}"
           echo "AP_WORLD_PATH=build/apworlds/${{ env.AP_WORLD_DIR }}.apworld" >> $GITHUB_ENV
       - name: Create AP World Template YAML
         run: |
+          source venv/bin/activate
           python Launcher.py "Generate Template Options"
           echo "AP_WORLD_YAML_PATH=Players/Templates/${{ env.AP_WORLD_NAME }}.yaml" >> $GITHUB_ENV
       - name: Add Changelog text to a file for release body, to preserve newlines
