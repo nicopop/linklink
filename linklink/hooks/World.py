@@ -264,7 +264,12 @@ def generate_rdm_filler(world: "ManualWorld", count: int = 1):
     queue: Iterator = iter([])  # for type checking reason
     other_player = None
     while item_count > 0:
-        if other_player is None:
+        if not victims:
+            # if all else fail make some nothing items
+            for _ in range(item_count):
+                replacements.append(world.create_item(world.filler_item_name))
+            break
+        elif other_player is None:
             world.random.shuffle(victims)
             queue = iter(v for v in victims)
             other_player = next(queue)
@@ -275,11 +280,6 @@ def generate_rdm_filler(world: "ManualWorld", count: int = 1):
             item_count -= 1
         else:
             victims.remove(other_player)
-            if not victims:
-                # if all else fail make some nothing items
-                for _ in range(item_count):
-                    replacements.append(world.create_item(world.filler_item_name))
-                break
             world.random.shuffle(victims)
             queue = iter(v for v in victims)
         other_player = next(queue, None)

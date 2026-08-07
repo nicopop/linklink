@@ -1,5 +1,6 @@
 # Object classes from AP that represent different types of options that you can create
-from Options import Option, OptionSet, FreeText, NumericOption, Toggle, DefaultOnToggle, Choice, TextChoice, Range, NamedRange, OptionGroup, PerGameCommonOptions
+from Options import Option, OptionSet, FreeText, NumericOption, Toggle, DefaultOnToggle, Choice, \
+TextChoice, Range, NamedRange, OptionGroup, PerGameCommonOptions, DeathLink
 # These helper methods allow you to determine if an option has been set, or what its value is, for any player in the multiworld
 from ..Helpers import is_option_enabled, get_option_value
 from typing import Type, Any
@@ -70,6 +71,8 @@ def after_options_defined(options: Type[PerGameCommonOptions]):
     # To access a modifiable version of options check the dict in options.type_hints
     # For example if you want to change DLC_enabled's display name you would do:
     # options.type_hints["DLC_enabled"].display_name = "New Display Name"
+
+    options.type_hints['death_link'].__doc__ = DeathLink.__doc__
 
     #  Here's an example on how to add your aliases to the generated goal
     # options.type_hints['goal'].aliases.update({"example": 0, "second_alias": 1})

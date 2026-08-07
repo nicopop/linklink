@@ -27,7 +27,7 @@ def repl_func(match: re.Match):
     result_parts: list[str] = []
     indent = "    "
     for i, part in enumerate(parts):
-        if current_length + len(part) + 1 > 120:
+        if i > 0 and current_length + len(part) + 1 > 120:
             part = f'",\n{indent * indent_level}{part.lstrip(" ")}'
             current_length = len(part) - 3
 

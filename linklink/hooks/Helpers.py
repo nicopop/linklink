@@ -15,7 +15,7 @@ def before_is_item_enabled(multiworld: MultiWorld, player: int, item:  dict[str,
     if item.get("linklink"):
         if not item.get("count"):
             return False
-        return item["linklink_status"][player]
+        return item.get("linklink_status",{}).get(player, None)
     return None
 
 # Use this if you want to override the default behavior of is_option_enabled
