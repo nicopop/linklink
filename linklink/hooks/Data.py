@@ -17,29 +17,47 @@ class Dict_item():
         self.category = json.get("category", [])
         self.linklink = json.get("linklink")
 
-ITEM_TABLE = []
+    def to_dict(self) -> dict[str, Any]:
+        return {"name": self.name, "count": self.count, "extra": self.extra, "category": self.category, "linklink": self.linklink}
+
+ITEM_TABLE: list[dict[str, Any]] = []
 MAX_PLAYERS = 40
 FREE_ITEMS = 12
-extra_item_files = ['items_pkmn.json', 'items_kh.json']
-FILLER_NAME = ""
+extra_item_files = ['items_pkmn.json', 'items_kh.json', 'items_manual.json', 'items_metroid.json']
 
 # called after the game.json file has been loaded
 def after_load_game_file(game_table: dict) -> dict:
-    global FILLER_NAME
-    FILLER_NAME = game_table.get("filler_item_name", "Nothing")
     return game_table
 
 # called after the items.json file has been loaded, before any item loading or processing has occurred
 # if you need access to the items after processing to add ids, etc., you should use the hooks in World.py
-def after_load_item_file(item_table: list) -> list:
-    # Store a reference to this
+def after_load_item_file(item_table: list[dict[str, Any]]) -> list:
+    # add the linklink category to all the existing items of the main items.json file
+    first_ll = True
+    for item in item_table:
+        if item.get('linklink'):
+            if first_ll:
+                item["id"] = 1000 # give plenty of space for non-ll locations
+                first_ll = False
+            if 'category' not in item:
+                item["category"] = ['linklink main']
+            elif 'linklink main' not in item['category']:
+                item["category"].append('linklink main')
 
     for i, extra_file in enumerate(extra_item_files):
         from ..Data import convert_to_list
         from ..Helpers import load_data_file
-
+        # ? maybe find a way to alias the keys so you can have "Fire Magic" in items.json ->
+        # ? and "Plasma" in metroid and both work together?
+        # ? might be possible by making it add an "or" requirement for each "alias" declared
+        # ? that or somehow combine the keys (category maybe)
         new_table = convert_to_list(load_data_file(extra_file), "data")
+        category_name = "linklink_" + extra_file.lower().removeprefix("items_").removesuffix(".json")
         for item in list(new_table):
+            if 'category' not in item:
+                item["category"] = [category_name]
+            elif category_name not in item['category']:
+                item["category"].append(category_name)
             item_o = Dict_item(item)
             for existing_item in item_table:
                 ex_item_o = Dict_item(existing_item)
@@ -55,14 +73,20 @@ def after_load_item_file(item_table: list) -> list:
                     existing_item["extra"] = max(item_o.extra, ex_item_o.extra)
                     new_table.remove(item)
                     break
-        new_table[0]["id"] = (i + 1) * 1000  # Plenty of room for expansion
+        new_table[0]["id"] = (i + 2) * 1000  # Plenty of room for expansion
         item_table.extend(new_table)
 
     for item in item_table:
+        if item.get("linklink"):
+            if extra_item_files:
+                if 'linklink all files' not in item['category']:
+                    item["category"].append('linklink all files')
+            if not item.get("progression"):
+                item["progression"] = True
         if 'count' not in item:
-            item['count'] = 1
+            item["count"] = 1
         if 'extra' not in item:
-            item['extra'] = 0
+            item["extra"] = 0
     ITEM_TABLE.extend(item_table)
     return item_table
 
@@ -74,6 +98,17 @@ def after_load_progressive_item_file(progressive_item_table: list) -> list:
 # called after the locations.json file has been loaded, before any location loading or processing has occurred
 # if you need access to the locations after processing to add ids, etc., you should use the hooks in World.py
 def after_load_location_file(location_table: list) -> list:
+    digit = len(str(FREE_ITEMS + 1))
+    for i in range(1, FREE_ITEMS + 1):
+        location: dict[str, Any] = {
+            "name": f"Free Item {str(i).zfill(digit)}",
+            "region": "Free Items",
+            "category": ["Free Items"],
+            "requires": "",
+        }
+        if i == 1:
+            location["id"] = 1000 # give plenty of space for non-ll locations
+        location_table.append(location)
     for item in ITEM_TABLE:
         if 'linklink' in item:
             count = item['count']
@@ -87,21 +122,30 @@ def after_load_location_file(location_table: list) -> list:
                         "region": f"{item['name']} {str(i).zfill(digit)}",
                         "category": [item['name']],
                         "requires": "",
-                        "linklink": item['name']
+                        "linklink": item['name'],
+                        "scoutable": True,
+                        "linklink_player": j,
+                        "linklink_level": i
                     })
-    digit = len(str(FREE_ITEMS + 1))
-    for i in range(1, FREE_ITEMS + 1):
-        location_table.append({
-            "name": f"Free Item {str(i).zfill(digit)}",
-            "region": "Free Items",
-            "category": ["Free Items"],
-            "requires": "",
-        })
     return location_table
 
 # called after the events.json file has been loaded, before any processing has occurred
 # If you need access to the events after processing, you should use the hooks in World.py
 def after_load_event_file(event_table: list) -> list:
+    for item in ITEM_TABLE:
+        if 'linklink' in item:
+            item_o = Dict_item(item)
+            digit = len(str(item_o.count + 1))
+            players_digits = len(str(MAX_PLAYERS))
+            for i in range(1, item_o.count + 1):
+                name = f"{item_o.name} {str(i).zfill(digit)}"
+                event_table.append({
+                    "name": "ll_collected",
+                    "category": ["Goal"],
+                    "location_name": name + " Event",
+                    "copy_location": name + f" Player {str(1).zfill(players_digits)}",
+                    "visible": True,
+                })
     return event_table
 
 # called after the regions.json file has been loaded, before any location loading or processing has occurred
@@ -109,14 +153,19 @@ def after_load_event_file(event_table: list) -> list:
 def after_load_region_file(region_table: dict) -> dict:
     for item in ITEM_TABLE:
         if 'linklink' in item:
-            digit = len(str(item['count'] + 1))
-            for i in range(1, item['count'] + 1):
+            count = item['count'] + 1
+            digit = len(str(count))
+            for i in range(1, count):
                 name = f"{item['name']} {str(i).zfill(digit)}"
                 if name not in region_table:
-                    region_table[name] = {
+                    region: dict[str, str|list|bool] = {
                         "name": name,
                         "requires": f"|{item['name']}:{i}|",
                     }
+                    region["starting"] = True if i == 1 else False
+                    region["connects_to"] = [f"{item['name']} {str(i + 1).zfill(digit)}"] if i < count - 1 else []
+
+                    region_table[name] = region
     return region_table
 
 # called after the categories.json file has been loaded

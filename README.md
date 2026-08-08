@@ -14,24 +14,45 @@ Note:  This is the maximum number of players in a link, not the total number of 
 
 Third, is a yaml setting `victims`.  You can leave this empty, and it will plando every valid player in the multiworld.  But if you only want to affect a subset of players, put their names in here.
 
-Note:  Unlike normal itemlinks, which are conservative with the pool, linklink is greedy.  If one player has 3 swords and another player has five, LinkLink will take as many as possible from each player.  You DO NOT need to worry about yaml settings affecting the numbers of items in the pool.
+Note: linklink will attempt to respect some of the players options
+like plando (if plando item enabled), local items and/or itemlinks  
+EG. if a player mark their sword to be local then all of their swords will be excluded from linklink  
+Another thing to note is that unlike normal itemlinks, which are conservative with the pool, linklink is greedy.  If one player has 3 swords and another player has five, LinkLink will take as many as possible from each player.  You DO NOT need to worry about yaml settings affecting the numbers of items in the pool.
 
 You DO NOT need to hand-define plando, or even have plando enabled in host.yaml.  The LinkLink world will force placement of the items it wants to steal automatically.
+
+Once you are done adding items you can run the [sorting script](#sorting-script-what-is-it-used-for) and all your items files will be prettified
 
 ## Item Definitions
 
 This is an extension of the standard Manual item definition.
+
 ```json
     {
-        "count": 6,  // Maximum in pool.  Any above this number won't be plando'd
         "name": "Shield", // Name of the item as it appears in the client and other players.
-        "progression": true,
+        "count": 6,  // Maximum in pool.  Any above this number won't be plando'd
+        "extra": 1, // Optional counts of extra copies of keys that will not create new levels of locations
         "linklink": {  // This is the important part:
-            "Links Awakening DX": ["Progressive Shield"],  // Progressive items are pulled multiple times.  We'll pull all three Progressive Shields.
-            "Tunic": ["Shield"],                           // Tunic only has one shield.  Nothing will happen when the link recieves shields 2 and 3.
-            "A Link to the Past": ["Blue Shield", "Red Shield", "Mirror Shield"], // LttP has three separate shields.  This will progressify them.
-            "Ocarina of Time": ["Progressive Shield", "Deku Shield", "Hylian Shield", "Mirror Shield"], // If a game has the option to be progressive or not, this uses progressives if it can find any, then the individuals afterwards.
-            "Factorio": ["progressive-armor", "progressive-energy-shield"],  // You can even progressify progressives!  This'll give all four Armor upgrades, then the two Energy Shield modules.
+            "Links Awakening DX": ["Progressive Shield"],  
+            // Progressive items are pulled multiple times.  We'll pull all three Progressive Shields.
+            "Tunic": ["Shield"],
+            // Tunic only has one shield.  Nothing will happen when the link recieves shields 2 and 3.
+            "A Link to the Past": ["Blue Shield", "Red Shield", "Mirror Shield"], 
+            // LttP has three separate shields.  This will progressify them.
+            "Ocarina of Time": ["Progressive Shield", "Deku Shield", "Hylian Shield", "Mirror Shield"], 
+            // If a game has the option to be progressive or not, this uses progressives if it can find any, then the individuals afterwards.
+            "Factorio": ["progressive-armor", "progressive-energy-shield"],  
+            // You can even progressify progressives!  This'll give all four Armor upgrades, then the two Energy Shield modules.
+            "Shuffle Example": ["Shield A", "Shield B", "Shield C", "$Shuffle"], 
+            // Something you can do in this fork of linklink is to add the special "$Shuffle" fake item that will make linklink randomly choose the order of items placed for this game
+            "ItemGroup Example": ["Shields"], 
+            // With this fork you can use an item group instead of listing all the items, every items in that item group will be possibly used
+            "Buffer Example": ["Shield A", "$Buffer_2", "Shield B"],
+            // Also with this fork, you can insert filler items in between other items, so that player with this will receive the following:
+            // "Shield A" -> "Filler from their game" -> "Filler from their game" -> "Shield B"
+            // you can put whatever number you want after the `_` not just 2
+            // one thing to note is that the code will cap the maximum of buffer created so that the total number of possible items to use will never exceed the "count" property
+            // if instead of "$Buffer_2" it was "$Buffer_20" since the "count" is set to 6 there would actually be only 4 filler created (assuming both shield only have 1 copy each in the pool)
             "The Legend of Zelda": ["Magical Shield"],
             "SMZ3": ["ProgressiveShield"],
             "Wind Waker": ["Progressive Shield"],
@@ -39,8 +60,41 @@ This is an extension of the standard Manual item definition.
     }
 ```
 
+(in the real file you can't have `//comments` but here its to explain features)
+
 ## How does this work?
 
-Locations are automatically created by [after_load_location_file](hooks/Data.py), and item placement and culling is done in [after_generate_basic](hooks/World.py).  
+Locations are automatically created by [after_load_location_file](hooks/Data.py), and item placement and culling is done first roughly in [Helpers.py hook](linklink/hooks/Helpers.py), and more precisely in [linklink_magic in after_generate_basic](linklink/hooks/World.py).  
 
 Distribution can done by hand using the Manual Client, but it is recommended that you use the [Slow Release Client](https://github.com/gjgfuj/AP-SlowRelease/releases) to automatically send items out as they come into Logic.
+
+## items.schema.json what is that?
+
+To help with editing linklink items.json files we use a custom schema file.  
+You can find at `linklink/data/items.schema.json`
+If your text editor supports it you can get suggested games that get added to the schema.
+
+you can add games by editing the schema file in the linklink definition like below
+
+```json
+// 20 ish lines of other stuff
+    "definitions": {
+        "linklink": {
+            "type": "object",
+            "description": "Name of this options Presets",
+            "properties": {
+                "A Link Between Worlds": {"description": "A Link Between Worlds", "$ref": "#/definitions/linklink_list", "group": "loz"},
+                "A Link to the Past": {"description": "A Link to the Past", "$ref": "#/definitions/linklink_list", "group": "loz"},
+                //... add a game here somewhere by duplicating an existing line, 
+                // editing the game name and optionally adding a group
+                // to keep things clean sort your game alphabetically by groups
+```
+
+Groups are only used by the [sorting script](#sorting-script-what-is-it-used-for) so do with that what you want.
+
+## Sorting script what is it used for?
+you can find the sorting script at `linklink/data/Sort-Items-linklink-data.py`
+
+- In all of your items.json/items_*.json files
+  - linklink game will be sorted by groups (declared in the [items.schema.json](#itemsschemajson-what-is-that)) and alphabetically
+  - Any list's object that would go over a line limit of 120 character will be wrapped around to a new line

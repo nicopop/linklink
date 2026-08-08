@@ -46,19 +46,23 @@ if not victory_names:
 
 location_id_to_name: dict[int, str] = {}
 location_name_to_location: dict[str, dict[str, Any]] = {}
-location_name_groups: dict[str, list[str]] = {}
+location_name_to_description: dict[str, str] = {}
+location_name_groups: dict[str, set[str]] = {}
 event_name_to_event: dict[str, dict[str, Any]] = {}
+event_name_groups: dict[str, set[str]] = {}
 
 for loc in location_table:
-    loc_name = loc.get("name", f"Unnamed Location {loc['id']}")
+    loc_name: str = loc.get("name", f"Unnamed Location {loc['id']}")
     location_id_to_name[loc["id"]] = loc_name
     location_name_to_location[loc_name] = loc
 
     for c in loc.get("category", []):
         if c not in location_name_groups:
-            location_name_groups[c] = []
-        location_name_groups[c].append(loc_name)
+            location_name_groups[c] = set()
+        location_name_groups[c].add(loc_name)
 
+    if loc.get("description"):
+        location_name_to_description[loc_name] = loc["description"]
 
 # location_id_to_name[None] = "__Manual Game Complete__"
 location_name_to_id = {name: id for id, name in location_id_to_name.items()}
@@ -83,6 +87,11 @@ for key, event in enumerate(event_table):
     if 'region' not in event:
         event_name_to_event[event_name]['region'] = "Manual"
         event_table[key]['region'] = "Manual"
+    for c in event.get("category", []):
+        if c not in event_name_groups:
+            event_name_groups[c] = set()
+        event_name_groups[c].add(event['name'])
+
     id += 1
 
 ######################

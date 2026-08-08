@@ -1,5 +1,6 @@
 # Object classes from AP that represent different types of options that you can create
-from Options import Option, OptionSet, FreeText, NumericOption, Toggle, DefaultOnToggle, Choice, TextChoice, Range, NamedRange, OptionGroup, PerGameCommonOptions
+from Options import Option, OptionSet, FreeText, NumericOption, Toggle, DefaultOnToggle, Choice, \
+TextChoice, Range, NamedRange, OptionGroup, PerGameCommonOptions, DeathLink
 # These helper methods allow you to determine if an option has been set, or what its value is, for any player in the multiworld
 from ..Helpers import is_option_enabled, get_option_value
 from typing import Type, Any
@@ -41,11 +42,28 @@ class MagicInPreFill(DefaultOnToggle):
     """
     display_name = "Magic done in pre_fill"
 
+class VictoryPercent(NamedRange):
+    """What percentage of keys do you need to get before you can 'goal'
+    For the total you can check your ll_collected count in the Goal category
+    """
+    display_name = "Percentage of keys required"
+    range_start = 0
+    range_end = 100
+    default = 25
+    special_range_names: dict[str, int] = {
+        "default": 25,
+    }
+
+class FillerAllRandom(Toggle):
+    """Should generated filler be from any victim at random (true) or mostly linked to those that have items stolen by linklink"""
+    display_name = "Should linklink generated filler be all random"
 
 # This is called before any manual options are defined, in case you want to define your own with a clean slate or let Manual define over them
 def before_options_defined(options: dict[str, Type[Option[Any]]]) -> dict[str, Type[Option[Any]]]:
     options["magic_in_pre_fill"] = MagicInPreFill
     options["victims"] = Victims
+    options["keys_required"] = VictoryPercent
+    options["filler_all_random"] = FillerAllRandom
     return options
 
 # This is called after any manual options are defined, in case you want to see what options are defined or want to modify the defined options
@@ -53,6 +71,8 @@ def after_options_defined(options: Type[PerGameCommonOptions]):
     # To access a modifiable version of options check the dict in options.type_hints
     # For example if you want to change DLC_enabled's display name you would do:
     # options.type_hints["DLC_enabled"].display_name = "New Display Name"
+
+    # options.type_hints['death_link'].__doc__ = DeathLink.__doc__
 
     #  Here's an example on how to add your aliases to the generated goal
     # options.type_hints['goal'].aliases.update({"example": 0, "second_alias": 1})

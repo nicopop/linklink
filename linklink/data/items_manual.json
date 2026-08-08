@@ -1,0 +1,363 @@
+{
+    "$schema": "items.schema.json",
+    "data": [
+        {
+            "count": 0,
+            "name": "_Main Weapon or Tool",
+            "_comment": ["I'm using 0 count, _ prefix to more easily add other manual later",
+                "if you want to turn this item ON make sure to change the count and remove the _ prefix in the name"],
+            "linklink": {
+                "Manual_OuterWilds_Nicopopxd": []
+            }
+        },
+        {
+            "count": 0,
+            "name": "_Special Weapon or Tool",
+            "linklink": {
+                "Manual_OuterWilds_Nicopopxd": []
+            }
+        },
+        {
+            "count": 2,
+            "name": "Shield",
+            "linklink": {
+                "Manual_OuterWilds_Nicopopxd": ["Jellyfishes", "Anglerfish Biology", "$Shuffle"]
+            }
+        },
+        {
+            "count": 4,
+            "name": "Fire Magic",
+            "linklink": {
+                "Manual_OuterWilds_Nicopopxd": ["DLC Flame", "$Shuffle"]
+            }
+        },
+        {
+            "count": 0,
+            "name": "_Ice Magic",
+            "linklink": {
+                "Manual_OuterWilds_Nicopopxd": []
+            }
+        },
+        {
+            "count": 0,
+            "name": "_Special Arrows",
+            "linklink": {
+                "Manual_OuterWilds_Nicopopxd": []
+            }
+        },
+        {
+            "count": 0,
+            "name": "_Bow",
+            "linklink": {
+                "Manual_OuterWilds_Nicopopxd": []
+            }
+        },
+        {
+            "count": 0,
+            "name": "_Boomerang",
+            "linklink": {
+                "Manual_OuterWilds_Nicopopxd": []
+            }
+        },
+        {
+            "count": 1,
+            "name": "Bombs",
+            "linklink": {
+                "Manual_OuterWilds_Nicopopxd": ["Breach Override Codes"]
+            }
+        },
+        {
+            "count": 0,
+            "name": "_Flute",
+            "linklink": {
+                "Manual_OuterWilds_Nicopopxd": []
+            }
+        },
+        {
+            "count": 1,
+            "name": "Armor Special",
+            "linklink": {
+                "Manual_OuterWilds_Nicopopxd": ["Autopilot"]
+            }
+        },
+        {
+            "count": 1,
+            "name": "Armor A",
+            "linklink": {
+                "Manual_OuterWilds_Nicopopxd": ["Spacesuit", "Landing Camera"]
+            }
+        },
+        {
+            "count": 1,
+            "name": "Armor B",
+            "linklink": {
+                "Manual_OuterWilds_Nicopopxd": ["Landing Camera"]
+            }
+        },
+        {
+            "count": 0,
+            "name": "_Strength",
+            "linklink": {
+                "Manual_OuterWilds_Nicopopxd": []
+            }
+        },
+        {
+            "count": 1,
+            "name": "Hookshot",
+            "linklink": {
+                "Manual_OuterWilds_Nicopopxd": ["Totem Hands Patch"]
+            }
+        },
+        {
+            "count": 2,
+            "name": "Swimming",
+            "linklink": {
+                "Manual_OuterWilds_Nicopopxd": ["Counter-Clockwise Tornadoes", "Clockwise Tornadoes", "$Shuffle"]
+            }
+        },
+        {
+            "count": 0,
+            "name": "_Hammer",
+            "linklink": {
+                "Manual_OuterWilds_Nicopopxd": []
+            }
+        },
+        {
+            "count": 0,
+            "name": "_Bottle",
+            "linklink": {
+                "Manual_OuterWilds_Nicopopxd": []
+            }
+        },
+        {
+            "count": 1,
+            "name": "Magical Rod",
+            "linklink": {
+                "Manual_OuterWilds_Nicopopxd": ["Signalscope"]
+            }
+        },
+        {
+            "count": 0,
+            "name": "_Shovel",
+            "linklink": {
+                "Manual_OuterWilds_Nicopopxd": []
+            }
+        },
+        {
+            "count": 0,
+            "name": "_Speed Boosts",
+            "linklink": {
+                "Manual_OuterWilds_Nicopopxd": []
+            }
+        },
+        {
+            "count": 0,
+            "name": "_Magic Meter",
+            "linklink": {
+                "Manual_OuterWilds_Nicopopxd": []
+            }
+        },
+        {
+            "count": 1,
+            "name": "Lamp",
+            "linklink": {
+                "Manual_OuterWilds_Nicopopxd": ["Scout"]
+            }
+        },
+        {
+            "count": 0,
+            "name": "_Magic Powder",
+            "linklink": {
+                "Manual_OuterWilds_Nicopopxd": []
+            }
+        },
+        {
+            "count": 0,
+            "name": "_Mushroom",
+            "linklink": {
+                "Manual_OuterWilds_Nicopopxd": []
+            }
+        },
+        {
+            "count": 4,
+            "name": "Key Items",
+            "linklink": {
+                "Manual_OuterWilds_Nicopopxd": ["Warp Core Manual", "Coordinates", "Stranger Access", "DreamWorld Access",
+                    "$Shuffle"]
+            }
+        },
+        {
+            "count": 7,
+            "name": "Magic Spell",
+            "linklink": {
+                "Manual_OuterWilds_Nicopopxd": ["DLC Glitch", "Door Candles Patch", "Ghost Wall Patch", "$Shuffle"]
+            }
+        },
+        {
+            "count": 0,
+            "name": "_Iron Boots",
+            "linklink": {
+                "Manual_OuterWilds_Nicopopxd": []
+            }
+        },
+        {
+            "count": 0,
+            "name": "_Glide",
+            "linklink": {
+                "Manual_OuterWilds_Nicopopxd": []
+            }
+        },
+        {
+            "count": 0,
+            "name": "_Slingshot",
+            "linklink": {
+                "Manual_OuterWilds_Nicopopxd": []
+            }
+        },
+        {
+            "count": 0,
+            "name": "_Membership Card",
+            "linklink": {
+                "Manual_OuterWilds_Nicopopxd": []
+            }
+        },
+        {
+            "count": 1,
+            "name": "Bag",
+            "linklink": {
+                "Manual_OuterWilds_Nicopopxd": ["Backpack"]
+            }
+        },
+        {
+            "count": 3,
+            "name": "Looking Glass",
+            "linklink": {
+                "Manual_OuterWilds_Nicopopxd": ["Scout", "Photos", "Quantum Rule > A"]
+            }
+        },
+        {
+            "count": 0,
+            "name": "_Letter",
+            "linklink": {
+                "Manual_OuterWilds_Nicopopxd": []
+            }
+        },
+        {
+            "count": 0,
+            "name": "_Book",
+            "linklink": {
+                "Manual_OuterWilds_Nicopopxd": []
+            }
+        },
+        {
+            "count": 0,
+            "name": "_Wallet",
+            "linklink": {
+                "Manual_OuterWilds_Nicopopxd": []
+            }
+        },
+        {
+            "count": 10,
+            "name": "Heart Container",
+            "linklink": {
+                "Manual_OuterWilds_Nicopopxd": ["Marshmallow", "Perfect Marshmallow", "Burnt Marshmallow", "$Shuffle"]
+            }
+        },
+        {
+            "count": 10,
+            "_extra": 4,
+            "name": "Energy Container",
+            "linklink": {
+                "Manual_OuterWilds_Nicopopxd": ["Marshmallow", "Perfect Marshmallow", "Burnt Marshmallow", "$Shuffle"]
+            }
+        },
+        {
+            "count": 0,
+            "name": "_Jump Upgrade",
+            "linklink": {
+                "Manual_OuterWilds_Nicopopxd": []
+            }
+        },
+        {
+            "count": 1,
+            "name": "Climb",
+            "linklink": {
+                "Manual_OuterWilds_Nicopopxd": ["Stranger Dam entrance"]
+            }
+        },
+        {
+            "count": 1,
+            "name": "Vehicle",
+            "_comment": "Rename to mode of transportation or something",
+            "linklink": {
+                "Manual_OuterWilds_Nicopopxd": ["Ship Key"]
+            }
+        },
+        {
+            "count": 0,
+            "name": "_Upgrades Slots",
+            "linklink": {
+                "Manual_OuterWilds_Nicopopxd": []
+            }
+        },
+        {
+            "count": 0,
+            "name": "_Dive",
+            "linklink": {
+                "Manual_OuterWilds_Nicopopxd": []
+            }
+        },
+        {
+            "count": 0,
+            "name": "_Charged Dash or Jump",
+            "linklink": {
+                "Manual_OuterWilds_Nicopopxd": []
+            }
+        },
+        {
+            "count": 0,
+            "name": "_Magnet",
+            "linklink": {
+                "Manual_OuterWilds_Nicopopxd": []
+            }
+        },
+        {
+            "name": "_Net",
+            "_comment": "AKA catch something with it... yea I added fishing rod to it to include more games",
+            "count": 0,
+            "linklink": {
+                "Manual_OuterWilds_Nicopopxd": []
+            }
+        },
+        {
+            "count": 20,
+            "name": "Keys",
+            "progression_skip_balancing": true,
+            "linklink": {
+                "Manual_OuterWilds_Nicopopxd": ["2b Signals", "3a Entrances", "3e codes", "Datamined Code", "$Buffer_10",
+                    "$Shuffle"]
+            }
+        },
+        {
+            "count": 9,
+            "name": "Teleporters",
+            "_comment": "Teleporter style items and items that let you go to other areas, get to important locations",
+            "progression_skip_balancing": true,
+            "extra": 5,
+            "linklink": {
+                "Manual_OuterWilds_Nicopopxd": ["Nomai Warp Codes", "$Buffer_3", "Quantum Rule > B", "$Buffer_3",
+                    "Quantum Rule > C", "$Shuffle"]
+            }
+        },
+        {
+            "count": 20,
+            "name": "Fun Surprise",
+            "trap": true,
+            "progression_skip_balancing": true,
+            "progression_deprioritized": true,
+            "linklink": {
+                "Manual_OuterWilds_Nicopopxd": ["1c Trap", "$Shuffle"]
+            }
+        }
+    ]
+}
