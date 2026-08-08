@@ -4,3 +4,4 @@
 /*.code-workspace
 .idea
 /.mypy_cache
+/.artifacts
