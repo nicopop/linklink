@@ -59,6 +59,7 @@ jobs:
           echo "AP_WORLD_DIR=${AP_WORLD_DIR,,}" >> $GITHUB_ENV
       - name: Move this repo to worlds folder
         run: |
+          find worlds -mindepth 1 -maxdepth 1 -type d ! -name "generic" -exec rm -rf {} +
           mkdir -p worlds/${{ env.AP_WORLD_DIR }}
           rsync -a temp/linklink/* worlds/${{ env.AP_WORLD_DIR }} --exclude='.[!.]*'
       # - name: Install python
@@ -103,6 +104,12 @@ jobs:
           source venv/bin/activate
           python Launcher.py "Build APWorlds" -- "${{ env.AP_WORLD_NAME }}"
           echo "AP_WORLD_PATH=build/apworlds/${{ env.AP_WORLD_DIR }}.apworld" >> $GITHUB_ENV
+      - name: Upload apworld as an artifact
+        uses: actions/upload-artifact@v4
+        with:
+            name: ${{ env.AP_WORLD_DIR }}.apworld
+            path: build/apworlds/${{ env.AP_WORLD_DIR }}.apworld
+            if-no-files-found: error
       - name: Create AP World Template YAML
         run: |
           source venv/bin/activate
