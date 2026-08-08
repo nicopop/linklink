@@ -61,11 +61,11 @@ jobs:
         run: |
           mkdir -p worlds/${{ env.AP_WORLD_DIR }}
           rsync -a temp/linklink/* worlds/${{ env.AP_WORLD_DIR }} --exclude='.[!.]*'
-      - name: Install python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '~3.12.7'
-          check-latest: true
+      # - name: Install python
+      #   uses: actions/setup-python@v5
+      #   with:
+      #     python-version: '~3.12.7 <= 3.12.12'
+      #     check-latest: true
       - name: Install dependencies
         run: |
           python -m venv venv
