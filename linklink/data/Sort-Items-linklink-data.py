@@ -44,16 +44,19 @@ def write_data_file(fname: str, data: dict):
     # regex based on answer in https://www.reddit.com/r/learnpython/comments/ymukyr/removing_new_line_inside_square_brackets_in_json/
     json_str = json.dumps(data, indent=4)
     json_str = re.sub(r"(.*?)\[([^\[\]]+)]", repl_func, json_str)
+    json_str += "\n"
 
     with open(file=fpath, mode="w", encoding="utf-8") as f:
         f.write(json_str)
 
+
 if __name__ == '__main__':
+    sorted_file_types = ("items") #("locations", "items", "events", "regions")
     files = [f.name for f in Path(path.dirname(__file__)).iterdir() if f.is_file()\
-        and f.name.startswith("items") and "schema" not in f.name]
+        and f.name.split("_")[0].removesuffix(".json") in sorted_file_types and "schema" not in f.name]
     print(files)
     # First get the key groups from schema:
-    schema = load_data_file('items.schema.json')
+    schema = load_data_file('Schema\\Manual.items.schema.json')
     schema_linklink = schema.get('definitions', {}).get('linklink', {}).get("properties", None)
     if schema_linklink is None:
         raise ValueError("items.schema.json doesn't contain a known definition of the linklink data")
@@ -97,8 +100,9 @@ if __name__ == '__main__':
     # Second: sort all the items's linklink properties by grouping them together first
     for filename in files:
         itemsjson: dict[str, Any] = load_data_file(filename)
+        file_type = filename.split("_")[0].removesuffix(".json")
         if isinstance(itemsjson, list):
-            itemsjson = {"$schema": "items.schema.json","data": itemsjson}
+            itemsjson = {"$schema": f"Schema/Manual.{file_type}.schema.json","data": itemsjson}
 
         if itemsjson.get("data"):
             for item in itemsjson.get("data", []):
@@ -113,6 +117,8 @@ if __name__ == '__main__':
                     del item["category"]
 
             # Third and finally write the change to the file
+            write_data_file(filename, itemsjson)
+        elif file_type == "regions":
             write_data_file(filename, itemsjson)
         else:
             raise ValueError(f"Failed to load data from items.schema.json or {filename}")
