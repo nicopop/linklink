@@ -1,5 +1,5 @@
 {
-    "$schema": "https://github.com/ManualForArchipelago/Manual/raw/main/schemas/Manual.game.schema.json",
+    "$schema": "Schema/Manual.game.schema.json",
     "game": "LinkLink",
     "creator": "Nicopopxd",
 

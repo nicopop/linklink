@@ -1,6 +1,6 @@
 import dataclasses
 import inspect
-from typing import TYPE_CHECKING, Any, Callable, Optional, Any
+from typing import TYPE_CHECKING, Any, Callable, Optional, Any, cast
 from enum import IntEnum
 from operator import eq, ge, le
 
@@ -35,9 +35,12 @@ AND_REGEX = re.compile(r'\s?\bAND\b\s?', re.IGNORECASE)
 OR_REGEX = re.compile(r'\s?\bOR\b\s?', flags=re.IGNORECASE)
 
 class LogicErrorSource(IntEnum):
-    INFIX_TO_POSTFIX = 1 # includes more closing parentheses than opening (but not the opposite)
-    EVALUATE_POSTFIX = 2 # includes missing pipes and missing value on either side of AND/OR
-    EVALUATE_STACK_SIZE = 3 # includes missing curly brackets
+    INFIX_TO_POSTFIX = 1
+    """includes more closing parentheses than opening (but not the opposite)"""
+    EVALUATE_POSTFIX = 2
+    """ includes missing pipes and missing value on either side of AND/OR"""
+    EVALUATE_STACK_SIZE = 3
+    """includes missing curly brackets"""
 
 def construct_logic_error(location_or_region: dict, source: LogicErrorSource) -> KeyError:
     object_type = "location/region"
@@ -78,9 +81,19 @@ def infix_to_postfix(expr: str, location: dict) -> str:
                 while stack and stack[-1] != "(":
                     postfix += stack.pop()
                 stack.pop()
+            else:
+                # added this here since '|Chun-Li| or {YamlCompare(Example_Choice == 1)' is valid because of the 1 at the end
+                raise ValueError(f"Invalid Character '{c}' in expression '{expr}', it should be either a number or a parentheses")
 
         while stack:
             postfix += stack.pop()
+    except ValueError as ex:
+        text = str(ex)
+        if "'{'" in text or ")}" in text:
+            raise construct_logic_error(location, LogicErrorSource.EVALUATE_STACK_SIZE)
+
+        raise construct_logic_error(location, LogicErrorSource.EVALUATE_POSTFIX)
+
     except Exception:
         raise construct_logic_error(location, LogicErrorSource.INFIX_TO_POSTFIX)
 
@@ -115,30 +128,30 @@ def evaluate_postfix(expr: str, location: dict) -> bool:
 
     return stack.pop()
 
+def evaluate_nonnumeric_count(item_base: str, item_name: str, item_count: str, is_category: bool, world: "ManualWorld") -> tuple[str, int]:
+    item_count = item_count.strip()
+    if item_count.isnumeric():
+        return item_name, int(item_count)
+
+    items_counts = world.get_item_counts(only_progression=True)
+    if is_category:
+        total_count = sum([items_counts.get(item, 0) for item in world.item_and_event_name_groups.get(item_name, set())])
+    else:
+        total_count = items_counts.get(item_name, 0)
+    if item_count.lower() == 'all':
+        count = total_count
+    elif item_count.lower() == 'half':
+        count = int(total_count / 2)
+    elif item_count.endswith('%') and len(item_count) > 1:
+        percent = clamp(float(item_count[:-1]) / 100, 0, 1)
+        count = math.ceil(total_count * percent)
+    # If invalid count assume its actually part of the item name
+    else:
+        item_name = item_base.strip("|")
+        count = 1
+    return item_name, count
+
 def set_rules(world: "ManualWorld", multiworld: MultiWorld, player: int):
-    def evaluate_nonnumeric_count(item_base: str, item_name: str, item_count: str, is_category: bool, area: dict) -> tuple[str, int]:
-        item_count = item_count.strip()
-        if item_count.isnumeric():
-            return item_name, int(item_count)
-
-        items_counts = world.get_item_counts(player, only_progression=True)
-        if is_category:
-            total_count = sum([items_counts.get(item, 0) for item in world.item_and_event_name_groups.get(item_name, set())])
-        else:
-            total_count = items_counts.get(item_name, 0)
-        if item_count == 'all':
-            count = total_count
-        elif item_count == 'half':
-            count = int(total_count / 2)
-        elif item_count.endswith('%') and len(item_count) > 1:
-            percent = clamp(float(item_count[:-1]) / 100, 0, 1)
-            count = math.ceil(total_count * percent)
-        # If invalid count assume its actually part of the item name
-        else:
-            item_name = item_base.strip("|")
-            count = 1
-        return item_name, count
-
     def construct_rule_from_string(area: dict) -> "rule_builder.rules.Rule | None":
         if not use_rulebuilder:
             return None
@@ -163,7 +176,7 @@ def set_rules(world: "ManualWorld", multiworld: MultiWorld, player: int):
                 if item_count.isnumeric():
                     count = int(item_count)
                 else:
-                    item_name, count = evaluate_nonnumeric_count(match.group(0), item_name, item_count, is_category, area)
+                    item_name, count = evaluate_nonnumeric_count(match.group(0), item_name, item_count, is_category, world)
 
                 if is_category:
                     rule = rule_builder.rules.HasFromList(*world.item_and_event_name_groups.get(item_name, set()), count=count)
@@ -189,15 +202,17 @@ def set_rules(world: "ManualWorld", multiworld: MultiWorld, player: int):
                         func = ns.get(name)
                     else:
                         func = getattr(ns, name, None)
+                    func = cast(Callable | type[rule_builder.rules.Rule] | None, func)
 
                     if func and inspect.isclass(func) and issubclass(func, rule_builder.rules.Rule):
+                        convert_req_function_args(None, func, func_args, area['name'], world)
                         rule_class = func
                         break
 
                     if func and inspect.signature(func).return_annotation is str:
                         # I'm assuming that functions that return strings don't need states.
                         convert_req_function_args(None, func, func_args, area['name'], world)
-                        rule = recursively_tokenize_manual_rule(func(*func_args))
+                        rule = recursively_tokenize_manual_rule(str(func(*func_args)))
                         break
 
                 if rule is None:
@@ -209,20 +224,24 @@ def set_rules(world: "ManualWorld", multiworld: MultiWorld, player: int):
                     rule = rule_class(*func_args)
                 remaining = partial[len(match.group(0)):]
             elif partial[0] == "(":
-                func_founds: dict[int, str] = {}
-                id: int = 0
+                func_founds: list[str] = []
                 for match in FUNCTION_REGEX.finditer(partial):
                     if match.group(0) not in partial:
                         # already done all of them
                         continue
-                    func_founds[id] = match.group(0)
+
+                    func_founds.append(match.group(0))
                     # looks like : {{Function#0}}
+                    id = len(func_founds) - 1
                     partial = partial.replace(match.group(0), f"{{{{Function#{id}}}}}")
-                    id += 1
+
                 inner = ''
                 queue = list(partial[1:])
                 stack = 1
                 while stack > 0:
+                    if not queue:
+                        raise construct_logic_error(area, LogicErrorSource.INFIX_TO_POSTFIX)
+
                     c = queue.pop(0)
                     if c == "(":
                         stack += 1
@@ -231,12 +250,14 @@ def set_rules(world: "ManualWorld", multiworld: MultiWorld, player: int):
                     else:
                         inner += c
                 remaining = "".join(queue)
-                for id, func in func_founds.items():
+
+                for id, func in enumerate(func_founds):
                     remaining = remaining.replace(f"{{{{Function#{id}}}}}", func)
                     inner = inner.replace(f"{{{{Function#{id}}}}}", func)
+
                 rule = recursively_tokenize_manual_rule(inner)
             else:
-                print(f'Could not convert {partial} into a Rule')
+                logging.warning(f'Warning: Could not convert {partial} into a Rule')
                 return None
 
             if rule is None:
@@ -329,7 +350,7 @@ def set_rules(world: "ManualWorld", multiworld: MultiWorld, player: int):
                 item_count = "1"
             item_count = item_count.lstrip(':')
 
-            item_name, numeric_count = evaluate_nonnumeric_count(item_base, item_name, item_count, is_category, area)
+            item_name, numeric_count = evaluate_nonnumeric_count(item_base, item_name, item_count, is_category, world)
 
             if is_category:
                 found = state.has_from_list(world.item_and_event_name_groups.get(item_name, set()), player, numeric_count)
@@ -384,7 +405,7 @@ def set_rules(world: "ManualWorld", multiworld: MultiWorld, player: int):
                     item_name = item_parts[0]
                     item_count = int(item_parts[1])
 
-                if not state.has(item_name, player, item_count):
+                if not state.has(item_name, player, item_count): # type: ignore
                     canAccess = False
 
         return canAccess
@@ -407,25 +428,27 @@ def set_rules(world: "ManualWorld", multiworld: MultiWorld, player: int):
     used_location_names = []
     # Region access rules
     extra_entrance_rules = {}
+    area: dict[str, Any] # for type checkers (mypy)
+    extra: dict[str, Any] # for type checkers (mypy)
     for region in regionMap.keys():
         entrance_rules = regionMap[region].get("entrance_requires", {})
         for e in entrance_rules:
             entrance = world.get_entrance(f'{e}To{region}')
-            area = {"requires": entrance_rules[e]}
+            area = {"requires": entrance_rules[e], "name": entrance.name, "is_region": True}
             extra_entrance_rules[entrance.name] = area
 
         exit_rules = regionMap[region].get("exit_requires", {})
         for e in exit_rules:
             exit = world.get_entrance(f'{region}To{e}')
-            area = {"requires": exit_rules[e]}
+            area = {"requires": exit_rules[e], "name": exit.name, "is_region": True}
             extra_entrance_rules[exit.name] = area
 
     for region in regionMap.keys():
         used_location_names.extend([l.name for l in multiworld.get_region(region, player).locations])
         for exitRegion in multiworld.get_region(region, player).entrances:
             extra = extra_entrance_rules.get(exitRegion.name, {})
-            area = regionMap[region]
-            area["name"] = exitRegion.name
+            area = dict(regionMap[region])
+            area["name"] = region
             area['is_region'] = True
             rb_rule = construct_rule_from_string(area)
             if rb_rule is not None:
@@ -476,12 +499,16 @@ def set_rules(world: "ManualWorld", multiworld: MultiWorld, player: int):
     # Victory requirement
     multiworld.completion_condition[player] = lambda state: state.has("__Victory__", player)
 
-def convert_req_function_args(state: CollectionState | None, func, args: list[str | Any], areaName: str, world: World) -> None:
-    parameters = inspect.signature(func).parameters
+def convert_req_function_args(state: CollectionState | None, func: Callable, args: list[str | Any], areaName: str, world: World) -> None:
+    parameters = inspect.signature(func).parameters.values()
     knownParameters = [World, 'ManualWorld', MultiWorld, CollectionState]
     index = -1
-    for parameter in parameters.values():
+    for parameter in parameters:
         target_type = parameter.annotation
+        if str(target_type) == "collections.abc.Iterable[rule_builder.options.OptionFilter]":
+            # parameters >= this one are added by rule builder and do not need to be converted
+            break
+
         index += 1
         if target_type in knownParameters:
             if target_type in [World, 'ManualWorld']:
@@ -546,40 +573,51 @@ def OptOne(world: "ManualWorld", item: str) -> str:
     Eg. requires: "{OptOne(|DisabledItem|)} and |other items|" become "|DisabledItem:0| and |other items|" if the item is disabled.
     """
     if item == "":
-        return "" #Skip this function if item is left blank
+        raise Exception("OptOne was called with no arguments. There should be at least an item/category name in between the parentheses")
 
     items_counts = world.get_item_counts(only_progression=True)
 
-    require_category = False
+    item_for_regex = item.strip()
+    if not item_for_regex.startswith("|"):
+        item_for_regex = "|" + item_for_regex + "|"
 
-    if '@' in item[:2]:
-        require_category = True
+    match = ITEM_REGEX.match(item_for_regex)
+    if match is None:
+        raise Exception(f'OptOne was called with an invalid item "{item}". There might be multiple "|" on one side or one missing.')
 
-    item = item.lstrip('|@$').rstrip('|')
+    is_category = bool(match.group(1))
+    item_name = match.group(2)
+    str_count = (str(match.group(3) or "1")).lstrip(':')
 
-    item_parts = item.split(":")
-    item_name = item
-    item_count = '1'
-
-    if len(item_parts) > 1:
-        item_name = item_parts[0]
-        item_count = item_parts[1]
-
-    if require_category:
-        if item_count.isnumeric():
-            #Only loop if we can use the result to clamp
-            category_items = [item for item in world.item_name_to_item.values() if "category" in item and item_name in item["category"]]
-            category_items_counts = sum([items_counts.get(category_item["name"], 0) for category_item in category_items])
-            item_count = clamp(int(item_count), 0, category_items_counts)
-        return f"|@{item_name}:{item_count}|"
+    was_numeric = False
+    if str_count.isnumeric():
+        was_numeric = True
+        item_count = int(str_count)
     else:
-        if item_count.isnumeric():
+        new_name, item_count = evaluate_nonnumeric_count(match.group(0), item_name, str_count, False, world)
+        # Used evaluate_nonnumeric_count here to support item with a : in their name.
+        # Told it this is not a category for Optimization purposes
+        if new_name != item_name:
+            was_numeric = True
+            item_name = new_name
+
+    if was_numeric:
+        # If the count is just a number
+        if is_category:
+            category_items = world.item_and_event_name_groups.get(item_name, set())
+            category_items_counts = sum([items_counts.get(category_item, 0) for category_item in category_items])
+            item_count = clamp(int(item_count), 0, category_items_counts)
+        else:
             item_current_count = items_counts.get(item_name, 0)
             item_count = clamp(int(item_count), 0, item_current_count)
-        return f"|{item_name}:{item_count}|"
+        return f"|{'@' if is_category else ''}{item_name}:{item_count}|"
+    else:
+        # If the count is something like ALL, HALF, or a percentage we don't need to clamp since it will be done anyway
+        return f"|{'@' if is_category else ''}{item_name}:{str_count}|"
+
 
 # OptAll check the passed require string and loop every item to check if they're enabled,
-def OptAll(world: "ManualWorld", requires: str) -> bool|str:
+def OptAll(world: "ManualWorld", requires: str) -> str:
     """Check the passed require string and loop every item to check if they're enabled,
     then returns the require string with items counts adjusted using OptOne\n
     eg. requires: "{OptAll(|DisabledItem| and |@CategoryWithModifedCount:10|)} and |other items|"
@@ -587,10 +625,14 @@ def OptAll(world: "ManualWorld", requires: str) -> bool|str:
     requires_list = requires
 
     if requires_list == "":
-        return True
+        raise Exception("OptAll was called with no arguments. There should be at least an item/category name in between the parentheses")
 
-    # parse user written statement into list of each item
-    for item in re.findall(r'\|[^|]+\|', requires):
+    # Use the main Item regex to find each item in string
+    for match in ITEM_REGEX.finditer(requires):
+        item = match.group(0)
+        if item not in requires_list:
+            # previous instance of this item was already processed
+            continue
         itemScanned = OptOne(world, item)
         requires_list = requires_list.replace(item, itemScanned)
 
@@ -675,6 +717,7 @@ def YamlCompare(world: "ManualWorld", args: str, skipCache: bool = False) -> boo
     else:
         raise  ValueError(f"Could not find a valid comparator in given string '{args}', it must be one of {comp_symbols.keys()}")
 
+    value: str|int
     option_name, value = args.split(comparator)
 
     initial_option_name = str(option_name).strip() #For exception messages
@@ -695,11 +738,12 @@ def YamlCompare(world: "ManualWorld", args: str, skipCache: bool = False) -> boo
     if not value: #empty string ''
         raise ValueError(f"Could not find a valid value to compare against in given string '{args}'. \nThere must be a value to compare against after the comparator (in this case '{comparator}').")
 
+    cacheindex: str = ""
     if not skipCache: #Cache made for optimization purposes
         cacheindex = option_name + '_' + comp_symbols[comparator].__name__ + '_' + format_to_valid_identifier(value.lower())
 
         if not hasattr(world, 'yaml_compare_rule_cache'):
-            world.yaml_compare_rule_cache = dict[str,bool]()
+            world.yaml_compare_rule_cache = dict[str,bool]() # type: ignore
 
     if skipCache or world.yaml_compare_rule_cache.get(cacheindex, None) is None:
         try:
@@ -718,7 +762,7 @@ def YamlCompare(world: "ManualWorld", args: str, skipCache: bool = False) -> boo
                     value = convert_string_to_type(value, int)
 
             elif issubclass(type(option), Toggle):
-                value = int(convert_string_to_type(value, bool))
+                value = int(convert_string_to_type(str(value), bool))
 
             else:
                 raise ValueError(f"YamlCompare does not currently support Option of type {type(option)} \nAsk about it in #Manual-dev and it might be added.")
@@ -729,7 +773,10 @@ def YamlCompare(world: "ManualWorld", args: str, skipCache: bool = False) -> boo
                 \n\n{type(ex).__name__}:{ex}")
 
         except Exception as ex:
-            raise TypeError(f"YamlCompare failed to convert the requested value to what a {type(option).__base__.__name__} option supports.\
+            base = type(option).__base__
+            # None check added for Type checkers
+            name = str(type(option)) if base is None else base.__name__
+            raise TypeError(f"YamlCompare failed to convert the requested value to what a {name} option supports.\
                 \nCaused By:\
                 \n\n{type(ex).__name__}:{ex}")
 

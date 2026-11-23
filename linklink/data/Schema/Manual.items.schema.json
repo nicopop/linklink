@@ -1,6 +1,6 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "$id": "https://raw.githubusercontent.com/ManualForArchipelago/Manual/main/schemas/Manual.items.schema.json",
+    "$id": "Manual_LinkLink_Nicopopxd_items.schema.json",
     "description": "Schema for Manual's items.json",
     "type": ["array", "object"],
     "items": {
@@ -88,7 +88,7 @@
                 "linklink": {"$ref": "#/definitions/linklink"},
                 "category": {
                     "description": "(Optional) A list of categories to be applied to this item.",
-                    "type": ["string", "array"],
+                    "type": "array",
                     "items": {
                         "type": "string"
                     },
@@ -130,11 +130,6 @@
                     "type": "boolean",
                     "default": false
                 },
-                "progression_deprioritized": {
-                    "description": "(Optional) Should this Item not be placed in prioritized locations? For more information on item classifications, see: https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/world%20api.md#items",
-                    "type": "boolean",
-                    "default": false
-                },
                 "useful": {
                     "description": "(Optional) Is this item useful to have but not required to complete the game? For more information on item classifications, see: https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/world%20api.md#items",
                     "type": "boolean",
@@ -147,6 +142,11 @@
                 },
                 "filler": {
                     "description": "(Optional) Is this item mostly useless and okay to skip placing sometimes? For more information on item classifications, see: https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/world%20api.md#items",
+                    "type": "boolean",
+                    "default": true
+                },
+                "deprioritized": {
+                    "description": "(Optional) Will not be considered for priority locations, see: https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/world%20api.md#items",
                     "type": "boolean",
                     "default": true
                 },
@@ -185,6 +185,10 @@
                 },
                 "sort-key": {
                     "description": "(Optional) A string to sort the items by. If not provided, items will always be sorted by name.",
+                    "type": "string"
+                },
+                "description": {
+                    "description": "(Optional) A short description of the item to be displayed in the client",
                     "type": "string"
                 },
                 "_comment": {"$ref": "#/definitions/comment"}

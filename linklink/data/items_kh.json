@@ -1,5 +1,5 @@
 {
-    "$schema": "items.schema.json",
+    "$schema": "Schema/Manual.items.schema.json",
     "data": [
         {
             "count": 3,

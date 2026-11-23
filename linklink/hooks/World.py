@@ -86,8 +86,8 @@ def before_generate_early(world: "ManualWorld", multiworld: MultiWorld, player: 
     if world.is_ut and (passthrough := dict[str, Any](getattr(multiworld, "re_gen_passthrough", {}).get(world.game, {}))):
         world.is_ut_regen = True # type: ignore
         slot_data = passthrough["linklink"]
-        world.linklink_locations = slot_data["filtered_locations"] # type: ignore
-        world.linklink_locations_filtered_by_removed = slot_data["filtered_removed"] # type: ignore
+        # world.linklink_locations = slot_data["filtered_locations"] # type: ignore
+        # world.linklink_locations_filtered_by_removed = slot_data["filtered_removed"] # type: ignore
         world.linklink_item_config = Counter(slot_data["key_counts"]) # type: ignore
         world.linklink_active_victims_ids = set(slot_data["active_victims"]) # type: ignore
         world.linklink_active_games = set(slot_data["active_games"]) # type: ignore
@@ -198,7 +198,10 @@ def after_create_items(item_pool: list[Item], world: "ManualWorld", multiworld: 
             nothing = unplaced_nothing.pop()
             try_remove_specific_item(item_pool, nothing)
         else:
-            nothing = world.create_item(world.filler_item_name)
+            if isinstance(world.filler_item_name, str):
+                nothing = world.create_item(world.filler_item_name)
+            else:
+                nothing = world.create_item(world.random.choice(world.filler_item_name))
         location.place_locked_item(nothing)
 # region
     # ? maybe add support for executing linklink_magic here, that would be the most "correct" time to do it
@@ -243,6 +246,9 @@ def try_remove_specific_item(items: list[Item], item: Item):
         logging.error(f"linklink failed to cleanly remove item '{item.name}'")
         items.remove(item)
 
+def better_in(item: Item, source: list[Item]) -> bool:
+    return any([i for i in source if i is item])
+
 def remove_location(world: "ManualWorld", location: Location):
     if location.parent_region is not None:
         location.parent_region.locations.remove(location)
@@ -267,7 +273,11 @@ def generate_rdm_filler(world: "ManualWorld", count: int = 1):
         if not victims:
             # if all else fail make some nothing items
             for _ in range(item_count):
-                replacements.append(world.create_item(world.filler_item_name))
+                if isinstance(world.filler_item_name, str):
+                    nothing = world.create_item(world.filler_item_name)
+                else:
+                    nothing = world.create_item(world.random.choice(world.filler_item_name))
+                replacements.append(nothing)
             break
         elif other_player is None:
             world.random.shuffle(victims)
@@ -746,6 +756,9 @@ def before_generate_basic(world: "ManualWorld", multiworld: MultiWorld, player: 
             setattr(world, "pre_fill", pre_fill)
         else:
             linklink_magic(world)
+    elif __debug__ and world.is_ut_regen:
+        from Utils import visualize_regions
+        visualize_regions(multiworld.get_region("Manual", player), f"{world.game}_{player}_UT.puml")
 
 def get_filler_item_name(self: World) -> str:
     # Custom replacement get_filler_item_name that try to get used for game with fully default create_filler
@@ -780,8 +793,6 @@ def try_create_filter(world: World) -> Item|None:
             logging.debug(f"linklink: replaced '{world.game}''s default unimplemented get_filler_item_name with my custom function")
         try:
             filler = world.create_filler()
-            if filler is None:
-                raise Exception(f"{str(type(world))}'s create_filler returned None instead of a filler item.")
             if filler.name == "Nothing":
                 return recursion(tries + 1) #might be a bad luck so reroll
             return filler
@@ -828,11 +839,13 @@ def after_fill_slot_data(slot_data: dict, world: "ManualWorld", multiworld: Mult
     slot_data["linklink"]["active_games"] = world.linklink_active_games
 
 
-    locations_ids = [l.address for l in world.get_locations() if l.address is not None and world.location_name_to_location[l.name].get("linklink")]
-    removed_smaller = len(world.linklink_removed_location) < len(locations_ids)
+    # locations_ids = [l.address for l in world.get_locations() if l.address is not None and world.location_name_to_location[l.name].get("linklink")]
+    # removed_smaller = len(world.linklink_removed_location) < len(locations_ids)
     # To send as little ids as possible pick the one with less locs in the list
-    slot_data["linklink"]["filtered_removed"] = removed_smaller
-    slot_data["linklink"]["filtered_locations"] = world.linklink_removed_location if removed_smaller else locations_ids
+    # slot_data["linklink"]["filtered_removed"] = True
+    #slot_data["linklink"]["filtered_removed"] = removed_smaller
+    # slot_data["linklink"]["filtered_locations"] = []
+    #slot_data["linklink"]["filtered_locations"] = world.linklink_removed_location if removed_smaller else locations_ids
 
     # endregion
     # region Goal alias

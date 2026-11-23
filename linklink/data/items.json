@@ -1,6 +1,16 @@
 {
-    "$schema": "items.schema.json",
+    "$schema": "Schema/Manual.items.schema.json",
     "data": [
+        {
+            "name": "FileMetaData",
+            "_comment": [
+                "This fake item tells the data hook to load the extra files defined",
+                "just below, it should be removed by the Data.py hook automatically"
+            ],
+            "extra_files": ["items_pkmn.json", "items_kh.json", "items_manual.json", "items_metroid.json"],
+            "offset": 1000,
+            "disabled": true
+        },
         {
             "name": "Free Hint",
             "_comment": ["Make sure you have enough non linklink location for any non-linklink items",

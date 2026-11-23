@@ -1,5 +1,5 @@
 {
-    "$schema": "https://github.com/ManualForArchipelago/Manual/raw/main/schemas/Manual.locations.schema.json",
+    "$schema": "Schema/Manual.locations.schema.json",
     "data": [
         {
             "name":"Victory Road",

@@ -8,7 +8,7 @@ There are three key things to be aware of:
 
 The first is item declarations.  Add new items to [items.json](data/items.json), adding games and their associated items to the `linklink` dictionary. Everything in a list will be made progressive, even if the original items weren't.
 
-The second knob is a technical limitation.  The [Data Hooks](hooks/Data.py) contains a constant (`MAX_PLAYERS`) with the Maximum number of players that can be added to an itemlink.  There is no penalty for having extras other than some ID bloat, but we'd rather not have it too much higher than needed.
+The second knob is a technical limitation.  The [init Hooks](hooks/__init__.py) contains a constant (`MAX_PLAYERS`) with the Maximum number of players that can be added to an itemlink.  There is no penalty for having extras other than some ID bloat, but we'd rather not have it too much higher than needed.
 
 Note:  This is the maximum number of players in a link, not the total number of players in the multiworld.  If you have an 8 player multiworld, with Four players with Swords, and three players with Bicycles, you can safely have MAX_PLAYERS at 4.
 

@@ -34,7 +34,7 @@ class DataValidation():
                     item_name = match.group(2)
                     item_count = (str(match.group(3) or "1")).lstrip(':').strip()
 
-                    if not item_count.isnumeric() and item_count not in ["all", "half"] and not item_count.endswith('%'):
+                    if not item_count.isnumeric() and item_count.lower() not in ["all", "half"] and not item_count.endswith('%'):
                         item_name = match.group(0).strip("|")
                         logging.debug(f'Invalid item_count "{item_count}" found, reverting to initial item_name "{item_name}"')
 
@@ -100,7 +100,7 @@ class DataValidation():
                     item_name = match.group(2)
                     item_count = (str(match.group(3) or "1")).lstrip(':').strip()
 
-                    if not item_count.isnumeric() and item_count not in ["all", "half"] and not item_count.endswith('%'):
+                    if not item_count.isnumeric() and item_count.lower() not in ["all", "half"] and not item_count.endswith('%'):
                         item_name = match.group(0).strip("|")
                         logging.debug(f'Invalid item_count "{item_count}" found, reverting to initial item_name "{item_name}"')
 
@@ -505,69 +505,103 @@ def runGenerationDataValidation(cls) -> None:
     validation_errors: list[ValidationError] = []
 
     try: DataValidation.checkForMissingItemNames()
-    except ValidationError as e: validation_errors.append(e)
+    except ValidationError as e:
+        e.add_note("checkForMissingItemNames")
+        validation_errors.append(e)
 
     try: DataValidation.checkForMissingLocationNames()
-    except ValidationError as e: validation_errors.append(e)
+    except ValidationError as e:
+        e.add_note("checkForMissingLocationNames")
+        validation_errors.append(e)
 
     # check that requires have correct item names in locations and regions
     try: DataValidation.checkItemNamesInLocationRequires()
-    except ValidationError as e: validation_errors.append(e)
+    except ValidationError as e:
+        e.add_note("checkItemNamesInLocationRequires")
+        validation_errors.append(e)
 
     try: DataValidation.checkItemNamesInRegionRequires()
-    except ValidationError as e: validation_errors.append(e)
+    except ValidationError as e:
+        e.add_note("checkItemNamesInRegionRequires")
+        validation_errors.append(e)
 
     # check that region names are valid (i.e., not already defined, etc.)
     try: DataValidation.checkForInvalidRegionNames()
-    except ValidationError as e: validation_errors.append(e)
+    except ValidationError as e:
+        e.add_note("checkForInvalidRegionNames")
+        validation_errors.append(e)
 
     # check that region names are correct in locations
     try: DataValidation.checkRegionNamesInLocations()
-    except ValidationError as e: validation_errors.append(e)
+    except ValidationError as e:
+        e.add_note("checkRegionNamesInLocations")
+        validation_errors.append(e)
 
     # check that any classification_count used in items are valid
     try: DataValidation.checkItemsHasValidClassificationCount()
-    except ValidationError as e: validation_errors.append(e)
+    except ValidationError as e:
+        e.add_note("checkItemsHasValidClassificationCount")
+        validation_errors.append(e)
 
     # check that items that are required by locations and regions are also marked required
     try: DataValidation.checkItemsThatShouldBeRequired()
-    except ValidationError as e: validation_errors.append(e)
+    except ValidationError as e:
+        e.add_note("checkItemsThatShouldBeRequired")
+        validation_errors.append(e)
 
     # check that regions that are connected to are correct
     try: DataValidation.checkRegionsConnectingToOtherRegions()
-    except ValidationError as e: validation_errors.append(e)
+    except ValidationError as e:
+        e.add_note("checkRegionsConnectingToOtherRegions")
+        validation_errors.append(e)
 
     # check for duplicate names in items, locations, and regions
     try: DataValidation.checkForDuplicateItemNames()
-    except ValidationError as e: validation_errors.append(e)
+    except ValidationError as e:
+        e.add_note("checkForDuplicateItemNames")
+        validation_errors.append(e)
 
     try: DataValidation.checkForDuplicateLocationNames()
-    except ValidationError as e: validation_errors.append(e)
+    except ValidationError as e:
+        e.add_note("checkForDuplicateLocationNames")
+        validation_errors.append(e)
 
     # check that starting items are actually valid starting item definitions
     try: DataValidation.checkStartingItemsForBadSyntax()
-    except ValidationError as e: validation_errors.append(e)
+    except ValidationError as e:
+        e.add_note("checkStartingItemsForBadSyntax")
+        validation_errors.append(e)
 
     # check that starting items and starting item categories actually exist in the items json
     try: DataValidation.checkStartingItemsForValidItemsAndCategories()
-    except ValidationError as e: validation_errors.append(e)
+    except ValidationError as e:
+        e.add_note("checkStartingItemsForValidItemsAndCategories")
+        validation_errors.append(e)
 
     # check that placed items are actually valid place item definitions
     try: DataValidation.checkPlacedItemsAndCategoriesForBadSyntax()
-    except ValidationError as e: validation_errors.append(e)
+    except ValidationError as e:
+        e.add_note("checkPlacedItemsAndCategoriesForBadSyntax")
+        validation_errors.append(e)
 
     # check placed item and item categories for valid options for each
     try: DataValidation.checkPlacedItemsForValidItems()
-    except ValidationError as e: validation_errors.append(e)
+    except ValidationError as e:
+        e.add_note("checkPlacedItemsForValidItems")
+        validation_errors.append(e)
 
     try: DataValidation.checkPlacedItemCategoriesForValidItemCategories()
-    except ValidationError as e: validation_errors.append(e)
+    except ValidationError as e:
+        e.add_note("checkPlacedItemCategoriesForValidItemCategories")
+        validation_errors.append(e)
 
     # check for regions that are set as non-starting regions and have no connectors to them (so are unreachable)
     try: DataValidation.checkForNonStartingRegionsThatAreUnreachable()
-    except ValidationError as e: validation_errors.append(e)
+    except ValidationError as e:
+        e.add_note("checkForNonStartingRegionsThatAreUnreachable")
+        validation_errors.append(e)
 
     if len(validation_errors) > 0:
-        heading = f"ValidationError(s) in {cls.game}:";
+        heading = f"ValidationError(s) in {cls.game}:"
 
         raise Exception("\n\n%s \n\n%s\n\n" % (heading, "\n".join([' - ' + str(validation_error) for validation_error in validation_errors])))

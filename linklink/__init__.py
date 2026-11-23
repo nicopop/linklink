@@ -7,8 +7,8 @@ import Utils
 from worlds.generic.Rules import forbid_items_for_player
 from worlds.LauncherComponents import Component, SuffixIdentifier, components, Type, launch, icon_paths
 
-from .Data import item_table, location_table, event_table, region_table, category_table
-from .Game import game_name, filler_item_name, starting_items, glitches_item_name
+from .Data import item_table, location_table, event_table, category_table
+from .Game import game_name, filler_item_name, starting_items, unused_goals_are_locations, glitches_item_name
 from .Meta import world_description, world_webworld
 from .Locations import location_id_to_name, location_name_to_id, location_name_to_location, location_name_groups, victory_names, event_name_to_event, event_name_groups, location_name_to_description
 from .Items import item_id_to_name, item_name_to_id, item_name_to_item, item_name_groups
@@ -78,13 +78,22 @@ class ManualWorld(World):
 
     # UT (the universal-est of trackers) can now generate without a YAML
     ut_can_gen_without_yaml = True
-    glitches_item_name: str | None = glitches_item_name
     location_id_to_alias: dict[int, str] = {location_name_to_id[name]: desc for name, desc in location_name_to_description.items()}
+    glitches_item_name: str | None = glitches_item_name
 
     origin_region_name = "Manual"
 
     def get_filler_item_name(self) -> str:
-        return hook_get_filler_item_name(self, self.multiworld, self.player) or self.filler_item_name
+        hook_result = hook_get_filler_item_name(self, self.multiworld, self.player)
+        if hook_result and isinstance(hook_result, str):
+            return hook_result
+        elif hook_result and isinstance(hook_result, list):
+            return self.random.choice(hook_result)
+        elif isinstance(filler_item_name, str):
+            return self.filler_item_name
+        else:
+            random_filler_name = self.random.choice(filler_item_name)
+            return random_filler_name
 
     def interpret_slot_data(self, slot_data: dict[str, Any]) -> dict[str, Any]:
         #this is called by tools like UT
@@ -122,8 +131,9 @@ class ManualWorld(World):
         location_game_complete = self.multiworld.get_location(victory_names[get_option_value(self.multiworld, self.player, 'goal')], self.player)
         location_game_complete.address = None
 
-        for unused_goal in [self.multiworld.get_location(name, self.player) for name in victory_names if name != location_game_complete.name]:
-            unused_goal.parent_region.locations.remove(unused_goal)
+        if not unused_goals_are_locations:
+            for unused_goal in [self.multiworld.get_location(name, self.player) for name in victory_names if name != location_game_complete.name]:
+                unused_goal.parent_region.locations.remove(unused_goal)
 
         location_game_complete.place_locked_item(
             ManualItem("__Victory__", ItemClassification.progression, None, player=self.player))
@@ -135,11 +145,16 @@ class ManualWorld(World):
         pool: list[Item] = []
         traps = []
         configured_item_names = self.item_id_to_name.copy()
+        is_UT = bool(getattr(self.multiworld, "generation_is_fake", False))
 
         items_config: dict[str, int|dict[ItemClassification | str | int, int]] = {}
         for name in configured_item_names.values():
             if name == "__Victory__": continue
-            if name == filler_item_name: continue # intentionally using the Game.py filler_item_name here because it's a non-Items item
+            # intentionally using the Game.py filler_item_name here because it can be a non-Items item
+            if isinstance(filler_item_name, str):
+                if name == filler_item_name: continue
+            elif isinstance(filler_item_name, list):
+                if name in filler_item_name: continue
 
             item = self.item_name_to_item[name]
             item_count = int(item.get("count", 1))
@@ -167,18 +182,18 @@ class ManualWorld(World):
                     new_item = self.create_item(name)
                     pool.append(new_item)
             elif type(configs) is dict:
-                for cat, count in configs.items():
+                for override, count in configs.items():
                     total_created += count
-                    if isinstance(cat, ItemClassification):
-                        true_class = cat
+                    if isinstance(override, ItemClassification):
+                        true_class = override
                     else:
                         try:
-                            if isinstance(cat, int):
-                                true_class = ItemClassification(cat)
+                            if isinstance(override, int):
+                                true_class = ItemClassification(override)
                             else:
-                                true_class = convert_string_to_itemclassification(cat)
+                                true_class = convert_string_to_itemclassification(override)
                         except Exception as ex:
-                            raise Exception(f"Item override '{cat}' for {name} improperly defined\n\n{type(ex).__name__}:{ex}")
+                            raise Exception(f"Item override '{override}' for {name} improperly defined\n\n{type(ex).__name__}:{ex}")
 
                     for _ in range(count):
                         new_item = self.create_item(name, true_class)
@@ -186,7 +201,7 @@ class ManualWorld(World):
             else:
                 raise Exception(f"Item override for {name} improperly defined")
 
-            if total_created == 0: continue
+            if total_created == 0 or is_UT: continue
 
             item = self.item_name_to_item[name]
             if item.get("early"): # Some or all early
@@ -213,12 +228,13 @@ class ManualWorld(World):
         pool = before_create_items_place_items(pool, self, self.multiworld, self.player)
         locations_with_forbid: list[Location] = []
         locations_with_placements: list[Location] = []
-        for location in self.multiworld.get_unfilled_locations(player=self.player):
-            manual_location = self.location_name_to_location.get(location.name, {})
-            if manual_location.get("place_item") or manual_location.get("place_item_category"):
-                locations_with_placements.append(location)
-            elif manual_location.get("dont_place_item") or manual_location.get("dont_place_item_category"):
-                locations_with_forbid.append(location)
+        if not is_UT:
+            for location in self.multiworld.get_unfilled_locations(player=self.player):
+                manual_location = self.location_name_to_location.get(location.name, {})
+                if manual_location.get("place_item") or manual_location.get("place_item_category"):
+                    locations_with_placements.append(location)
+                elif manual_location.get("dont_place_item") or manual_location.get("dont_place_item_category"):
+                    locations_with_forbid.append(location)
 
         # Handle specific item forbidding using forbid_items_for_player
         for location in locations_with_forbid:
@@ -240,7 +256,7 @@ class ManualWorld(World):
             manual_location = self.location_name_to_location.get(location.name, {})
             eligible_items = []
             eligible_item_names: set[str] = set()
-            forbidden_item_names: set[str] = set()
+            forbidden_item_names = set()
             place_messages = []
             forbid_messages = []
 
@@ -336,18 +352,18 @@ class ManualWorld(World):
         precollected_items = list(self.multiworld.precollected_items[self.player])
 
         # UT doesn't precollect the exceptions so this can be skipped
-        if not hasattr(self.multiworld, "generation_is_fake"):
+        if not is_UT:
             # Filter Precollected items for those not in logic aka created by start_inventory(_from_pool)
             precollected_exceptions = self.options.start_inventory.value + self.options.start_inventory_from_pool.value # type: ignore
             for item, count in precollected_exceptions.items():
                 items_iter = iter([i for i in precollected_items if i.name == item])
                 for _ in range(count):
                     precollected_items.remove(next(items_iter))
-
-        # Placed items detections:
+        # Placed items:
         placed_pool: list[Item] = []
         for location in self.multiworld.get_filled_locations(self.player):
-            placed_pool.append(location.item)
+            if location.item is not None: # For type checkers
+                placed_pool.append(location.item)
 
         real_pool = pool + precollected_items + placed_pool
         self.item_counts[self.player] = self.get_item_counts(pool=real_pool)
@@ -442,6 +458,7 @@ class ManualWorld(World):
 
         # slot_data["DeathLink"] = bool(self.multiworld.death_link[self.player].value)
         common_options = set(PerGameCommonOptions.type_hints.keys())
+        common_options |= set(["generate_region_diagram", "start_inventory_from_pool"])
         for option_key, _ in self.options_dataclass.type_hints.items():
             if option_key in common_options:
                 continue
@@ -595,7 +612,7 @@ class VersionedComponent(Component):
         self.version = version
 
 def add_client_to_launcher() -> None:
-    version = 2026_04_04 # YYYYMMDD
+    version = 2026_09_18 # YYYYMMDD
     found = False
 
     if "manual" not in icon_paths:
