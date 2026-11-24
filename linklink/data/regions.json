@@ -2,6 +2,7 @@
     "$schema": "https://github.com/ManualForArchipelago/Manual/raw/main/schemas/Manual.regions.schema.json",
     "Free Items":
     {
+        "starting": true,
         "connects_to": []
     }
 }

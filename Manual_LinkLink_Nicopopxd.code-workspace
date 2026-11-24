@@ -1,0 +1,118 @@
+{
+    "folders": [
+        {
+            "name": "Manual_LinkLink_Nicopopxd",
+            "path": "."
+        },
+        {
+            "name": "Archipelago",
+            "_comment": "Copy of Archipelago SRC with current Project added to world folder via file junction, Used for Testing",
+            "path": "../Archipelago"
+        }
+    ],
+    "launch": {
+        "version": "0.2.0",
+        "configurations": [
+        {
+            "name": "AP: Launcher.py",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder:Archipelago}${/}Launcher.py",
+            "consoleName": "Archipelago Launcher",
+            "justMyCode": true
+        },
+        {
+            "name": "AP: Generate.py",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder:Archipelago}${/}Generate.py",
+            "consoleName": "Archipelago Generate",
+            "cwd": "${workspaceFolder:Manual_LinkLink_Nicopopxd}",
+            "justMyCode": true
+        },
+        {
+            "name": "AP Generate.py Debug folder",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder:Archipelago}${/}Generate.py",
+            "consoleName": "Archipelago Generate",
+            "args": [
+                "--outputpath", "${workspaceFolder:Manual_LinkLink_Nicopopxd}${/}.debug${/}output${/}",
+                "--player_files_path", "${workspaceFolder:Manual_LinkLink_Nicopopxd}${/}.debug${/}players${/}",
+                "--spoiler", "2",
+                //"--log_level", "DEBUG",
+            ],
+            "cwd": "${workspaceFolder:Manual_LinkLink_Nicopopxd}",
+            "justMyCode": true
+        },
+        // {
+        //     "name": "AP: Fuzz Manual_Pikmin4",
+        //     "type": "debugpy",
+        //     "request": "launch",
+        //     "program": "${workspaceFolder:Archipelago}${/}fuzz.py",
+        //     "consoleName": "Archipelago Fuzzing",
+        //     "args": " -r 500 -g manual_pikmin4_nicopopxd",
+        //     "cwd": "${workspaceFolder:Manual_LinkLink_Nicopopxd}",
+        //     "justMyCode": true
+        // },
+        // {
+        //     "name": "AP: Fuzz UT Manual_Pikmin4",
+        //     "type": "debugpy",
+        //     "request": "launch",
+        //     "program": "${workspaceFolder:Archipelago}${/}fuzz.py",
+        //     "consoleName": "Archipelago Fuzzing",
+        //     "args": " -r 500 -g manual_pikmin4_nicopopxd --hook worlds.tracker.fuzzer_hook:Hook",
+        //     "cwd": "${workspaceFolder:Manual_LinkLink_Nicopopxd}",
+        //     "justMyCode": true
+        // },
+        // {
+        //     "name": "AP: Fuzz Collect Access. Manual_Pikmin4",
+        //     "type": "debugpy",
+        //     "request": "launch",
+        //     "program": "${workspaceFolder:Archipelago}${/}fuzz.py",
+        //     "consoleName": "Archipelago Fuzzing",
+        //     "args": " -r 500 -g manual_pikmin4_nicopopxd --hook hooks.collect_accessibility_test:Hook",
+        //     "cwd": "${workspaceFolder:Manual_LinkLink_Nicopopxd}",
+        //     "justMyCode": true
+        // },
+        // {
+        //     "name": "AP: Fuzz Determinism Manual_Pikmin4",
+        //     "type": "debugpy",
+        //     "request": "launch",
+        //     "program": "${workspaceFolder:Archipelago}${/}fuzz.py",
+        //     "consoleName": "Archipelago Fuzzing",
+        //     "args": " -r 500 -j6 -g manual_pikmin4_nicopopxd --hook hooks.determinism:Hook",
+        //     "cwd": "${workspaceFolder:Manual_LinkLink_Nicopopxd}",
+        //     "justMyCode": true
+        // },
+        ],
+        "compounds": []
+    },
+    "settings": {
+        "workbench.colorCustomizations": {
+            "statusBar.background" : "#4c9724",
+            "statusBar.debuggingBackground": "#c65220"
+        },
+        "dotnet.defaultSolution": "disable",
+        "python.analysis.extraPaths": [
+            "${workspaceFolder:Archipelago}",
+            "../Archipelago-Tests", //if above doesn't work
+            "../Archipelago-imports"
+        ],
+        "folder-path-color.folders": [
+            { "path": "worlds/manual_pikmin4_nicopopxd", "symbol": "P4", "tooltip": "Pikmin4", "color": "custom1" },
+            { "path": "custom_worlds/manual_pikmin4_nicopopxd", "symbol": "P4", "tooltip": "Pikmin4", "color": "custom1" },
+            { "path": "worlds/manual_outerwilds_nicopopxd", "symbol": "Ow", "tooltip": "OuterWilds", "color": "custom2" },
+            { "path": "custom_worlds/manual_outerwilds_nicopopxd", "symbol": "Ow", "tooltip": "OuterWilds", "color": "custom2" },
+            { "path": "worlds/manual_terraria_the_board_game_nicopopxd", "symbol": "T", "tooltip": "Terraria", "color": "custom5" },
+            { "path": "custom_worlds/manual_terraria_the_board_game_nicopopxd", "symbol": "T", "tooltip": "Terraria", "color": "custom5" },
+            { "path": "worlds/manual", "symbol": "Ma", "tooltip": "Manual", "color": "custom3" },
+        ],
+
+        "timetracker.autostart.autoStartTimeTracking": true,
+        "timetracker.dotTimeTrackerIndent": 2,
+        "emptyIndent.exclude": [
+            ".md"
+        ],
+    },
+}

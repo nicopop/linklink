@@ -1,0 +1,11 @@
+{
+    "recommendations": [
+        "aaron-bond.better-comments",
+        "jebbs.plantuml",
+        "davidanson.vscode-markdownlint",
+        "dmitrydorofeev.empty-indent",
+        "kevinrose.vsc-python-indent",
+        "visbydev.folder-path-color",
+        "streetsidesoftware.code-spell-checker"
+    ]
+}

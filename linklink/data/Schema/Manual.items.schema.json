@@ -1,6 +1,6 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "$id": "https://raw.githubusercontent.com/ManualForArchipelago/Manual/main/schemas/Manual.items.schema.json",
+    "$id": "Manual_LinkLink_Nicopopxd_items.schema.json",
     "description": "Schema for Manual's items.json",
     "type": ["array", "object"],
     "items": {
@@ -23,30 +23,36 @@
             "type": "object",
             "description": "Name of this options Presets",
             "properties": {
-                "A Link Between Worlds": {"description": "A Link Between Worlds", "$ref": "#/definitions/linklink_list", "group": "loz"},
-                "A Link to the Past": {"description": "A Link to the Past", "$ref": "#/definitions/linklink_list", "group": "loz"},
-                "Links Awakening DX": {"description": "Links Awakening DX", "$ref": "#/definitions/linklink_list", "group": "loz"},
-                "Majora's Mask Recompiled": {"description": "Majora's Mask Recompiled", "$ref": "#/definitions/linklink_list", "group": "loz"},
-                "Ocarina of Time": {"description": "Ocarina of Time", "$ref": "#/definitions/linklink_list", "group": "loz"},
-                "Skyward Sword": {"description": "Skyward Sword", "$ref": "#/definitions/linklink_list", "group": "loz"},
-                "SMZ3": {"description": "SMZ3", "$ref": "#/definitions/linklink_list", "group": "loz"},
-                "Ship of Harkinian": {"description": "Ship of Harkinian", "$ref": "#/definitions/linklink_list", "group": "loz"},
-                "The Legend of Zelda - Oracle of Ages": {"description": "The Legend of Zelda - Oracle of Ages", "$ref": "#/definitions/linklink_list", "group": "loz"},
-                "The Legend of Zelda - Oracle of Seasons": {"description": "The Legend of Zelda - Oracle of Seasons", "$ref": "#/definitions/linklink_list", "group": "loz"},
-                "The Legend of Zelda - Phantom Hourglass": {"description": "The Legend of Zelda - Phantom Hourglass", "$ref": "#/definitions/linklink_list", "group": "loz"},
-                "The Legend of Zelda - Spirit Tracks": {"description": "The Legend of Zelda - Spirit Tracks", "$ref": "#/definitions/linklink_list", "group": "loz"},
-                "The Legend of Zelda": {"description": "The Legend of Zelda", "$ref": "#/definitions/linklink_list", "group": "loz"},
-                "The Minish Cap": {"description": "The Minish Cap", "$ref": "#/definitions/linklink_list", "group": "loz"},
-                "The Wind Waker": {"description": "The Wind Waker", "$ref": "#/definitions/linklink_list", "group": "loz"},
-                "Twilight Princess": {"description": "Twilight Princess", "$ref": "#/definitions/linklink_list", "group": "loz"},
+                "A Link Between Worlds": {"description": "loz", "$ref": "#/definitions/linklink_list", "group": "loz"},
+                "A Link to the Past": {"description": "loz", "$ref": "#/definitions/linklink_list", "group": "loz"},
+                "Links Awakening DX": {"description": "loz", "$ref": "#/definitions/linklink_list", "group": "loz"},
+                "Majora's Mask Recompiled": {"description": "loz", "$ref": "#/definitions/linklink_list", "group": "loz"},
+                "Ocarina of Time": {"description": "loz", "$ref": "#/definitions/linklink_list", "group": "loz"},
+                "Skyward Sword": {"description": "loz", "$ref": "#/definitions/linklink_list", "group": "loz"},
+                "SMZ3": {"description": "loz + metroid", "$ref": "#/definitions/linklink_list", "group": "loz"},
+                "Ship of Harkinian": {"description": "loz", "$ref": "#/definitions/linklink_list", "group": "loz"},
+                "The Legend of Zelda - Oracle of Ages": {"description": "loz", "$ref": "#/definitions/linklink_list", "group": "loz"},
+                "The Legend of Zelda - Oracle of Seasons": {"description": "loz", "$ref": "#/definitions/linklink_list", "group": "loz"},
+                "The Legend of Zelda - Phantom Hourglass": {"description": "loz", "$ref": "#/definitions/linklink_list", "group": "loz"},
+                "The Legend of Zelda - Spirit Tracks": {"description": "loz", "$ref": "#/definitions/linklink_list", "group": "loz"},
+                "The Legend of Zelda": {"description": "loz", "$ref": "#/definitions/linklink_list", "group": "loz"},
+                "The Minish Cap": {"description": "loz", "$ref": "#/definitions/linklink_list", "group": "loz"},
+                "The Wind Waker": {"description": "loz", "$ref": "#/definitions/linklink_list", "group": "loz"},
+                "Twilight Princess": {"description": "loz", "$ref": "#/definitions/linklink_list", "group": "loz"},
                 "Kingdom Hearts": {"description": "Kingdom Hearts", "$ref": "#/definitions/linklink_list", "group": "Kingdom Hearts"},
-                "Kingdom Hearts 2": {"description": "Kingdom Hearts 2", "$ref": "#/definitions/linklink_list", "group": "Kingdom Hearts"},
-                "Kingdom Hearts Birth by Sleep": {"description": "Kingdom Hearts Birth by Sleep", "$ref": "#/definitions/linklink_list", "group": "Kingdom Hearts"},
-                "Kingdom Hearts Dream Drop Distance": {"description": "Kingdom Hearts Dream Drop Distance", "$ref": "#/definitions/linklink_list", "group": "Kingdom Hearts"},
-                "Kingdom Hearts RE Chain of Memories": {"description": "Kingdom Hearts RE Chain of Memories", "$ref": "#/definitions/linklink_list", "group": "Kingdom Hearts"},
-                "Pokemon Crystal": {"description": "Pokemon Crystal", "$ref": "#/definitions/linklink_list", "group": "Pokemon"},
-                "Pokemon Emerald": {"description": "Pokemon Emerald", "$ref": "#/definitions/linklink_list", "group": "Pokemon"},
-                "Pokemon Red and Blue": {"description": "Pokemon Crystal", "$ref": "#/definitions/linklink_list", "group": "Pokemon"},
+                "Kingdom Hearts 2": {"description": "Kingdom Hearts", "$ref": "#/definitions/linklink_list", "group": "Kingdom Hearts"},
+                "Kingdom Hearts Birth by Sleep": {"description": "Kingdom Hearts", "$ref": "#/definitions/linklink_list", "group": "Kingdom Hearts"},
+                "Kingdom Hearts Dream Drop Distance": {"description": "Kingdom Hearts", "$ref": "#/definitions/linklink_list", "group": "Kingdom Hearts"},
+                "Kingdom Hearts RE Chain of Memories": {"description": "Kingdom Hearts", "$ref": "#/definitions/linklink_list", "group": "Kingdom Hearts"},
+                "Pokemon Crystal": {"description": "Pokemon", "$ref": "#/definitions/linklink_list", "group": "Pokemon"},
+                "Pokemon Emerald": {"description": "Pokemon", "$ref": "#/definitions/linklink_list", "group": "Pokemon"},
+                "Pokemon Red and Blue": {"description": "Pokemon", "$ref": "#/definitions/linklink_list", "group": "Pokemon"},
+                "Metroid Fusion": {"description": "Metroid", "$ref": "#/definitions/linklink_list", "group": "Metroid"},
+                "Metroid Prime": {"description": "Metroid", "$ref": "#/definitions/linklink_list", "group": "Metroid"},
+                "Metroid: Samus Returns": {"description": "Metroid", "$ref": "#/definitions/linklink_list", "group": "Metroid"},
+                "Metroid: Zero Mission": {"description": "Metroid", "$ref": "#/definitions/linklink_list", "group": "Metroid"},
+                "Super Metroid": {"description": "Metroid", "$ref": "#/definitions/linklink_list", "group": "Metroid"},
+                "Super Metroid Map Rando": {"description": "Metroid", "$ref": "#/definitions/linklink_list", "group": "Metroid"},
                 "A Hat in Time": {"description": "A Hat in Time", "$ref": "#/definitions/linklink_list"},
                 "ANIMAL WELL": {"description": "ANIMAL WELL", "$ref": "#/definitions/linklink_list"},
                 "Hollow Knight": {"description": "Hollow Knight", "$ref": "#/definitions/linklink_list"},
@@ -82,7 +88,7 @@
                 "linklink": {"$ref": "#/definitions/linklink"},
                 "category": {
                     "description": "(Optional) A list of categories to be applied to this item.",
-                    "type": ["string", "array"],
+                    "type": "array",
                     "items": {
                         "type": "string"
                     },
@@ -124,11 +130,6 @@
                     "type": "boolean",
                     "default": false
                 },
-                "progression_deprioritized": {
-                    "description": "(Optional) Should this Item not be placed in prioritized locations? For more information on item classifications, see: https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/world%20api.md#items",
-                    "type": "boolean",
-                    "default": false
-                },
                 "useful": {
                     "description": "(Optional) Is this item useful to have but not required to complete the game? For more information on item classifications, see: https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/world%20api.md#items",
                     "type": "boolean",
@@ -141,6 +142,11 @@
                 },
                 "filler": {
                     "description": "(Optional) Is this item mostly useless and okay to skip placing sometimes? For more information on item classifications, see: https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/world%20api.md#items",
+                    "type": "boolean",
+                    "default": true
+                },
+                "deprioritized": {
+                    "description": "(Optional) Will not be considered for priority locations, see: https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/world%20api.md#items",
                     "type": "boolean",
                     "default": true
                 },
@@ -179,6 +185,10 @@
                 },
                 "sort-key": {
                     "description": "(Optional) A string to sort the items by. If not provided, items will always be sorted by name.",
+                    "type": "string"
+                },
+                "description": {
+                    "description": "(Optional) A short description of the item to be displayed in the client",
                     "type": "string"
                 },
                 "_comment": {"$ref": "#/definitions/comment"}

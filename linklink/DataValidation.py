@@ -22,41 +22,31 @@ class DataValidation():
 
     @staticmethod
     def checkItemNamesInLocationRequires():
+        from .Rules import ITEM_REGEX
         for location in DataValidation.location_table_with_events:
             if "requires" not in location:
                 continue
 
             if isinstance(location["requires"], str):
                 # parse user written statement into list of each item
-                for item in re.findall(r'\|[^|]+\|', location["requires"]):
-                    if item.lower() == "or" or item.lower() == "and" or item == ")" or item == "(":
+                for match in ITEM_REGEX.finditer(location["requires"]):
+                    is_category = bool(match.group(1))
+                    item_name = match.group(2)
+                    item_count = (str(match.group(3) or "1")).lstrip(':').strip()
+
+                    if not item_count.isnumeric() and item_count.lower() not in ["all", "half"] and not item_count.endswith('%'):
+                        item_name = match.group(0).strip("|")
+                        logging.debug(f'Invalid item_count "{item_count}" found, reverting to initial item_name "{item_name}"')
+
+                    # if it's a category, validate that the category exists
+                    if is_category:
+                        item_category_exists = len([item for item in DataValidation.item_table_with_events if item_name in item.get('category', [])]) > 0
+
+                        if not item_category_exists:
+                            raise ValidationError("Item category %s is required by location %s but is misspelled or does not exist." % (item_name, location.get("name")))
+
                         continue
                     else:
-                        # if it's a category, validate that the category exists
-                        if '@' in item:
-                            item = item.replace("|", "")
-                            item_parts = item.split(":")
-                            item_name = item
-
-                            if len(item_parts) > 1:
-                                item_name = item_parts[0]
-
-                            item_name = item_name[1:]
-                            item_category_exists = len([item for item in DataValidation.item_table_with_events if item_name in item.get('category', [])]) > 0
-
-                            if not item_category_exists:
-                                raise ValidationError("Item category %s is required by location %s but is misspelled or does not exist." % (item_name, location.get("name")))
-
-                            continue
-
-                        item = item.replace("|", "")
-
-                        item_parts = item.split(":")
-                        item_name = item
-
-                        if len(item_parts) > 1:
-                            item_name = item_parts[0]
-
                         item_exists = len([item.get("name") for item in DataValidation.item_table_with_events if item.get("name") == item_name]) > 0
 
                         if not item_exists:
@@ -96,6 +86,7 @@ class DataValidation():
 
     @staticmethod
     def checkItemNamesInRegionRequires():
+        from .Rules import ITEM_REGEX
         for region_name in DataValidation.region_table:
             region = DataValidation.region_table[region_name]
 
@@ -104,35 +95,23 @@ class DataValidation():
 
             if isinstance(region["requires"], str):
                 # parse user written statement into list of each item
-                for item in re.findall(r'\|[^|]+\|', region["requires"]):
-                    if item.lower() == "or" or item.lower() == "and" or item == ")" or item == "(":
-                        continue
+                for match in ITEM_REGEX.finditer(region["requires"]):
+                    is_category = bool(match.group(1))
+                    item_name = match.group(2)
+                    item_count = (str(match.group(3) or "1")).lstrip(':').strip()
+
+                    if not item_count.isnumeric() and item_count.lower() not in ["all", "half"] and not item_count.endswith('%'):
+                        item_name = match.group(0).strip("|")
+                        logging.debug(f'Invalid item_count "{item_count}" found, reverting to initial item_name "{item_name}"')
+
+                    # if it's a category, validate that the category exists
+                    if is_category:
+                        item_category_exists = len([item for item in DataValidation.item_table_with_events if item_name in item.get('category', [])]) > 0
+
+                        if not item_category_exists:
+                            raise ValidationError("Item category %s is required by region %s but is misspelled or does not exist." % (item_name, region_name))
+
                     else:
-                        # if it's a category, validate that the category exists
-                        if '@' in item:
-                            item = item.replace("|", "")
-                            item_parts = item.split(":")
-                            item_name = item
-
-                            if len(item_parts) > 1:
-                                item_name = item_parts[0]
-
-                            item_name = item_name[1:]
-                            item_category_exists = len([item for item in DataValidation.item_table_with_events if item_name in item.get('category', [])]) > 0
-
-                            if not item_category_exists:
-                                raise ValidationError("Item category %s is required by region %s but is misspelled or does not exist." % (item_name, region_name))
-
-                            continue
-
-                        item = item.replace("|", "")
-
-                        item_parts = item.split(":")
-                        item_name = item
-
-                        if len(item_parts) > 1:
-                            item_name = item_parts[0]
-
                         item_exists = len([item.get("name") for item in DataValidation.item_table_with_events if item.get("name") == item_name]) > 0
 
                         if not item_exists:
@@ -526,69 +505,103 @@ def runGenerationDataValidation(cls) -> None:
     validation_errors: list[ValidationError] = []
 
     try: DataValidation.checkForMissingItemNames()
-    except ValidationError as e: validation_errors.append(e)
+    except ValidationError as e:
+        e.add_note("checkForMissingItemNames")
+        validation_errors.append(e)
 
     try: DataValidation.checkForMissingLocationNames()
-    except ValidationError as e: validation_errors.append(e)
+    except ValidationError as e:
+        e.add_note("checkForMissingLocationNames")
+        validation_errors.append(e)
 
     # check that requires have correct item names in locations and regions
     try: DataValidation.checkItemNamesInLocationRequires()
-    except ValidationError as e: validation_errors.append(e)
+    except ValidationError as e:
+        e.add_note("checkItemNamesInLocationRequires")
+        validation_errors.append(e)
 
     try: DataValidation.checkItemNamesInRegionRequires()
-    except ValidationError as e: validation_errors.append(e)
+    except ValidationError as e:
+        e.add_note("checkItemNamesInRegionRequires")
+        validation_errors.append(e)
 
     # check that region names are valid (i.e., not already defined, etc.)
     try: DataValidation.checkForInvalidRegionNames()
-    except ValidationError as e: validation_errors.append(e)
+    except ValidationError as e:
+        e.add_note("checkForInvalidRegionNames")
+        validation_errors.append(e)
 
     # check that region names are correct in locations
     try: DataValidation.checkRegionNamesInLocations()
-    except ValidationError as e: validation_errors.append(e)
+    except ValidationError as e:
+        e.add_note("checkRegionNamesInLocations")
+        validation_errors.append(e)
 
     # check that any classification_count used in items are valid
     try: DataValidation.checkItemsHasValidClassificationCount()
-    except ValidationError as e: validation_errors.append(e)
+    except ValidationError as e:
+        e.add_note("checkItemsHasValidClassificationCount")
+        validation_errors.append(e)
 
     # check that items that are required by locations and regions are also marked required
     try: DataValidation.checkItemsThatShouldBeRequired()
-    except ValidationError as e: validation_errors.append(e)
+    except ValidationError as e:
+        e.add_note("checkItemsThatShouldBeRequired")
+        validation_errors.append(e)
 
     # check that regions that are connected to are correct
     try: DataValidation.checkRegionsConnectingToOtherRegions()
-    except ValidationError as e: validation_errors.append(e)
+    except ValidationError as e:
+        e.add_note("checkRegionsConnectingToOtherRegions")
+        validation_errors.append(e)
 
     # check for duplicate names in items, locations, and regions
     try: DataValidation.checkForDuplicateItemNames()
-    except ValidationError as e: validation_errors.append(e)
+    except ValidationError as e:
+        e.add_note("checkForDuplicateItemNames")
+        validation_errors.append(e)
 
     try: DataValidation.checkForDuplicateLocationNames()
-    except ValidationError as e: validation_errors.append(e)
+    except ValidationError as e:
+        e.add_note("checkForDuplicateLocationNames")
+        validation_errors.append(e)
 
     # check that starting items are actually valid starting item definitions
     try: DataValidation.checkStartingItemsForBadSyntax()
-    except ValidationError as e: validation_errors.append(e)
+    except ValidationError as e:
+        e.add_note("checkStartingItemsForBadSyntax")
+        validation_errors.append(e)
 
     # check that starting items and starting item categories actually exist in the items json
     try: DataValidation.checkStartingItemsForValidItemsAndCategories()
-    except ValidationError as e: validation_errors.append(e)
+    except ValidationError as e:
+        e.add_note("checkStartingItemsForValidItemsAndCategories")
+        validation_errors.append(e)
 
     # check that placed items are actually valid place item definitions
     try: DataValidation.checkPlacedItemsAndCategoriesForBadSyntax()
-    except ValidationError as e: validation_errors.append(e)
+    except ValidationError as e:
+        e.add_note("checkPlacedItemsAndCategoriesForBadSyntax")
+        validation_errors.append(e)
 
     # check placed item and item categories for valid options for each
     try: DataValidation.checkPlacedItemsForValidItems()
-    except ValidationError as e: validation_errors.append(e)
+    except ValidationError as e:
+        e.add_note("checkPlacedItemsForValidItems")
+        validation_errors.append(e)
 
     try: DataValidation.checkPlacedItemCategoriesForValidItemCategories()
-    except ValidationError as e: validation_errors.append(e)
+    except ValidationError as e:
+        e.add_note("checkPlacedItemCategoriesForValidItemCategories")
+        validation_errors.append(e)
 
     # check for regions that are set as non-starting regions and have no connectors to them (so are unreachable)
     try: DataValidation.checkForNonStartingRegionsThatAreUnreachable()
-    except ValidationError as e: validation_errors.append(e)
+    except ValidationError as e:
+        e.add_note("checkForNonStartingRegionsThatAreUnreachable")
+        validation_errors.append(e)
 
     if len(validation_errors) > 0:
-        heading = f"ValidationError(s) in {cls.game}:";
+        heading = f"ValidationError(s) in {cls.game}:"
 
         raise Exception("\n\n%s \n\n%s\n\n" % (heading, "\n".join([' - ' + str(validation_error) for validation_error in validation_errors])))
