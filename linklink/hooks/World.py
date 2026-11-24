@@ -35,6 +35,13 @@ import logging, time
 ## The fill_slot_data method will be used to send data to the Manual client for later use, like deathlink.
 ########################################################################################
 
+def tuple_remove(data: tuple, element: Any) -> tuple:
+    return tuple(e for e in data if e != element)
+def tuple_add(data: tuple, element: Any):
+    tmp = set(data)
+    tmp.add(element)
+    return tuple(tmp)
+
 # region Custom Client
 from worlds.LauncherComponents import Component, SuffixIdentifier, components, Type, launch, icon_paths
 def launch_client(*args):
@@ -89,48 +96,52 @@ def before_generate_early(world: "ManualWorld", multiworld: MultiWorld, player: 
         # world.linklink_locations = slot_data["filtered_locations"] # type: ignore
         # world.linklink_locations_filtered_by_removed = slot_data["filtered_removed"] # type: ignore
         world.linklink_item_config = Counter(slot_data["key_counts"]) # type: ignore
-        world.linklink_active_victims_ids = set(slot_data["active_victims"]) # type: ignore
-        world.linklink_active_games = set(slot_data["active_games"]) # type: ignore
+        world.linklink_active_victims_ids = tuple(slot_data["active_victims"]) # type: ignore
+        world.linklink_active_games = tuple(slot_data["active_games"]) # type: ignore
     else:
         world.is_ut_regen = False # type: ignore
 # endregion
 # region validate victims
     option_victims = cast(Victims, world.options.victims) # type: ignore
     victims = option_victims.value
-    victims_ids: set[int] = set()
-    filtered_victims_ids: set[int]
-    active_games: set[str] = set()
+    victims_ids: tuple[int, ...]
+    filtered_victims_ids: tuple[int, ...]
+    active_games: tuple[str, ...]
     if world.is_ut:
         if world.is_ut_regen:
-            victims_ids = cast(set[int], world.linklink_active_victims_ids)
-            active_games = cast(set[str], world.linklink_active_games)
+            victims_ids = world.linklink_active_victims_ids
+            active_games = world.linklink_active_games
             filtered_victims_ids = victims_ids
     else:
         if len(victims) == 0:
-            victims_ids = set(range(1, multiworld.players + 1))
+            victims_ids = tuple(range(1, multiworld.players + 1))
         else:
             missing: list[str] = []
             id_for_names = {w.player_name: i for i, w in multiworld.worlds.items()}
+            _victims_ids = set()
             for name in victims:
                 if name not in id_for_names.keys():
                     missing.append(name)
                     continue
-                victims_ids.add(id_for_names[name])
+                _victims_ids.add(id_for_names[name])
+            victims_ids = tuple(_victims_ids)
             if missing:
                 raise OptionError(f"The following victim(s) could not be found in the multiworld, there could be some typos or their yaml failed to load.\
                     \n - missing: {', '.join(missing)}")
 
         if player in victims_ids:
-            victims_ids.remove(player)
+            victims_ids = tuple_remove(victims_ids, player)
 
-        filtered_victims_ids = victims_ids.copy()
+        filtered_victims_ids = tuple(victims_ids)
+        _active_games: set[str] = set()
         games = get_linklink_games(world)
-        for victim in set(victims_ids):
+        for victim in victims_ids:
             game = multiworld.worlds[victim].game
             if game not in games:
-                filtered_victims_ids.remove(victim)
+                filtered_victims_ids = tuple_remove(filtered_victims_ids, victim)
             else:
-                active_games.add(game)
+                _active_games.add(game)
+        active_games = tuple(_active_games)
 
     world.linklink_victims_ids = victims_ids # type: ignore
     world.linklink_active_victims_ids = filtered_victims_ids # type: ignore
@@ -222,9 +233,9 @@ def get_linklink_games(world: "ManualWorld") -> set[str]:
     world.linklink_games = games # type: ignore
     return games
 
-def get_victims(world: "ManualWorld", filter: bool = False) -> set[int]:
-    linklink_victims_ids = cast(set[int], world.linklink_victims_ids) # type: ignore
-    linklink_active_victims_ids = cast(set[int], world.linklink_active_victims_ids) # type: ignore
+def get_victims(world: "ManualWorld", filter: bool = False) -> tuple[int, ...]:
+    linklink_victims_ids = cast(tuple[int, ...], world.linklink_victims_ids) # type: ignore
+    linklink_active_victims_ids = cast(tuple[int, ...], world.linklink_active_victims_ids) # type: ignore
     return linklink_active_victims_ids if filter else linklink_victims_ids
 
 def place_locked_item(location: Location, item: Item) -> Item | None:
@@ -342,12 +353,14 @@ def linklink_magic(world: "ManualWorld", in_pre_fill = False):
     # region handle Items
     from Options import LocalItems, PlandoItems, ItemLinks, StartInventoryPool, StartInventory
     usable_items_for_player: dict[int, list[Item]] = {}
-    for victim in victims.union([player]):
+    victim: int
+    victims_plus_player = tuple([*victims, player])
+    for victim in victims_plus_player:
         usable_items_for_player[victim] = []
     not_linklink_items_count = 0
 
     for item in multiworld.itempool:
-        if item.player not in victims.union([player]):
+        if item.player not in victims_plus_player:
             continue
         if item.player == player:
             manual_item = world.item_name_to_item[item.name]
@@ -369,7 +382,7 @@ def linklink_magic(world: "ManualWorld", in_pre_fill = False):
         items_iter = iter([i for i in precollected_items if i.name == item_name])
         for _ in range(count):
             precollected_items.remove(next(items_iter))
-    precollected_items_ids: set[int] = set([id(item) for item in precollected_items])
+    precollected_items_ids: set[int] = set(id(item) for item in precollected_items)
     usable_items_for_player[player].extend(precollected_items)
     usable_items_for_player[player].sort(key=lambda i: i.code if i.code is not None else 0)
 
@@ -415,7 +428,7 @@ def linklink_magic(world: "ManualWorld", in_pre_fill = False):
                     plando_max = 99999999
 
                 # sadly locations groups are not converted to "real" locations for plando like items groups so we cant know how many there are
-                if plando_item.locations and set(plando_item.locations).isdisjoint(set(["early_locations", "non_early_locations", "Everywhere"])):
+                if plando_item.locations and set(plando_item.locations).isdisjoint(["early_locations", "non_early_locations", "Everywhere"]):
                     plando_max = min(plando_max, len(plando_item.locations))
 
                 if isinstance(plando_item.items, list):
@@ -453,12 +466,12 @@ def linklink_magic(world: "ManualWorld", in_pre_fill = False):
                 processed_items[item.name] += 1
 
         if not usable_items_for_player[_player]:
-            victims.remove(_player)
+            victims = tuple_remove(victims, _player)
 
-    for game_name in world.linklink_active_games.copy():
-        players = set(multiworld.get_game_players(game_name))
-        if victims.isdisjoint(players):
-            world.linklink_active_games.remove(game_name)
+    for game_name in tuple(world.linklink_active_games):
+        players = multiworld.get_game_players(game_name)
+        if set(victims).isdisjoint(players):
+            world.linklink_active_games = tuple_remove(world.linklink_active_games, game_name) # type: ignore
     # endregion
 
     item_create_filler: set[int] = set()
@@ -501,7 +514,7 @@ def linklink_magic(world: "ManualWorld", in_pre_fill = False):
                         if name in item_name_groups.keys():
                             index = ll_data.index(name)
                             ll_data.remove(name)
-                            for ll_element in reversed([lli for lli in _world.item_name_groups[name]]):
+                            for ll_element in sorted(_world.item_name_groups[name]):
                                 ll_data.insert(index, ll_element)
                 pass
             item_data["linklink_item_name_groups_done"] = True
